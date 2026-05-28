@@ -1,18 +1,5 @@
 {
   "track": {
-<<<<<<< HEAD
-    "name": "\u5e8a",
-    "url": "https://open.spotify.com/track/7iNnvOWQSTQPLn5WPu0gdU",
-    "artists": [
-      {
-        "name": "No Party For Cao Dong",
-        "url": "https://open.spotify.com/artist/3HXSUfI76zVZk71UMAeVfp"
-      }
-    ],
-    "played_at": "2026-04-29T17:13:58.187Z"
-  },
-  "fetched_at": "2026-04-29T17:14:02Z"
-=======
     "name": "Slapocalypse",
     "url": "https://open.spotify.com/track/5jpehybdkmX1DtGW4Y6WUa",
     "artists": [
@@ -28,5 +15,4 @@
     "played_at": "2026-05-28T01:19:36.856Z"
   },
   "fetched_at": "2026-05-28T01:20:04Z"
->>>>>>> 3219a08a95920a8cdce8ffa74c31a66d39736cd3
 }
