@@ -3,3 +3,9 @@ exclude:
   - editor.md
   - album-editor.md
   - scripts/local_editor_server.rb
+  - README.md
+  - CLAUDE.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
