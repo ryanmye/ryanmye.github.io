@@ -1,4 +1,4 @@
-# robots.txt — Anti-AI/crawler policy for ryanmye.github.io/aboutme
+# robots.txt — Anti-AI/crawler policy for ryanmye.github.io
 # This file instructs web crawlers and AI bots about access restrictions.
 
 # Block AI training crawlers
@@ -88,4 +88,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://ryanmye.github.io/aboutme/sitemap.xml
+Sitemap: https://ryanmye.github.io/sitemap.xml
