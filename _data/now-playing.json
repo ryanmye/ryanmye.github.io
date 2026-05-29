@@ -1,18 +1,14 @@
 {
   "track": {
-    "name": "Slapocalypse",
-    "url": "https://open.spotify.com/track/5jpehybdkmX1DtGW4Y6WUa",
+    "name": "Abandoned",
+    "url": "https://open.spotify.com/track/07e1UOoLHenRgycuDjaLdT",
     "artists": [
       {
-        "name": "Charles Berthoud",
-        "url": "https://open.spotify.com/artist/2ja5lXz6NdhSjtDlbYIE91"
-      },
-      {
-        "name": "Giacomo Turra",
-        "url": "https://open.spotify.com/artist/7FZ7QjjU3oULdlzZr6GJCw"
+        "name": "Pass Sacaglia",
+        "url": "https://open.spotify.com/artist/0ZrsvPjO4XAYfYXzoTroF5"
       }
     ],
-    "played_at": "2026-05-28T01:19:36.856Z"
+    "played_at": "2026-05-29T21:17:12.827Z"
   },
-  "fetched_at": "2026-05-28T01:20:04Z"
+  "fetched_at": "2026-05-29T21:18:43Z"
 }
