@@ -1,18 +1,19 @@
 {
   "track": {
-    "name": "Now and Then",
-    "url": "https://open.spotify.com/track/1U8o73TurMXghX2kqF99EG",
+    "name": "The Cut That Always Bleeds",
+    "url": "https://open.spotify.com/track/7wTqEW5nrMhvyEhEyTnOMd",
     "artists": [
       {
-        "name": "Elliott Jack Sansom",
-        "url": "https://open.spotify.com/artist/22WxwAyT9U9wWsKA7ToO7K"
-      },
-      {
-        "name": "Jacob David",
-        "url": "https://open.spotify.com/artist/2ClAWj3iKUlyddnvR6faUP"
+        "name": "Conan Gray",
+        "url": "https://open.spotify.com/artist/4Uc8Dsxct0oMqx0P6i60ea"
       }
     ],
-    "played_at": "2026-05-30T15:42:37.262Z"
+    "played_at": "2026-06-05T19:28:07.753Z"
   },
-  "fetched_at": "2026-05-30T15:42:49Z"
+  "fetched_at": "2026-06-05T20:19:51Z",
+  "context": {
+    "type": "playlist",
+    "name": "25.99",
+    "url": "https://open.spotify.com/playlist/0lFEXta1sMIqTelgp0lAq4"
+  }
 }
