@@ -2,7 +2,7 @@
 layout: default
 title: "CV"
 permalink: /cv/
-description: "CV of Ryan Ye — education, research, publications, projects, and skills in CS and machine learning."
+description: "Ryan Ye's CV."
 ---
 
 <div class="page-header page-header-resume">

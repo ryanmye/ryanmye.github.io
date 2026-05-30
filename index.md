@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Computer Science Student at Cornell University"
-description: "Ryan Ye is an undergraduate Computer Science student at Cornell University (College of Engineering) researching machine learning and computer vision. View my research, projects, and publications."
+description: "CS student at Cornell (College of Engineering) working on computer vision and machine learning."
 ---
 
 <div class="profile-section">
