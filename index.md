@@ -1,6 +1,5 @@
 ---
 layout: default
-title: "Computer Science Student at Cornell University"
 description: "CS student at Cornell (College of Engineering) working on computer vision and machine learning."
 ---
 
