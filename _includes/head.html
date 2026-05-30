@@ -1,7 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="SygV5RMPuPkt2CGGy3ULlEGrnAX7MDRn-ZFpCmfJHN0">
-<title>{% if page.title %}{{ page.title }} &mdash; {% endif %}{{ site.title }}</title>
+<title>{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }} &mdash; {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 <meta name="description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 <meta name="author" content="{{ site.author }}">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
@@ -12,7 +12,7 @@
 <meta name="tdm-reservation" content="1">
 
 <!-- Open Graph -->
-<meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+<meta property="og:title" content="{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
 <meta property="og:description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
@@ -27,7 +27,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
 {% if site.twitter_username %}<meta name="twitter:site" content="@{{ site.twitter_username }}">{% endif %}
-<meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+<meta name="twitter:title" content="{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
 <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 <meta name="twitter:image" content="{% if page.images and page.images.size > 0 %}{{ page.images[0].src | absolute_url }}{% else %}{{ '/assets/images/headshot.jpeg' | absolute_url }}{% endif %}">
 
