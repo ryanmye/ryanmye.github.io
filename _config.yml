@@ -62,3 +62,7 @@ defaults:
       type: "albums"
     values:
       layout: "album"
+  - scope:
+      path: "**.pdf"
+    values:
+      sitemap: false
