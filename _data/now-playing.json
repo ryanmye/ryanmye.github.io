@@ -1,27 +1,19 @@
 {
   "track": {
-    "name": "Hosanna - Live",
-    "url": "https://open.spotify.com/track/0Emspyx2N1o6afDjo27JnR",
+    "name": "The Cut That Always Bleeds",
+    "url": "https://open.spotify.com/track/7wTqEW5nrMhvyEhEyTnOMd",
     "artists": [
       {
-        "name": "UPPERROOM",
-        "url": "https://open.spotify.com/artist/107CG0UhUl9GJnPwF83N63"
-      },
-      {
-        "name": "Ashley Bailey",
-        "url": "https://open.spotify.com/artist/0mCGACx1tzi9BRx1KX0OXR"
-      },
-      {
-        "name": "Justus Tams",
-        "url": "https://open.spotify.com/artist/2IiwIcF2ugOhgrqg4IH5Vk"
+        "name": "Conan Gray",
+        "url": "https://open.spotify.com/artist/4Uc8Dsxct0oMqx0P6i60ea"
       }
     ],
-    "played_at": "2026-06-03T01:18:37.998Z"
+    "played_at": "2026-06-05T19:28:07.753Z"
   },
-  "fetched_at": "2026-06-03T10:14:22Z",
+  "fetched_at": "2026-06-05T20:19:51Z",
   "context": {
     "type": "playlist",
-    "name": "surrender my life",
-    "url": "https://open.spotify.com/playlist/1eQ5bBxjfhMjB797PyQmgq"
+    "name": "25.99",
+    "url": "https://open.spotify.com/playlist/0lFEXta1sMIqTelgp0lAq4"
   }
 }
