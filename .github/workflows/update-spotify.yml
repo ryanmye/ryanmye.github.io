@@ -116,8 +116,8 @@ jobs:
           PARENT_COUNT=$(git cat-file -p HEAD | grep -c '^parent ')
           LAST_AUTHOR=$(git log -1 --format='%an')
           if [ "$PARENT_COUNT" -eq 1 ] && [ "$LAST_AUTHOR" = "github-actions[bot]" ]; then
-            git commit --amend --no-edit
+            git commit --amend -m "chore: update Spotify now-playing data"
           else
-            git commit -m "chore: update Spotify now-playing data [skip ci]"
+            git commit -m "chore: update Spotify now-playing data"
           fi
           git push --force-with-lease
