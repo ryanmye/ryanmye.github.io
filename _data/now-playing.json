@@ -1,19 +1,23 @@
 {
   "track": {
-    "name": "The Cut That Always Bleeds",
-    "url": "https://open.spotify.com/track/7wTqEW5nrMhvyEhEyTnOMd",
+    "name": "Genshin Impact Main Theme",
+    "url": "https://open.spotify.com/track/6MZoXnbjDE2VgUWeMJgrrn",
     "artists": [
       {
-        "name": "Conan Gray",
-        "url": "https://open.spotify.com/artist/4Uc8Dsxct0oMqx0P6i60ea"
+        "name": "Yu-Peng Chen",
+        "url": "https://open.spotify.com/artist/6CY7WNJfd5uZclcS3WeEjx"
+      },
+      {
+        "name": "HOYO-MiX",
+        "url": "https://open.spotify.com/artist/2YvlK6lKiKVjXxsjvNbnqg"
       }
     ],
-    "played_at": "2026-06-05T19:28:07.753Z"
+    "played_at": "2026-06-10T14:11:56.519Z"
   },
-  "fetched_at": "2026-06-05T20:19:51Z",
+  "fetched_at": "2026-06-10T14:14:23Z",
   "context": {
     "type": "playlist",
-    "name": "25.99",
-    "url": "https://open.spotify.com/playlist/0lFEXta1sMIqTelgp0lAq4"
+    "name": "Genshin Impact OST",
+    "url": "https://open.spotify.com/playlist/151KKX3jvHH9FFgQKoaDC0"
   }
 }
