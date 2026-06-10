@@ -1,19 +1,14 @@
 {
   "track": {
-    "name": "The Unbearable Weight of Being",
-    "url": "https://open.spotify.com/track/2nXKZXIFK243Am4MbX3ClD",
+    "name": "\u7b2c57\u6b21\u53d6\u6d88\u53d1\u9001",
+    "url": "https://open.spotify.com/track/2xYrGeWUjwGvB0KMAfUFSd",
     "artists": [
       {
-        "name": "HOYO-MiX",
-        "url": "https://open.spotify.com/artist/2YvlK6lKiKVjXxsjvNbnqg"
+        "name": "\u83f2\u83f2\u516c\u4e3b",
+        "url": "https://open.spotify.com/artist/64kT1WWPbIyJcOfNrR2RPD"
       }
     ],
-    "played_at": "2026-06-10T16:20:28.233Z"
+    "played_at": "2026-09-06T22:44:37.333Z"
   },
-  "fetched_at": "2026-06-10T17:39:39Z",
-  "context": {
-    "type": "playlist",
-    "name": "Genshin Impact OST",
-    "url": "https://open.spotify.com/playlist/151KKX3jvHH9FFgQKoaDC0"
-  }
+  "fetched_at": "2026-09-06T22:57:49Z"
 }
