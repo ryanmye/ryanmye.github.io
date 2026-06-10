@@ -4,7 +4,7 @@
 > 1. Update the relevant sections of this file to reflect your changes before finishing.
 > 2. **Anti-AI defense is a hard requirement.** Every new page, layout, or include you create MUST follow the anti-AI defense checklist in the "Anti-AI Defense" section below. Do not skip this, even for dev-only pages.
 >
-> Last updated: 2026-06-10 (sitewide SEO improvements)
+> Last updated: 2026-06-10 (sitewide SEO + site efficiency improvements)
 
 ## Project Overview
 
@@ -27,7 +27,8 @@ bundle exec jekyll build --config _config.yml,_config_prod.yml
 - **Permalink format:** `/blog/:year/:month/:day/:title/`
 - **Themes:** 5 color themes via CSS custom properties — warm (default), linen, pure, barely, dark-mono
 - **Fonts:** Inter (body), DM Serif Display (headings/brand), JetBrains Mono (code)
-- **Spotify:** GitHub Actions updates `_data/now-playing.json` every 30 minutes
+- **Spotify:** GitHub Actions checks every 30 minutes; commits + triggers a Pages deploy only when the track changed
+- **Icons:** inline SVGs via `_includes/icon.html` (no Font Awesome)
 
 ## Directory Tree
 
@@ -52,6 +53,7 @@ bundle exec jekyll build --config _config.yml,_config_prod.yml
 │   ├── head.html            # <head>: meta, OG tags, fonts, CSS
 │   ├── navbar.html          # Sticky nav, 5-theme dots, mobile hamburger menu
 │   ├── footer.html          # Copyright, social links, faith statement
+│   ├── icon.html            # Inline SVG icon include (replaces Font Awesome)
 │   ├── image_src.html       # Pluggable image URL resolver (local | cloudflare_resize | cloudflare_images)
 │   └── photo_card.html      # Shared album/gallery photocard (figure + lightbox trigger)
 │
@@ -98,7 +100,8 @@ bundle exec jekyll build --config _config.yml,_config_prod.yml
 │   └── get-spotify-refresh-token.py # One-time Spotify OAuth setup
 │
 ├── .github/workflows/
-│   └── update-spotify.yml   # Cron job: fetch Spotify → commit now-playing.json
+│   ├── deploy.yml           # Jekyll build + Pages deploy (push to main / manual / dispatched by Spotify workflow)
+│   └── update-spotify.yml   # Cron job: fetch Spotify → commit now-playing.json → dispatch deploy if changed
 │
 ├── _editor_tmp/             # Temp images during editing (not committed)
 ├── _site/                   # Built output (not committed)
@@ -115,6 +118,7 @@ bundle exec jekyll build --config _config.yml,_config_prod.yml
 Main Jekyll configuration. Key settings:
 - `title: "Ryan Ye"`, `baseurl: ""`, `url: "https://ryanmye.github.io"`
 - `title_suffix: "Ryan Ye | Cornell CS"` — appended to inner-page `<title>` tags by `head.html` (SEO keyword signal)
+- `css_version: 1` — cache-busting query param for `styles.css`; bump manually whenever the stylesheet changes
 - `description` — "Personal website of Ryan Ye, a computer science student at Cornell University…" (fallback meta description + WebSite schema)
 - `twitter_username: "ryanmye0"` — used for Twitter Card meta tags
 - `markdown: kramdown` with GFM input, Rouge syntax highlighter
@@ -130,9 +134,10 @@ Main Jekyll configuration. Key settings:
 - Defaults: `post` layout applied to all files in `_posts/`, `album` layout applied to all files in `_albums/`
 - Excludes: README.md, CLAUDE.md, Gemfile, Gemfile.lock, node_modules, vendor
 
-### _config_prod.yml (5 lines)
+### _config_prod.yml
 Production overlay (used in CI build). Overrides:
 - `local_editor: false` — hides editor
+- Also excludes dev-only assets `assets/js/editor.js` and `assets/js/album-editor.js` from the built site
 - Excludes `editor.md`, `album-editor.md`, and `scripts/local_editor_server.rb` from build
 
 ### Gemfile
@@ -145,8 +150,8 @@ Dependencies: `jekyll ~> 3.8`, `webrick ~> 1.7`, `kramdown-parser-gfm`, `ffi ~> 
 ### _layouts/default.html (25 lines)
 Base HTML5 layout for all non-post, non-album pages. Includes `head.html`, `navbar.html`, `footer.html`. Loads `theme.js` before `</body>`. Also conditionally loads `album-lightbox.js` when the page sets `album_lightbox: true` in its front matter (currently used by `gallery.md`). **Used by:** `index.md`, `blog.md`, `projects.md`, `research.md`, `publications.md`, `cv.md`, `gallery.md`.
 
-### _layouts/post.html (97 lines)
-Blog post layout. Renders: `<article>` with title, ISO 8601 date (`date_to_xmlschema`), human-readable date (`"%B %-d, %Y"`), tag list (iterates `page.tags`), post content, optional photocard album grid (if `page.images` present — each image wrapped in `<button class="album-photo-trigger">` for lightbox), previous/next navigation links. Includes BlogPosting JSON-LD structured data (headline, datePublished, author, image, keywords). Loads `theme.js` and `album-lightbox.js`. **Used by:** all files in `_posts/` via default collection config.
+### _layouts/post.html (~107 lines)
+Blog post layout. Renders: `<article>` with title, ISO 8601 date (`date_to_xmlschema`), human-readable date (`"%B %-d, %Y"`), tag list (iterates `page.tags`), post content (post-processed: body `<img>` srcs are rewritten to `-med.jpg` variants via the `_data/image_meta.yml` manifest, and `loading="lazy" decoding="async"` is injected), optional photocard album grid (if `page.images` present — each image wrapped in `<button class="album-photo-trigger">` for lightbox), previous/next navigation links. Includes BlogPosting JSON-LD structured data (headline, datePublished, author, image, keywords). Loads `theme.js` and `album-lightbox.js`. **Used by:** all files in `_posts/` via default collection config.
 
 ### _layouts/album.html (53 lines)
 Standalone photo album detail page layout. Renders: title, date, optional description, photocard grid of `page.images` (`<figure>` + `<button class="album-photo-trigger">` + `<figcaption>`), and a "Back to gallery" link. Loads `theme.js` and `album-lightbox.js` for lightbox support. **Used by:** all files in `_albums/` via default collection config. Permalink: `/albums/:title/`.
@@ -169,9 +174,8 @@ HTML `<head>` contents:
 - Anti-AI/crawler: `<meta name="robots" content="noai, noimageai">`, `<meta name="tdm-reservation" content="1">`
 - Open Graph: type ("article" for posts, "website" otherwise), URL, title, description, site_name, image (post's first image or headshot fallback). Posts also get `article:published_time`, `article:author`, `article:tag`
 - Twitter Card: summary card with site handle (@ryanmye0), title, description, image
-- CSS: preloads `styles.css` with cache-busting timestamp
-- Fonts: Google Fonts preconnect, loads Inter, DM Serif Display, JetBrains Mono
-- Font Awesome 6.4.2 (loaded with `media="print" onload` for non-blocking)
+- CSS: loads `styles.css` with `?v={{ site.css_version }}` cache-buster (bump `css_version` in `_config.yml` when editing the stylesheet)
+- Fonts: Google Fonts preconnect, loads Inter, DM Serif Display, JetBrains Mono (no Font Awesome — icons are inline SVGs via `icon.html`)
 - Favicon: inline base64 SVG graduation cap emoji
 - JSON-LD structured data: WebSite schema on all pages (with `alternateName` array, e.g. "Ryan Ye's Personal Website"); Person + ProfilePage schemas on homepage only. Person schema includes `givenName`/`familyName`, `alternateName` (e.g. "ryanmye"), `jobTitle`, `memberOf`/`affiliation` (Cornell), `knowsAbout` keywords, `sameAs` links (GitHub, LinkedIn, Twitter, Google Scholar). ProfilePage references the Person and WebSite via `@id`.
 - Inline theme-bootstrap `<script>` at end: reads `localStorage.theme` and applies CSS custom properties synchronously to prevent flash of wrong theme on load.
@@ -188,6 +192,9 @@ Sticky top navigation bar:
 
 ### _includes/footer.html (16 lines)
 Site footer with: dynamic copyright year ("© {year} Ryan Ye — personal website", SEO keyword phrase), "Jesus is King" statement, social links (GitHub, LinkedIn, email from site config). All external links use `target="_blank" rel="noopener noreferrer"`.
+
+### _includes/icon.html
+Inline SVG icon include (replaces Font Awesome). Usage: `{% include icon.html name="github" class="optional-extra-class" %}`. Supported names: `envelope`, `github`, `linkedin`, `spotify`, `file-pdf`, `file-lines`, `graduation-cap`. Emits `<svg class="icon ..." fill="currentColor" aria-hidden="true">` sized at 1em by the `svg.icon` rule in `styles.css` — inherits `font-size` and `color` from context. Path data from Font Awesome Free 6.4.2 (CC BY 4.0). To add an icon: add a `{% when %}` branch with its viewBox + path. **Used by:** `index.md`, `cv.md`, `research.md`, `publications.md`.
 
 ### _includes/image_src.html (~40 lines)
 Pluggable image URL resolver — the single choke point for every album/gallery image URL. Takes `src` (repo-relative path, e.g. `/assets/images/posts/foo.png`) and `variant` (`thumb` | `med` | `original`) and emits one URL string. Branches on `site.images.source`:
@@ -529,7 +536,10 @@ One-time setup script for Spotify integration. Runs OAuth 2.0 authorization code
 
 ## GitHub Actions
 
-### .github/workflows/update-spotify.yml (111 lines)
+### .github/workflows/deploy.yml
+Jekyll build + GitHub Pages deploy. **Triggers:** push to `main`, manual `workflow_dispatch`, or explicit dispatch from the Spotify workflow (there is intentionally NO `workflow_run` trigger — that previously caused a full deploy every 30 minutes even when nothing changed). Build job: Ruby 3.1 + bundler cache → `jekyll build --config _config.yml,_config_prod.yml` with `JEKYLL_ENV: production` → upload Pages artifact → deploy.
+
+### .github/workflows/update-spotify.yml
 Automated Spotify "recently played" sync.
 
 **Trigger:** cron every 30 min (`*/30 * * * *`) + manual `workflow_dispatch`.
@@ -537,7 +547,8 @@ Automated Spotify "recently played" sync.
 **Steps:**
 1. Checkout repo
 2. Embedded Python script: exchanges refresh token → access token → `GET /v1/me/player/recently-played?limit=1` → extracts track metadata (name, URL, artists, played_at, context) → writes `_data/now-playing.json`
-3. Auto-commit with `[skip ci]` flag as `github-actions[bot]`
+3. Commit as `github-actions[bot]` — exits early if the data is unchanged; otherwise amends the previous bot commit (rolling single commit, force-push with lease) so history isn't flooded
+4. If a commit was pushed, dispatches `deploy.yml` via `gh workflow run` (pushes made with `GITHUB_TOKEN` don't fire `push`-event workflows). Requires `actions: write` permission. No commit → no deploy.
 
 **Required secrets:** `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`
 
@@ -555,7 +566,7 @@ Automated Spotify "recently played" sync.
 `navbar.html` renders 5 theme dots → user clicks → `theme.js` reads dot's `data-theme`, calls `setTheme()` → applies CSS custom properties to `:root` → `styles.css` uses `var(--*)` throughout → persisted to `localStorage["theme"]`
 
 ### Spotify Widget
-`update-spotify.yml` (cron 30min) → Spotify API → writes `_data/now-playing.json` → Jekyll builds `now-playing.json.html` (permalink `/assets/data/now-playing.json`) → `index.md` inline JS fetches JSON → renders track info in `#spotify-now-playing`
+`update-spotify.yml` (cron 30min) → Spotify API → writes `_data/now-playing.json` → if changed: commit + dispatch `deploy.yml` → Jekyll builds `now-playing.json.html` (permalink `/assets/data/now-playing.json`) → `index.md` inline JS fetches JSON → renders track info in `#spotify-now-playing`
 
 ### Local Editor System
 `editor.md` (layout: editor) → `editor.html` loads Toast UI Editor + `editor.js` → `editor.js` CRUD calls to `local_editor_server.rb:4001` → server reads/writes `_posts/`, `_drafts/`, manages images in `_editor_tmp/` and `assets/images/`.
@@ -602,7 +613,7 @@ Switching delivery backends is purely a config flip — no template edits requir
 - **CSS theming:** always use `var(--name)` for colors; never hardcode hex in component styles
 - **Data access:** `_data/` files accessed as `site.data.filename` in Liquid
 - **Conditional editor:** nav link + page only appear when `site.local_editor == true` AND `jekyll.environment == "development"`
-- **External deps:** Font Awesome 6.4.2, Google Fonts (Inter, DM Serif Display, JetBrains Mono), Toast UI Editor (editor only)
+- **External deps:** Google Fonts (Inter, DM Serif Display, JetBrains Mono), Toast UI Editor (editor only). Icons are inline SVGs via `_includes/icon.html` — do not reintroduce Font Awesome.
 - **Blog post images:** use markdown `![caption](url)` followed by `*caption*` on the next line (styled by CSS `:has()` selector). Avoid `<figure>` HTML — Toast UI Editor strips it during round-trip.
 - **Links:** all external links use `target="_blank" rel="noopener noreferrer"`
 - **Anti-AI defense:** See dedicated section below. All 4 layers must be maintained when adding new pages or layouts.

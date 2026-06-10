@@ -9,7 +9,7 @@ description: "Publications by Ryan Ye — research papers on AI, computer vision
   <h1>Publications</h1>
   <p style="margin-top:0.5rem;font-size:0.9rem">
     <a href="{{ site.data.research.google_scholar }}" target="_blank" rel="noopener noreferrer">
-      <i class="fas fa-graduation-cap" aria-hidden="true"></i> Google Scholar
+      {% include icon.html name="graduation-cap" %} Google Scholar
     </a>
   </p>
 </div>
@@ -20,7 +20,7 @@ description: "Publications by Ryan Ye — research papers on AI, computer vision
     {% if pub.image %}
     <img src="{{ pub.image | relative_url }}" alt="{{ pub.title }}">
     {% else %}
-    <i class="fas fa-file-alt pub-tile-icon" aria-hidden="true"></i>
+    {% include icon.html name="file-lines" class="pub-tile-icon" %}
     {% endif %}
   </div>
   <div class="pub-tile-body">

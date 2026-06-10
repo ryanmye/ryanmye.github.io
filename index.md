@@ -7,7 +7,7 @@ description: "Personal website of Ryan Ye, a computer science student at Cornell
 <div class="profile-section">
   <div class="profile-left">
     <div class="profile-avatar">
-      <img src="{{ '/assets/images/headshot.jpeg' | relative_url }}" alt="Ryan Ye - Cornell University Computer Science Student" width="160" height="160" decoding="async">
+      <img src="{{ '/assets/images/headshot.jpeg' | relative_url }}" alt="Ryan Ye - Cornell University Computer Science Student" width="160" height="160" decoding="async" fetchpriority="high">
     </div>
     <h1 class="profile-name">{{ site.author }}</h1>
     <p class="profile-position">
@@ -15,9 +15,9 @@ description: "Personal website of Ryan Ye, a computer science student at Cornell
       <a href="https://www.cs.cornell.edu/" target="_blank" rel="noopener noreferrer">Cornell University</a>
     </p>
     <div class="profile-social">
-      <a href="mailto:{{ site.email }}" title="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
-      <a href="https://github.com/{{ site.github_username }}" target="_blank" rel="me noopener noreferrer" title="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
-      <a href="https://linkedin.com/in/{{ site.linkedin_username }}" target="_blank" rel="me noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+      <a href="mailto:{{ site.email }}" title="Email">{% include icon.html name="envelope" %}</a>
+      <a href="https://github.com/{{ site.github_username }}" target="_blank" rel="me noopener noreferrer" title="GitHub">{% include icon.html name="github" %}</a>
+      <a href="https://linkedin.com/in/{{ site.linkedin_username }}" target="_blank" rel="me noopener noreferrer" title="LinkedIn">{% include icon.html name="linkedin" %}</a>
     </div>
     <p class="profile-faith-note">Jesus is King</p>
   </div>
@@ -30,7 +30,7 @@ description: "Personal website of Ryan Ye, a computer science student at Cornell
       &middot; GPA {{ site.data.about.education.gpa }}
     </p>
     <p class="spotify-widget" aria-live="polite" aria-atomic="true">
-      <i class="fab fa-spotify spotify-icon" aria-hidden="true"></i>
+      {% include icon.html name="spotify" class="spotify-icon" %}
       <span id="spotify-now-playing">Loading&hellip;</span>
     </p>
   </div>
@@ -62,7 +62,7 @@ description: "Personal website of Ryan Ye, a computer science student at Cornell
       {% if pub.image %}
       <img src="{{ pub.image | relative_url }}" alt="{{ pub.title }}">
       {% else %}
-      <i class="fas fa-file-alt pub-tile-icon" aria-hidden="true"></i>
+      {% include icon.html name="file-lines" class="pub-tile-icon" %}
       {% endif %}
     </div>
     <div class="pub-tile-body">

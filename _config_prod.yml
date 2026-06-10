@@ -3,6 +3,8 @@ exclude:
   - editor.md
   - album-editor.md
   - scripts/local_editor_server.rb
+  - assets/js/editor.js
+  - assets/js/album-editor.js
   - README.md
   - CLAUDE.md
   - Gemfile

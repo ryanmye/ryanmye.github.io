@@ -135,6 +135,15 @@ hr {
   margin: 2rem 0;
 }
 
+/* Inline SVG icons (replaces Font Awesome) — sized by font-size, colored by currentColor */
+svg.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
 /* ===========================
    Layout
    =========================== */
@@ -1793,7 +1802,6 @@ main {
   color: var(--muted);
 }
 
-.spotify-widget .fab.fa-spotify,
 .spotify-widget .spotify-icon {
   font-size: 1.1rem;
   flex-shrink: 0;

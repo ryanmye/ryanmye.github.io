@@ -9,7 +9,7 @@ description: "CV of Ryan Ye, computer science student at Cornell University — 
   <h1>CV</h1>
   <p class="resume-download">
     <a href="{{ '/25Dec_Ye_Ryan_Resume.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer" class="btn-download">
-      <i class="fas fa-file-pdf"></i> Download PDF
+      {% include icon.html name="file-pdf" %} Download PDF
     </a>
   </p>
 </div>

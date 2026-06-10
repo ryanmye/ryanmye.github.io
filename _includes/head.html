@@ -31,18 +31,13 @@
 <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 <meta name="twitter:image" content="{% if page.images and page.images.size > 0 %}{{ page.images[0].src | absolute_url }}{% else %}{{ '/assets/images/headshot.jpeg' | absolute_url }}{% endif %}">
 
-<!-- Stylesheet (preload for critical path) -->
-<link rel="preload" href="{{ '/assets/css/styles.css' | relative_url }}?v={{ site.time | date: '%s' }}" as="style">
-<link rel="stylesheet" href="{{ '/assets/css/styles.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<!-- Stylesheet (bump site.css_version in _config.yml when styles.css changes) -->
+<link rel="stylesheet" href="{{ '/assets/css/styles.css' | relative_url }}?v={{ site.css_version }}">
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<!-- Font Awesome (deferred, non-blocking) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 
