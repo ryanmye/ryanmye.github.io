@@ -1,7 +1,7 @@
 ---
 layout: default
-full_title: "Ryan Ye | CS@Cornell"
-description: "CS student at Cornell (College of Engineering) working on computer vision and machine learning."
+full_title: "Ryan Ye — Computer Science Student at Cornell University"
+description: "Personal website of Ryan Ye, a computer science student at Cornell University (College of Engineering) working on computer vision and machine learning research."
 ---
 
 <div class="profile-section">

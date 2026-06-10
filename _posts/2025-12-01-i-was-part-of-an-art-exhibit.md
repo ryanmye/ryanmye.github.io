@@ -3,6 +3,7 @@ layout: post
 title: "I Was Part of an Art Exhibit"
 date: 2025-12-01T11:14:00-05:00
 tags: [life-update, i'm an artist now]
+description: "Ryan Ye on contributing a photo installation to 'What Remains — Traces of Fire, Memory and Renewal,' a Cornell AAP exhibit reflecting on the Palisades fire cleanup trip with Cru."
 images:
   - src: "/assets/images/posts/20260423112441-Screenshot_2026-04-23_at_10.38.38.png"
   - src: "/assets/images/posts/20260423112441-Screenshot_2026-04-23_at_10.38.30.png"

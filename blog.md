@@ -2,7 +2,7 @@
 layout: default
 title: "Blog"
 permalink: /blog/
-description: "Notes on research, school, and life."
+description: "Blog of Ryan Ye, computer science student at Cornell University — notes on research, school, and life."
 ---
 
 <div class="page-header">

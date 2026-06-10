@@ -1,7 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="SygV5RMPuPkt2CGGy3ULlEGrnAX7MDRn-ZFpCmfJHN0">
-<title>{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }} &mdash; {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+<title>{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }} &mdash; {{ site.title_suffix | default: site.title }}{% else %}{{ site.title }}{% endif %}</title>
 <meta name="description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 <meta name="author" content="{{ site.author }}">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
@@ -53,6 +53,7 @@
   "@type": "WebSite",
   "@id": "{{ site.url }}{{ site.baseurl }}/#website",
   "name": "{{ site.title }}",
+  "alternateName": ["Ryan Ye's Personal Website", "Ryan Ye Personal Website", "Ryan Ye — Cornell CS"],
   "description": "{{ site.description }}",
   "url": "{{ site.url }}{{ site.baseurl }}/",
   "author": {
@@ -69,6 +70,9 @@
   "@type": "Person",
   "@id": "{{ site.url }}{{ site.baseurl }}/#ryan-ye",
   "name": "{{ site.author }}",
+  "givenName": "Ryan",
+  "familyName": "Ye",
+  "alternateName": ["ryanmye", "Ryan M. Ye"],
   "url": "{{ site.url }}{{ site.baseurl }}/",
   "email": "{{ site.email }}",
   "image": "{{ '/assets/images/headshot.jpeg' | absolute_url }}",
@@ -101,6 +105,17 @@
     "https://twitter.com/{{ site.twitter_username }}"{% if site.data.research.google_scholar %},
     "{{ site.data.research.google_scholar }}"{% endif %}
   ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": "{{ site.url }}{{ site.baseurl }}/#profilepage",
+  "url": "{{ site.url }}{{ site.baseurl }}/",
+  "name": "{% if page.full_title %}{{ page.full_title }}{% else %}{{ site.title }}{% endif %}",
+  "isPartOf": { "@id": "{{ site.url }}{{ site.baseurl }}/#website" },
+  "mainEntity": { "@id": "{{ site.url }}{{ site.baseurl }}/#ryan-ye" }
 }
 </script>
 {% endif %}

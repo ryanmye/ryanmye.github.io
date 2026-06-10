@@ -4,11 +4,11 @@
 > 1. Update the relevant sections of this file to reflect your changes before finishing.
 > 2. **Anti-AI defense is a hard requirement.** Every new page, layout, or include you create MUST follow the anti-AI defense checklist in the "Anti-AI Defense" section below. Do not skip this, even for dev-only pages.
 >
-> Last updated: 2026-04-24 (image optimization pipeline)
+> Last updated: 2026-06-10 (sitewide SEO improvements)
 
 ## Project Overview
 
-Jekyll 3.8 personal website and blog for **Ryan Ye** (CS @ Cornell). Deployed on GitHub Pages at `ryanmye.github.io/aboutme`. Features data-driven pages (homepage bio, projects, research, CV), a 5-theme color system, a local blog editor + standalone album editor with Sinatra API, standalone photo albums (Jekyll collection), a gallery page, and automated Spotify "recently played" integration via GitHub Actions.
+Jekyll 3.8 personal website and blog for **Ryan Ye** (CS @ Cornell). Deployed on GitHub Pages at `ryanmye.github.io` (root user site, repo `ryanmye/ryanmye.github.io`). Features data-driven pages (homepage bio, projects, research, CV), a 5-theme color system, a local blog editor + standalone album editor with Sinatra API, standalone photo albums (Jekyll collection), a gallery page, and automated Spotify "recently played" integration via GitHub Actions.
 
 ## Quick Reference
 
@@ -23,7 +23,7 @@ bundle exec ruby scripts/local_editor_server.rb
 bundle exec jekyll build --config _config.yml,_config_prod.yml
 ```
 
-- **Base URL:** `/aboutme` (GitHub Pages project site)
+- **Base URL:** `""` (GitHub Pages root user site)
 - **Permalink format:** `/blog/:year/:month/:day/:title/`
 - **Themes:** 5 color themes via CSS custom properties — warm (default), linen, pure, barely, dark-mono
 - **Fonts:** Inter (body), DM Serif Display (headings/brand), JetBrains Mono (code)
@@ -113,7 +113,9 @@ bundle exec jekyll build --config _config.yml,_config_prod.yml
 
 ### _config.yml (~65 lines)
 Main Jekyll configuration. Key settings:
-- `title: "Ryan Ye"`, `baseurl: "/aboutme"`, `url: "https://ryanmye.github.io"`
+- `title: "Ryan Ye"`, `baseurl: ""`, `url: "https://ryanmye.github.io"`
+- `title_suffix: "Ryan Ye | Cornell CS"` — appended to inner-page `<title>` tags by `head.html` (SEO keyword signal)
+- `description` — "Personal website of Ryan Ye, a computer science student at Cornell University…" (fallback meta description + WebSite schema)
 - `twitter_username: "ryanmye0"` — used for Twitter Card meta tags
 - `markdown: kramdown` with GFM input, Rouge syntax highlighter
 - `permalink: /blog/:year/:month/:day/:title/`
@@ -161,7 +163,7 @@ Local album editor layout. Contains: standalone album metadata section (title, d
 
 ### _includes/head.html (110 lines)
 HTML `<head>` contents:
-- Meta: charset, viewport, dynamic title, description (priority: `page.description` > `page.excerpt` truncated to 160 chars > `site.description`), author
+- Meta: charset, viewport, dynamic title (priority: `page.full_title` > `{{ page.title }} — {{ site.title_suffix | default: site.title }}` > `site.title`), description (priority: `page.description` > `page.excerpt` truncated to 160 chars > `site.description`), author
 - Canonical URL: `<link rel="canonical">` using `absolute_url`
 - Feed discovery: `{% feed_meta %}` (Atom feed link from jekyll-feed)
 - Anti-AI/crawler: `<meta name="robots" content="noai, noimageai">`, `<meta name="tdm-reservation" content="1">`
@@ -171,7 +173,7 @@ HTML `<head>` contents:
 - Fonts: Google Fonts preconnect, loads Inter, DM Serif Display, JetBrains Mono
 - Font Awesome 6.4.2 (loaded with `media="print" onload` for non-blocking)
 - Favicon: inline base64 SVG graduation cap emoji
-- JSON-LD structured data: WebSite schema on all pages; Person schema (with `sameAs` links to GitHub, LinkedIn, Twitter, Google Scholar) on homepage only. Person schema includes `jobTitle`, `memberOf`/`affiliation` (Cornell), `knowsAbout` keywords.
+- JSON-LD structured data: WebSite schema on all pages (with `alternateName` array, e.g. "Ryan Ye's Personal Website"); Person + ProfilePage schemas on homepage only. Person schema includes `givenName`/`familyName`, `alternateName` (e.g. "ryanmye"), `jobTitle`, `memberOf`/`affiliation` (Cornell), `knowsAbout` keywords, `sameAs` links (GitHub, LinkedIn, Twitter, Google Scholar). ProfilePage references the Person and WebSite via `@id`.
 - Inline theme-bootstrap `<script>` at end: reads `localStorage.theme` and applies CSS custom properties synchronously to prevent flash of wrong theme on load.
 
 ### _includes/navbar.html (55 lines)
@@ -185,7 +187,7 @@ Sticky top navigation bar:
 - Active link detection via `page.url` comparison
 
 ### _includes/footer.html (16 lines)
-Site footer with: dynamic copyright year, "Jesus is King" statement, social links (GitHub, LinkedIn, email from site config). All external links use `target="_blank" rel="noopener noreferrer"`.
+Site footer with: dynamic copyright year ("© {year} Ryan Ye — personal website", SEO keyword phrase), "Jesus is King" statement, social links (GitHub, LinkedIn, email from site config). All external links use `target="_blank" rel="noopener noreferrer"`.
 
 ### _includes/image_src.html (~40 lines)
 Pluggable image URL resolver — the single choke point for every album/gallery image URL. Takes `src` (repo-relative path, e.g. `/assets/images/posts/foo.png`) and `variant` (`thumb` | `med` | `original`) and emits one URL string. Branches on `site.images.source`:
@@ -203,7 +205,7 @@ Shared photocard renderer used by every album/gallery context. Inputs: `src`, `c
 ## Root Pages
 
 ### index.md — Homepage
-**Layout:** default. **Title:** "Computer Science Student at Cornell University". **Data deps:** `site.data.about.bio_profile`, `site.data.about.education`, `site.data.about.blog_blurb`, `site.data.research.positions` (filtered by `homepage: true`), `site.data.research.publications` (filtered by `selected: true`), `site.posts` (limit 3), `_config.yml` (author, email, github_username, linkedin_username). Has page-specific `description` for SEO meta.
+**Layout:** default. **Title:** `full_title: "Ryan Ye — Computer Science Student at Cornell University"`. **Data deps:** `site.data.about.bio_profile`, `site.data.about.education`, `site.data.about.blog_blurb`, `site.data.research.positions` (filtered by `homepage: true`), `site.data.research.publications` (filtered by `selected: true`), `site.posts` (limit 3), `_config.yml` (author, email, github_username, linkedin_username). Has page-specific `description` for SEO meta.
 
 Sections (top to bottom):
 1. **Profile card** (`.profile-section`) — two columns:
@@ -349,7 +351,7 @@ Standalone albums (in `_albums/`):
 |------|-------|------|
 | `some-cornell-propoganda.md` | Some Cornell Propoganda | Apr 23, 2026 |
 
-Post front matter schema: `layout: post`, `title`, `date` (YYYY-MM-DD or ISO 8601 with timezone), `tags` (array), optional `excerpt`, optional `images` (array of `{src, caption?}` for photo album — displayed at bottom of post page and on gallery page).
+Post front matter schema: `layout: post`, `title`, `date` (YYYY-MM-DD or ISO 8601 with timezone), `tags` (array), optional `description` (SEO meta description — all 3 published posts have one), optional `excerpt`, optional `images` (array of `{src, caption?}` for photo album — displayed at bottom of post page and on gallery page).
 
 ---
 
@@ -436,7 +438,7 @@ Key features:
 - Delete standalone album button (calls `DELETE /albums/:slug`, cleans up orphaned images)
 
 ### assets/images/
-- `headshot.jpeg` — profile photo (412KB)
+- `headshot.jpeg` — profile photo (640×640, ~90KB, optimized for Core Web Vitals)
 - `posts/` — published post images, naming convention: `YYYYMMDDHHMMSS-originalname.ext`
 - `drafts/` — draft post images (same naming convention, gitignored)
 - `albums/` — standalone album images (same naming convention)
@@ -593,7 +595,7 @@ Switching delivery backends is purely a config flip — no template edits requir
 
 - **Post filenames:** `YYYY-MM-DD-slug.md` in `_posts/`, `slug.md` in `_drafts/`
 - **Page front matter (root pages):** `layout: default`, `title: "..."`, `permalink: /slug/`, `description: "..."` (SEO meta description, ~150 chars)
-- **Post front matter:** `layout: post` (applied by default), `title: "..."`, `date: YYYY-MM-DD` (or ISO 8601), `tags: [array]`, optional `excerpt: "..."`, optional `images: [{src, caption?}]` (photo album, max 25). The `caption` key on each image is optional.
+- **Post front matter:** `layout: post` (applied by default), `title: "..."`, `date: YYYY-MM-DD` (or ISO 8601), `tags: [array]`, optional `description: "..."` (SEO meta description), optional `excerpt: "..."`, optional `images: [{src, caption?}]` (photo album, max 25). The `caption` key on each image is optional.
 - **Album filenames:** `slug.md` in `_albums/`
 - **Album front matter:** `layout: album` (applied by default), `title: "..."`, `date: YYYY-MM-DD`, `description: "..."` (max 500 chars), optional `draft: true`, `images: [{src, caption?}]`
 - **Image naming:** `YYYYMMDDHHMMSS-originalname.ext` (timestamp prefix, set by editor server)

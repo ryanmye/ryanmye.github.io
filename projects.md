@@ -2,7 +2,7 @@
 layout: default
 title: "Projects"
 permalink: /projects/
-description: "Things I've built."
+description: "Projects by Ryan Ye, Cornell CS student — machine learning, computer vision, and software projects from research, hackathons, and personal work."
 ---
 
 <div class="page-header">

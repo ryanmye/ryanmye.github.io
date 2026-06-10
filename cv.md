@@ -2,7 +2,7 @@
 layout: default
 title: "CV"
 permalink: /cv/
-description: "Ryan Ye's CV."
+description: "CV of Ryan Ye, computer science student at Cornell University — research experience, publications, projects, teaching, and honors."
 ---
 
 <div class="page-header page-header-resume">
