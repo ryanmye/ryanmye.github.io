@@ -1,0 +1,26 @@
+{%- comment -%}
+  The one line above the h1 on every page but the homepage: "← Home", then
+  the section the page sits under, if any, as a short trail ("← Home / Blog"
+  on posts and /gallery/, "← Home / Blog / Gallery" on albums, "← Home /
+  Research" on /publications/). The same sections the navbar marks with
+  aria-current="true". The current page is not repeated (the h1 names it).
+  Used by default.html (every default page except "/"), post.html and
+  album.html. Styles: `.crumbs` in styles.css.
+{%- endcomment -%}
+{%- assign crumb_trail = "" -%}
+{%- if page.layout == "post" or page.url == "/gallery/" -%}
+  {%- assign crumb_trail = "Blog|/blog/" -%}
+{%- elsif page.layout == "album" -%}
+  {%- assign crumb_trail = "Blog|/blog/,Gallery|/gallery/" -%}
+{%- elsif page.url == "/publications/" -%}
+  {%- assign crumb_trail = "Research|/research/" -%}
+{%- endif -%}
+<nav class="crumbs" aria-label="Breadcrumb">
+  <ol role="list">
+    <li><a href="{{ '/' | relative_url }}"><span class="crumb-arrow" aria-hidden="true">&larr;</span>Home</a></li>
+    {%- assign crumb_items = crumb_trail | split: "," -%}
+    {%- for item in crumb_items -%}{%- assign crumb = item | split: "|" %}
+    <li><span class="sep" aria-hidden="true">/</span><a href="{{ crumb[1] | relative_url }}">{{ crumb[0] }}</a></li>
+    {%- endfor %}
+  </ol>
+</nav>

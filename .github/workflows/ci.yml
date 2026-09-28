@@ -1,0 +1,41 @@
+name: CI
+
+# Builds the production site and checks internal links/images on every PR.
+# Deploys only happen from deploy.yml on push to main.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    env:
+      # Skip the local editor/thumbnail gems; keep the :test group (html-proofer).
+      BUNDLE_WITHOUT: development
+    steps:
+      - uses: actions/checkout@v4
+
+      # Ruby version comes from .ruby-version; gems from the committed Gemfile.lock.
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Build with Jekyll (production)
+        run: bundle exec jekyll build --config _config.yml,_config_prod.yml
+        env:
+          JEKYLL_ENV: production
+
+      - name: Check links and images
+        run: >-
+          bundle exec htmlproofer _site
+          --disable-external
+          --allow-missing-href
+          --ignore-urls "/^\/albums\/some-cornell-propoganda\/$/"

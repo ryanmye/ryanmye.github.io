@@ -1,28 +1,41 @@
 name: Update Spotify Now Playing
 
+# Fetches the most recently played track and publishes it as now-playing.json
+# on the orphan `spotify-data` branch (one commit, force-pushed). The homepage
+# reads it from raw.githubusercontent.com, so main and the Pages deploy are
+# never touched by this workflow.
+
 on:
   schedule:
     # Run every 30 minutes
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+concurrency:
+  group: spotify-data
+  cancel-in-progress: false
+
 jobs:
   update-spotify:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
 
     steps:
+      # Only needed for git credentials; skip downloading the site's images.
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .github
 
       - name: Fetch recently played track
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+          OUT_FILE: ${{ runner.temp }}/now-playing.json
         run: |
           python3 << 'PYEOF'
           import os, json, base64, urllib.request, urllib.parse, time, sys
@@ -49,8 +62,16 @@ jobs:
                   'Content-Type':   'application/x-www-form-urlencoded',
               },
           )
-          with urllib.request.urlopen(token_req) as resp:
-              access_token = json.loads(resp.read())['access_token']
+          try:
+              with urllib.request.urlopen(token_req) as resp:
+                  access_token = json.loads(resp.read())['access_token']
+          except urllib.error.HTTPError as e:
+              body = e.read().decode(errors='replace')
+              print(f"::error title=Spotify token refresh failed::{e.code} {body}")
+              if 'invalid_grant' in body:
+                  print("::error::Refresh token is revoked/expired. Run scripts/get-spotify-refresh-token.py "
+                        "locally and update the SPOTIFY_REFRESH_TOKEN repo secret.")
+              sys.exit(1)
 
           # Fetch most recently played track
           recent_req = urllib.request.Request(
@@ -98,37 +119,60 @@ jobs:
               if context_info:
                   result['context'] = context_info
 
-          os.makedirs('_data', exist_ok=True)
-          with open('_data/now-playing.json', 'w') as f:
+          out_path = os.environ['OUT_FILE']
+          with open(out_path, 'w') as f:
               json.dump(result, f, indent=2)
+              f.write('\n')
 
-          print("Spotify data written to _data/now-playing.json")
+          print(f"Spotify data written to {out_path}")
           PYEOF
 
-      - name: Commit updated data
-        id: commit
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add _data/now-playing.json
-          git diff --staged --quiet && exit 0
-          # Amend the previous commit if it was also a bot update, so only one
-          # rolling bot commit appears in the history instead of hundreds.
-          # Guard: never amend merge commits (multiple parents) — that destroys branch topology.
-          PARENT_COUNT=$(git cat-file -p HEAD | grep -c '^parent ')
-          LAST_AUTHOR=$(git log -1 --format='%an')
-          if [ "$PARENT_COUNT" -eq 1 ] && [ "$LAST_AUTHOR" = "github-actions[bot]" ]; then
-            git commit --amend -m "chore: update Spotify now-playing data"
-          else
-            git commit -m "chore: update Spotify now-playing data"
-          fi
-          git push --force-with-lease
-          echo "pushed=true" >> "$GITHUB_OUTPUT"
-
-      # Pushes made with GITHUB_TOKEN don't fire `push`-event workflows, so
-      # dispatch the Pages deploy explicitly — but only when the track changed.
-      - name: Trigger Pages deploy
-        if: steps.commit.outputs.pushed == 'true'
+      - name: Publish to spotify-data branch
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
+          OUT_FILE: ${{ runner.temp }}/now-playing.json
+          BOT_NAME: github-actions[bot]
+          BOT_EMAIL: github-actions[bot]@users.noreply.github.com
+        run: |
+          set -euo pipefail
+
+          if [ ! -f "$OUT_FILE" ]; then
+            echo "No now-playing data was written; nothing to publish."
+            exit 0
+          fi
+
+          played_at() {
+            python3 -c 'import json,sys; d=json.load(sys.stdin); print((d.get("track") or {}).get("played_at") or "")'
+          }
+
+          new_played=$(played_at < "$OUT_FILE")
+
+          # Compare only track.played_at (never fetched_at, which changes every run).
+          if git ls-remote --exit-code --heads origin spotify-data > /dev/null; then
+            git fetch --quiet --depth=1 origin refs/heads/spotify-data
+            old_played=$(git show FETCH_HEAD:now-playing.json 2>/dev/null | played_at || true)
+            if [ "$new_played" = "$old_played" ]; then
+              echo "Track unchanged (played_at=$new_played); not pushing."
+              exit 0
+            fi
+            echo "Track changed: '$old_played' -> '$new_played'"
+          else
+            echo "spotify-data branch does not exist yet; creating it."
+          fi
+
+          # Build a single parentless commit (now-playing.json + README.md)
+          # in a throwaway index so the checkout is untouched.
+          export GIT_INDEX_FILE="$RUNNER_TEMP/spotify-index"
+          rm -f "$GIT_INDEX_FILE"
+          readme="$RUNNER_TEMP/spotify-README.md"
+          echo "Auto-updated by .github/workflows/update-spotify.yml on main: holds now-playing.json (my most recently played Spotify track), read by the homepage." > "$readme"
+          json_blob=$(git hash-object -w "$OUT_FILE")
+          readme_blob=$(git hash-object -w "$readme")
+          printf '100644 blob %s\tnow-playing.json\n100644 blob %s\tREADME.md\n' "$json_blob" "$readme_blob" \
+            | git update-index --index-info
+          tree=$(git write-tree)
+          commit=$(GIT_AUTHOR_NAME="$BOT_NAME" GIT_AUTHOR_EMAIL="$BOT_EMAIL" \
+                   GIT_COMMITTER_NAME="$BOT_NAME" GIT_COMMITTER_EMAIL="$BOT_EMAIL" \
+                   git commit-tree "$tree" -m "Update now-playing (played_at ${new_played:-none})")
+
+          git push --force origin "$commit:refs/heads/spotify-data"
+          echo "Pushed $commit to spotify-data"

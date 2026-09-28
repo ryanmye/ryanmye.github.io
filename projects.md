@@ -2,45 +2,19 @@
 layout: default
 title: "Projects"
 permalink: /projects/
-description: "Projects by Ryan Ye, Cornell CS student — machine learning, computer vision, and software projects from research, hackathons, and personal work."
+description: "Projects by Ryan Ye, Cornell CS student: machine learning and software projects from courses, hackathons, and personal work."
 ---
 
-<div class="page-header">
+<header class="page-head">
   <h1>Projects</h1>
-  <p class="subtitle">Things I've built, explored, and shipped.</p>
-</div>
+  <p class="page-lede">Course, hackathon, and personal projects. Research is on the <a href="{{ '/research/' | relative_url }}">research page</a>.</p>
+</header>
 
-<div class="card-grid">
-
-{% for project in site.data.projects.projects %}
-  <article class="card">
-    <h2 class="card-title">
-      {% if project.url %}
-      <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer">{{ project.title }}</a>
-      {% else %}
-      {{ project.title }}
-      {% endif %}
-    </h2>
-    {% if project.date %}<p class="card-date">{{ project.date }}</p>{% endif %}
-    <p class="card-description">{{ project.description }}</p>
-    <div class="tags">
-      {% for tag in project.tags %}
-      <span class="tag">{{ tag }}</span>
-      {% endfor %}
-    </div>
-    {% if project.bullets.size > 0 %}
-    <ul style="font-size:0.875rem;margin-top:0.75rem;color:var(--muted)">
-      {% for bullet in project.bullets %}
-      <li>{{ bullet }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% if project.url %}
-    <div class="card-links">
-      <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer">GitHub &rarr;</a>
-    </div>
-    {% endif %}
-  </article>
-{% endfor %}
-
-</div>
+{%- comment -%}
+  The same compact rows as the homepage (title, "code →", one-line summary,
+  date on the right), each with a <details> holding the description and
+  bullets. projects.yml order.
+{%- endcomment -%}
+<section class="page-section page-section-first" aria-label="All projects">
+  {% include project_rows.html details=true heading="h2" %}
+</section>

@@ -1,0 +1,13 @@
+{%- comment -%}
+  The blog's one list: every post plus each standalone album that is not a
+  draft (`draft: true`), not `published: false`, and has at least one
+  image, sorted by `date`, newest first. Assigns `blog_entries` (Liquid
+  assigns inside an include persist in the page) and outputs nothing.
+  Used by /blog/ (all, grouped by year) and the homepage "From the blog"
+  (the first three), so the two cannot drift.
+  Usage: include blog_entries.html, then loop over blog_entries.
+{%- endcomment -%}
+{%- assign blog_entries = "" | split: "" -%}
+{%- for _be_post in site.posts -%}{%- assign blog_entries = blog_entries | push: _be_post -%}{%- endfor -%}
+{%- for _be_album in site.albums -%}{%- unless _be_album.draft == true or _be_album.published == false -%}{%- if _be_album.images and _be_album.images.size > 0 -%}{%- assign blog_entries = blog_entries | push: _be_album -%}{%- endif -%}{%- endunless -%}{%- endfor -%}
+{%- assign blog_entries = blog_entries | sort: "date" | reverse -%}

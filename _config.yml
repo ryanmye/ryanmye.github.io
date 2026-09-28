@@ -1,6 +1,6 @@
 title: "Ryan Ye"
 title_suffix: "Ryan Ye | Cornell CS"
-description: "Personal website of Ryan Ye, a computer science student at Cornell University working on computer vision and machine learning."
+description: "Personal website of Ryan Ye, a computer science student at Cornell University doing AI for science research: agents for scientific discovery and computer vision."
 author: "Ryan Ye"
 email: "rmy43@cornell.edu"
 github_username: "ryanmye"
@@ -12,7 +12,7 @@ twitter_username: "ryanmye0"
 theme: null
 
 # Cache-busting version for assets/css/styles.css — bump when the stylesheet changes.
-css_version: 1
+css_version: 12
 
 plugins:
   - jekyll-sitemap
@@ -21,6 +21,9 @@ plugins:
 markdown: kramdown
 highlighter: rouge
 permalink: /blog/:year/:month/:day/:title/
+# No automatic excerpts: a post has `excerpt` only when its front matter sets
+# one (the blog index then shows it; otherwise the first 24 words).
+excerpt_separator: ""
 
 kramdown:
   input: GFM
@@ -47,13 +50,22 @@ collections:
     output: true
     permalink: /albums/:title/
 
+# Keep in sync with the other config; Jekyll replaces exclude lists, it does not merge them.
+# (_config_prod.yml repeats this whole list and adds the editor-only files.)
 exclude:
   - README.md
   - CLAUDE.md
+  - LOCAL_DEV.md
   - Gemfile
   - Gemfile.lock
+  - .ruby-version
   - node_modules
   - vendor
+  - scripts/
+  - .github/
+  - _deleted/
+  - resume/
+  - bin/
 
 defaults:
   - scope:

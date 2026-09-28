@@ -1,6 +1,6 @@
 ---
 layout: album
-title: "Some Cornell Propoganda"
+title: "Some Cornell Propaganda"
 date: 2026-04-26T13:25:19-04:00
 description: "Just some Cornell propaganda. Disclaimer: These pictures are not representative of Cornell's usual state. They were all taken during April (the month where everything happens)."
 images:

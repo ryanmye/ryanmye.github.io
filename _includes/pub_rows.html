@@ -1,0 +1,20 @@
+{%- comment -%}
+  Publications as wide rows (the /research/ and /cv/ style): title (linked
+  when `url` is set), authors with Ryan's name in 600 weight, venue and
+  lowercased role in muted, optionally the description; the year on the right.
+  Callers pass the list already sorted by `rank`.
+  Usage: {% include pub_rows.html pubs=array descriptions=true %}
+{%- endcomment -%}
+<ul class="rows" role="list">
+  {% for pub in include.pubs %}
+  <li class="row">
+    <div class="row-main">
+      <p class="row-title">{% if pub.url %}<a href="{{ pub.url }}" target="_blank" rel="noopener noreferrer">{{ pub.title }}</a>{% else %}{{ pub.title }}{% endif %}</p>
+      <p class="row-line">{{ pub.authors | replace: "Ryan M. Ye", "<strong>Ryan M. Ye</strong>" | replace: "Ryan Ye", "<strong>Ryan Ye</strong>" | replace: "R. M. Ye", "<strong>R. M. Ye</strong>" }}</p>
+      <p class="row-meta">{{ pub.venue }}{% if pub.role %} &middot; {{ pub.role | downcase }}{% endif %}</p>
+      {% if include.descriptions and pub.description %}<p class="row-desc">{{ pub.description }}</p>{% endif %}
+    </div>
+    <p class="row-date">{{ pub.year }}</p>
+  </li>
+  {% endfor %}
+</ul>

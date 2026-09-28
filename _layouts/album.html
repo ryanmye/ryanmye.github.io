@@ -10,14 +10,12 @@
 
   <main id="main-content" role="main">
     <div class="container">
+      <div class="page-content">
       <article class="album-detail">
+        {% include breadcrumb.html %}
         <header class="post-header">
           <h1>{{ page.title }}</h1>
-          <p class="post-date">
-            <time datetime="{{ page.date | date_to_xmlschema }}">
-              {{ page.date | date: "%B %-d, %Y" }}
-            </time>
-          </p>
+          <p class="post-date"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>{% if page.images and page.images.size > 0 %} &middot; {{ page.images.size }} photo{% if page.images.size != 1 %}s{% endif %}{% endif %}</p>
         </header>
 
         {% if page.description and page.description != "" %}
@@ -32,10 +30,9 @@
         </div>
         {% endif %}
 
-        <nav class="album-nav">
-          <a href="{{ '/gallery' | relative_url }}">&larr; Back to gallery</a>
-        </nav>
+        <p class="album-end"><a href="{{ '/gallery/' | relative_url }}"><span aria-hidden="true">&larr;</span> Back to gallery</a></p>
       </article>
+      </div>
     </div>
   </main>
 

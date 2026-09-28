@@ -1,0 +1,68 @@
+{%- comment -%}
+  The project list: `featured: true` projects first, then the rest in
+  projects.yml order. Each row has the title with "code →" when the project
+  has a url, and the date right-aligned.
+  - Homepage (default): featured rows add `short` (a one-to-two-line
+    version for the homepage column), else the `summary`; the others add
+    the one-line `context` (team and role).
+  - details=true (/projects/): every row adds `summary` and `context`, then a
+    <details> with the description and bullets; the list is two columns
+    from 700px with featured rows spanning both. A project with `image`
+    gets a .row-media picture first (the li gets .has-media), linked to
+    `site`, else `url`. The link is aria-hidden and out of the tab order
+    because the title row already links there, so the alt is left empty
+    inside it (`alt` is used when there is no link). The first picture is
+    fetchpriority=high, the rest lazy. No `image`, no picture.
+    After the featured rows, the projects with a picture come before the
+    ones without (each group in file order), so a grid row never pairs a
+    picture with a text-only cell that would read as its caption.
+  Usage: {% include project_rows.html %} or {% include project_rows.html details=true heading="h2" %}
+{%- endcomment -%}
+{%- assign h = include.heading | default: "h3" -%}
+{%- assign featured = site.data.projects.projects | where: "featured", true -%}
+{%- assign rest = site.data.projects.projects | where_exp: "p", "p.featured != true" -%}
+{%- if include.details -%}
+  {%- assign rest_media = "" | split: "" -%}
+  {%- assign rest_plain = "" | split: "" -%}
+  {%- for p in rest -%}
+    {%- if p.image -%}{%- assign rest_media = rest_media | push: p -%}{%- else -%}{%- assign rest_plain = rest_plain | push: p -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign rest = rest_media | concat: rest_plain -%}
+{%- endif -%}
+{%- assign ordered = featured | concat: rest -%}
+<ul class="rows{% if include.details %} proj-grid{% else %} proj-list{% endif %}" role="list">
+  {% for project in ordered %}
+  {%- assign media = false -%}
+  {%- if include.details and project.image -%}{%- assign media = project.image -%}{%- endif %}
+  <li class="row{% if project.featured %} row-featured{% endif %}{% if media %} has-media{% endif %}">
+    {%- if media %}{% assign media_href = project.site | default: project.url %}
+    <div class="row-media">{% if media_href %}<a href="{{ media_href }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">{% endif %}<img src="{{ media.src | relative_url }}" alt="{% unless media_href %}{{ media.alt | escape }}{% endunless %}" width="{{ media.width }}" height="{{ media.height }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% if media_href %}</a>{% endif %}</div>
+    {%- endif %}
+    <div class="row-main">
+      <{{ h }} class="row-title">{{ project.title }}{% if project.site %} <a class="row-link" href="{{ project.site }}" target="_blank" rel="noopener noreferrer">site<span class="visually-hidden"> for {{ project.title }}</span> <span aria-hidden="true">&rarr;</span></a>{% endif %}{% if project.url %} <a class="row-link" href="{{ project.url }}" target="_blank" rel="noopener noreferrer">code<span class="visually-hidden"> for {{ project.title }}</span> <span aria-hidden="true">&rarr;</span></a>{% endif %}</{{ h }}>
+      {% if include.details or project.featured %}
+      {%- if include.details %}{% assign line = project.summary | default: project.description %}{% else %}{% assign line = project.short | default: project.summary | default: project.description %}{% endif %}
+      <p class="row-line">{{ line | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
+      {% elsif project.context %}
+      <p class="row-context">{{ project.context }}</p>
+      {% endif %}
+      {% if include.details %}
+      {% if project.context %}<p class="row-context">{{ project.context }}</p>{% endif %}
+      <details class="more">
+        <summary>Details<span class="visually-hidden"> on {{ project.title }}</span></summary>
+        <div class="more-body">
+          <p class="row-desc">{{ project.description }}</p>
+          {% if project.bullets.size > 0 %}
+          <ul class="row-bullets">
+            {% for bullet in project.bullets %}<li>{{ bullet }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+      </details>
+      {% endif %}
+    </div>
+    <p class="row-date">{{ project.date }}</p>
+  </li>
+  {% endfor %}
+</ul>

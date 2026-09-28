@@ -1,71 +1,180 @@
 # Research information
-subtitle: "Computer vision, machine learning, and AI for scientific discovery."
 google_scholar: "https://scholar.google.com/citations?user=RhqHy9sAAAAJ&hl=en"
 
+# Positions, newest first. `date` uses one format: "Mon YYYY – present",
+# "Mon YYYY – Mon YYYY", or a season ("Summer 2026"), with an en dash.
+# research.md groups positions by `lab` and prints one header per lab:
+# "<lab>, <institution> · PI <pi> · <date of the lab's oldest position>".
+#
+# Card fields (homepage "Selected work" and /research/):
+#   slug            anchor id on /research/ (the card's "Details" target)
+#   card_summary    two short sentences on the card: what the project is,
+#                   then what he did (first person). Not a metric: no
+#                   headline numbers on the cards.
+#   figure          optional {src, alt, caption, width, height}; /research/
+#                   shows it left of the description when set; without it
+#                   the description takes the full measure
 positions:
-  - title: "MABe25 - Animal Behavior Benchmark"
+  - title: "Statistical Validation for Automated Hypothesis Discovery"
+    slug: "statistical-validation"
+    card_summary: "The statistical layer that checks an automated scientific-discovery agent's findings. I built it and found where its false-discovery guarantees broke."
     role: "Undergraduate Researcher"
-    lab: "Sun Lab (PI: Jennifer Sun)"
+    lab: "Sun Lab"
+    pi: "Jennifer Sun"
     institution: "Cornell University"
-    date: "February 2025 - Present"
+    date: "Summer 2026"
     description: |
-      Benchmarking video-based AI models for classifying animal behavior
-      across 16 research labs as part of the MABe25 competition.
+      Showed that an automated scientific discovery system reported far more false findings
+      than it promised: its false discovery rate (the share of reported findings that are
+      wrong) ran 35 to 41% against a 10% target, and up to 99.3% when adaptive selection
+      reused holdout data, which led to the conservative controller becoming the default.
+      I built the system's statistical validation layer, which checks its findings; the
+      system searches over thousands of hypotheses and would otherwise mostly report noise.
+      AIMI Junior Affiliate project.
     focus:
-      - title: "Large-scale video understanding"
-        detail: "evaluating whether pretrained video transformers (VideoMAE2, VideoPrism) can generalize to specialized behavioral science data across diverse lab settings"
-      - title: "Multi-lab benchmark infrastructure"
-        detail: "a dataset spanning 16 labs with varied recording conditions, designed to test model robustness for real-world scientific use"
+      - title: "Validation layer from scratch"
+        detail: "A config-gated add-on with a typed anytime-valid evidence interface, e-value robustness fixes, interval-null tests, and a portfolio-FDR test suite"
+      - title: "Finding where the guarantees broke"
+        detail: "The FDR controller only saw values that had already cleared a self-referential local threshold; shipped two corrected registration modes. A separate scaling mismatch had the default controller silently making zero discoveries across 261,904 real clinical-trial p-values"
+      - title: "Adaptive-selection vulnerability"
+        detail: "Showed that a smarter tree selector could exploit reused holdout data to bias which hypotheses got tested"
+      - title: "Validation against real data"
+        detail: "Four real-world datasets including a 250K-row clinical-trials corpus; benchmarked 8 candidate controllers against the published online-FDR literature; drove a null-data incoherence failure mode from 67% to 10.5%"
+    homepage: true
+    index_title: "Statistical Validation for Hypothesis Discovery"
+    index_description: "Showed that an automated hypothesis discovery system's false discovery rate ran 35 to 41% against a 10% target, and built the statistical validation layer that checks its findings."
+    cv: true
+    cv_title: "Sun Lab · statistical validation"
+    cv_date: "Summer 2026"
+    cv_subtitle: "Statistical validation for automated hypothesis discovery"
+    cv_bullets:
+      - "Showed an MCTS-based discovery system's false discovery rate ran 35 to 41% against a 10% target; shipped two corrected registration modes"
+      - "Showed that reusing holdout data under adaptive tree selection pushed the false discovery rate to 99.3% at scale, which led to the conservative controller becoming the default"
+      - "Built the validation layer (anytime-valid evidence interface, e-value fixes, interval-null tests) and benchmarked 8 controllers on four real-world datasets"
 
-  - title: "AI for Animal Behavior Monitoring - Project accepted to ADSA 2026 Poster!"
+  - title: "Video Behavior Recognition Across Labs (MABe)"
+    slug: "mabe"
+    card_summary: "Video foundation models that recognize animal behavior across 15 labs' datasets. I designed the fine-tuning and built the training pipeline on Cornell's GPU cluster."
     role: "Undergraduate Researcher"
-    lab: "Sun Lab (PI: Jennifer Sun)"
+    lab: "Sun Lab"
+    pi: "Jennifer Sun"
     institution: "Cornell University"
-    date: "May 2025 - Present"
+    date: "Feb 2026 – present"
     description: |
-      Building scalable computer vision systems for analyzing dairy calf behavior in
-      agricultural environments, supporting veterinary researchers studying early
-      indicators of disease and welfare.
+      A video-based action recognition system that generalizes across 15 independently
+      collected animal behavior datasets, grown from a Kaggle "Multi-Agent Behavior"
+      competition entry. In a shared lab codebase, I designed LoRA fine-tuning of a frozen
+      video foundation model with a self-authored kinematic auxiliary loss and built the
+      8-stage SLURM training pipeline; it beat the frozen-backbone baseline on 9 of 15
+      datasets, and for one lab, the video-only model beat that lab's pose-tracking ceiling.
+    focus:
+      - title: "Fine-tuning video foundation models"
+        detail: "Ahead of the baseline on at least one split for 13 of 15 datasets; ablations of the kinematic loss and of checkpoint selection, and a like-for-like comparison against a pose-tracking model's frozen classifier"
+      - title: "Training infrastructure"
+        detail: "An 8-stage SLURM pipeline (fine-tune, extract, train, evaluate) with 5-fold cross-validation and threshold calibration, run across all 15 datasets on Cornell's GPU cluster"
+      - title: "Data and GPU bring-up"
+        detail: "Wrote the staging pipeline that moves terabytes of video (up to 1.9 TB per lab) to node-local NVMe before training and a balanced sampler for severe multi-label class imbalance; brought the pipeline up on Blackwell GPUs through a toggleable parallel CUDA 12.8 environment"
+    homepage: true
+    index_title: "Behavior Recognition Across Labs (MABe)"
+    index_description: "Beat the frozen-backbone baseline on 9 of 15 animal behavior datasets by LoRA fine-tuning a video foundation model, and built the training pipeline that runs across all 15."
+    cv: true
+    cv_title: "Sun Lab · MABe"
+    cv_date: "Feb 2026 – present"
+    cv_subtitle: "Multi-lab animal behavior video recognition"
+    cv_bullets:
+      - "Beat the frozen-backbone baseline on 9 of 15 datasets (13 of 15 on at least one split) by LoRA fine-tuning a frozen video foundation model with a self-authored kinematic auxiliary loss"
+      - "Built the 5-fold cross-validation, threshold calibration, and 8-stage SLURM training pipeline used across all 15 datasets; brought it up on Blackwell GPUs with CUDA 12.8"
+      - "Wrote the staging pipeline that moves terabytes of video to node-local NVMe, a balanced sampler for multi-label class imbalance, and the JAX baseline for the Kaggle competition the project grew out of"
+
+  - title: "AI for Animal Behavior Monitoring"
+    slug: "calf-behavior"
+    card_summary: "Computer vision that classifies dairy calf posture from farm video, for veterinary researchers. I annotated the data and built the detection and classification pipeline."
+    figure:
+      src: "/assets/images/research/calf-pose-detection.webp"
+      alt: "Overhead farm camera view of three calves in neighboring pens, each boxed and labeled by the model: one standing (0.99) and two lying (1.00 and 0.99)."
+      caption: "The pipeline labeling calf posture on farm camera footage (from the ADSA 2026 poster)."
+      width: 1000
+      height: 562
+    role: "Undergraduate Researcher"
+    lab: "Sun Lab"
+    pi: "Jennifer Sun"
+    institution: "Cornell University"
+    date: "May 2025 – present"
+    description: |
+      Computer vision for dairy calf behavior on working farms, for veterinary researchers
+      studying early indicators of disease and welfare. I annotated the calf dataset,
+      fine-tuned a YOLO detector on it, and benchmarked DINOv2 against DINOv3 features and
+      vision-language models for posture and ear tag recognition.
     focus:
       - title: "Self-supervised vision for livestock monitoring"
-        detail: "a pipeline using DINOv3 features and YOLOv11 detection to classify calf posture from farm camera footage with limited labeled data"
+        detail: "Posture classification from frozen DINOv2/DINOv3 features with lightweight classifier heads, plus a YOLO detector fine-tuned on a self-annotated calf dataset; best F1 rose from 0.928 at 300 training images to 0.957 at 1,000"
+      - title: "Vision-language models on farm imagery"
+        detail: "Benchmarked Qwen, Gemma 3, PaliGemma, and NVLM for ear tag and pose recognition; 77% of ear tag OCR responses were unreadable on real farm images"
       - title: "Bridging AI and veterinary research"
-        detail: "an interactive Jupyter workflow enabling everyone to run experiments and interpret results"
-      - title: "Paper: \"Automating pose detection in calves: a computer vision framework for non-invasive behavioral monitoring.\""
-        detail: "Accepted to ADSA 2026 — thank you to all my advisors!"
+        detail: "An interactive Jupyter workflow so veterinary researchers can run experiments and interpret results without an ML background"
+      - title: "ADSA 2026 poster"
+        detail: "\"Automating pose detection in calves: a computer vision framework for non-invasive behavioral monitoring\"; manuscript in preparation"
     note: "Conducted as part of the Bowers Undergraduate Research Experience (BURE) with support from a CIDA grant."
     homepage: true
-    index_title: "AI for Animal Behavior Monitoring"
-    index_description: |
-      I work on scalable computer vision systems for analyzing dairy calf behavior in
-      agricultural environments, supporting veterinary researchers studying early indicators
-      of disease and welfare. Work spans pose classification with self-supervised DINO
-      features, YOLO-based object detection on a self-annotated dataset, and evaluation
-      of vision-language models for farm settings.
+    index_title: "Calf Behavior Monitoring"
+    index_description: "Reached F1 0.957 on calf posture classification from DINO features and a YOLO detector fine-tuned on a dataset I annotated; poster presented at ADSA 2026."
     cv: true
-    cv_title: "Undergraduate Researcher — Sun Lab"
-    cv_date: "May 2025 - present"
+    cv_title: "Sun Lab · calf behavior"
+    cv_date: "May 2025 – present"
     cv_subtitle: "Bowers Undergraduate Research Experience (BURE) — CIDA Grant Recipient"
     cv_bullets:
-      - "Computer vision pipeline for dairy calf behavior analysis from overhead video"
-      - "Pose classification using self-supervised DINO features"
-      - "YOLO fine-tuning on self-annotated livestock dataset"
-      - "Evaluation of VLMs for pose recognition and eartag identification"
-      - "Interactive Jupyter workflow for veterinary researchers"
-publications:
-  - title: "Effects of Firm Performance on CEO Compensation Before and During COVID-19"
-    authors: "Ryan Ye, Yanan Chen, Kyle A. Kelly"
-    venue: "Research in Economics, 2023"
-    url: "https://doi.org/10.1016/j.rie.2023.07.002"
-    image: null
-    selected: true
-    description: "This research analyzed how firm performance influenced CEO compensation structures before and during the COVID-19 pandemic, with a focus on changes in pay ratios and incentive alignment."
-    tags: ["Economics", "CEO Compensation", "COVID-19"]
-    cv_year: "2023"
-    cv_subtitle: "Primary Author — Research in Economics"
+      - "Built a calf posture classification pipeline from DINOv2/DINOv3 features and a YOLO detector fine-tuned on a self-annotated dataset; best F1 0.957"
+      - "Ran 24 comparison runs across training-set sizes benchmarking DINOv2 vs. DINOv3 ensembles"
+      - "Benchmarked vision-language models (Qwen, Gemma 3, PaliGemma, NVLM) for ear tag and pose recognition on farm imagery"
+      - "Built an interactive Jupyter workflow for veterinary researchers"
+      - "Poster presented at ADSA 2026; manuscript in preparation"
 
+# Every page sorts publications by `rank` (1 = most significant, listed
+# first; currently the ADSA poster). To reorder, change the numbers; the
+# order of entries in this file does not matter. The homepage and /research/
+# show `selected: true`; /publications/ and /cv/ show all, and /publications/
+# groups them by `type` ("poster" or "journal"), groups ordered by their
+# best-ranked entry. pub_rows.html bolds "Ryan Ye" / "Ryan M. Ye" /
+# "R. M. Ye" in `authors`, appends the lowercased `role` to the venue
+# ("Venue · supporting author"), and right-aligns `year`.
+publications:
+  - title: "Automating pose detection in calves: a computer vision framework for non-invasive behavioral monitoring"
+    rank: 1
+    authors: "Ryan M. Ye, Marina Madureira Ferreira, Jennifer J. Sun, Francisco A. Leal Yepes"
+    venue: "ADSA Annual Meeting, 2026 (poster)"
+    url: null
+    selected: true
+    description: "A computer vision framework for calf posture detection from farm video, built for veterinary researchers studying early indicators of disease and welfare."
+    role: "Author"
+    year: "2026"
+    type: "poster"
+
+  - title: "A smarter lung ultrasonography solution for lung consolidation classification in dairy calves using a deep learning approach"
+    rank: 2
+    authors: "Marina Madureira Ferreira, Keshawa M. Dadallage, Tyler Ward, Hannah McCray, Ryan M. Ye, Jennifer J. Sun, Francisco A. Leal Yepes"
+    venue: "Journal of Dairy Science, 2026"
+    url: "https://doi.org/10.3168/jds.2026-28434"
+    selected: true
+    description: "A deep learning classifier for lung consolidation from calf lung ultrasound. Supporting author: advised on annotation tooling (CVAT) and model selection (YOLO, DINO)."
+    role: "Supporting author"
+    year: "2026"
+    type: "journal"
+
+  - title: "The effects of firm performance on CEO compensation and CEO pay ratio before and during COVID-19"
+    rank: 3
+    authors: "Ryan Ye, Yanan Chen, Kyle A. Kelly"
+    venue: "Research in Economics 77(4), 2023"
+    url: "https://doi.org/10.1016/j.rie.2023.07.002"
+    selected: false
+    description: "High school research with West Chester University. Analyzed how firm performance influenced CEO compensation and pay ratios before and during the COVID-19 pandemic."
+    role: "First author"
+    year: "2023"
+    type: "journal"
+
+# Research interests, shown on /research/ and /cv/. The " — " splits the bold
+# lead from the detail; it is a separator, not prose.
 interests:
-  - "Machine learning and computer vision — deep learning systems for real-world perception tasks"
-  - "AI for science — using ML to accelerate research in biology, agriculture, and medicine"
-  - "Representation learning — self-supervised and foundation models (DINO, VLMs)"
-  - "Data-efficient learning — methods that work well with limited labeled data"
+  - "AI for science — Using ML to accelerate research in biology, agriculture, and medicine"
+  - "Agents for scientific discovery — Open-ended systems that generate and test hypotheses, and statistical checks on what they report"
+  - "Computer vision for science — Video and self-supervised models (DINO, VLMs) for animal behavior"
+  - "Data-efficient learning — Methods that work well with limited labeled data"

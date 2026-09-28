@@ -1,13 +1,24 @@
+# Production overlay, used by CI:
+#   jekyll build --config _config.yml,_config_prod.yml
 local_editor: false
+
+# Keep in sync with the other config; Jekyll replaces exclude lists, it does not merge them.
+# This is the full list from _config.yml plus the dev-only studio pages and their JS.
 exclude:
-  - editor.md
-  - album-editor.md
-  - scripts/local_editor_server.rb
-  - assets/js/editor.js
-  - assets/js/album-editor.js
   - README.md
   - CLAUDE.md
+  - LOCAL_DEV.md
   - Gemfile
   - Gemfile.lock
+  - .ruby-version
   - node_modules
   - vendor
+  - scripts/
+  - .github/
+  - _deleted/
+  - resume/
+  - bin/
+  - editor.md
+  - album-editor.md
+  - assets/js/editor.js
+  - assets/css/editor.css

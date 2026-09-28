@@ -1,9 +1,42 @@
 (function () {
   'use strict';
 
+  // Images in a post body open in the same lightbox. Each one (unless it is
+  // already inside a link) is wrapped in a button that carries the same data
+  // attributes as an album photocard, so it joins the photo list in document
+  // order. The caption is the editor's "*caption*" line under the image, else
+  // the alt text.
+  function wrapBodyImages() {
+    var imgs = document.querySelectorAll('.post-content img');
+    Array.prototype.forEach.call(imgs, function (img) {
+      if (img.closest('a, button')) return;
+      var caption = '';
+      var holder = img.parentElement;
+      var next = holder && holder.tagName === 'P' ? holder.nextElementSibling : null;
+      if (next && next.tagName === 'P' && next.children.length === 1 &&
+          next.firstElementChild.tagName === 'EM' &&
+          next.textContent.trim() === next.firstElementChild.textContent.trim()) {
+        caption = next.textContent.trim();
+      }
+      var fig = img.closest('figure');
+      if (!caption && fig && fig.querySelector('figcaption')) {
+        caption = fig.querySelector('figcaption').textContent.trim();
+      }
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'post-image-trigger';
+      btn.setAttribute('data-full-src', img.currentSrc || img.src);
+      btn.setAttribute('data-caption', caption || img.alt || '');
+      if (!img.alt) btn.setAttribute('aria-label', 'Open photo' + (caption ? ': ' + caption : ''));
+      img.parentNode.insertBefore(btn, img);
+      btn.appendChild(img);
+    });
+  }
+
   function init() {
+    wrapBodyImages();
     var triggers = Array.prototype.slice.call(
-      document.querySelectorAll('.album-photo-trigger')
+      document.querySelectorAll('.album-photo-trigger, .post-image-trigger')
     );
     if (triggers.length === 0) return;
 

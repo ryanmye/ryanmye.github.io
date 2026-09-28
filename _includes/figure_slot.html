@@ -1,0 +1,11 @@
+{%- comment -%}
+  A research figure: rendered only when research.yml sets `figure` on a
+  position ({src, alt, caption, width, height}); nothing at all otherwise.
+  Give width/height (the image's pixel size) so the page does not shift.
+  Usage: {% if position.figure %}{% include figure_slot.html figure=position.figure %}{% endif %}
+{%- endcomment -%}
+{%- assign f = include.figure -%}
+<figure class="study-figure">
+  <img src="{{ f.src | relative_url }}" alt="{{ f.alt }}"{% if f.width %} width="{{ f.width }}" height="{{ f.height }}"{% endif %} loading="lazy" decoding="async">
+  {% if f.caption %}<figcaption>{{ f.caption }}</figcaption>{% endif %}
+</figure>

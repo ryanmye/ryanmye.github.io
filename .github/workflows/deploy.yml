@@ -17,12 +17,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Job-level so both `bundle install` (setup-ruby) and `bundle exec` see it.
+      BUNDLE_WITHOUT: development:test
     steps:
       - uses: actions/checkout@v4
 
+      # Ruby version comes from .ruby-version; gems from the committed Gemfile.lock.
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
           bundler-cache: true
 
       - name: Build with Jekyll

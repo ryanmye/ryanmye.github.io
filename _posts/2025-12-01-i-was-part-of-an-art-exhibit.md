@@ -16,13 +16,13 @@ images:
 
 Last month, I was part of an art exhibit. I wrote a short bio for my piece, but have had nowhere to publish it, so it'll be here below.
 
-##### Background
+## Background
 
-A bit of background: a group of about \~40 of us from [Cru Cornell](https://www.crucornell.com) went to LA to help with cleanup after the tragic Palisades fire back in early april for our spring break. This was such a reflective and life-changing experience, contrasting the destruction of what were people's homes and lives with the beautiful ocean. When I was approached by my friend Christina about being part of an art exhibit, I immediately replied with, "When is it?"
+A bit of background: a group of about 40 of us from [Cru Cornell](https://www.crucornell.com) went to LA to help with cleanup after the tragic Palisades fire back in early April for our spring break. This was such a reflective and life-changing experience, contrasting the destruction of what were people's homes and lives with the beautiful ocean. When I was approached by my friend Christina about being part of an art exhibit, I immediately replied with, "When is it?"
 
 Below (writing and photos) are part of my work that I did for this exhibit, titled "*What Remains — Traces of Fire, Memory and Renewal.*"
 
-##### My piece, titled "Though the Mountains Fall Into the Sea (Psalms 46:2)"
+## My piece, titled "Though the Mountains Fall Into the Sea (Psalm 46:2)"
 
 This installation emerged from my journey with Cru and Samaritan's Purse to the scorched neighborhoods of the Palisades, where wildfires reduced homes, futures, and dreams to ash. Each transparent panel holds a fragment of that landscape, a visual testimony to both devastation and divine presence.
 
@@ -38,11 +38,11 @@ The juxtaposition of charred earth against glimpses of the Pacific serves as a m
 
 > "Therefore we will not fear, though the earth give way and the mountains fall into the heart of the sea"
 > 
-> \- Psalms 46:2
+> \- Psalm 46:2
 
 As witness and prayer, this work honors everything lost while reminding us that even in the midst of ashes, new, fuller, better, everlasting things can spring forth.
 
-##### More links
+## More links
 
 Cornell Daily Sun featured us? [On ‘What Remains — Traces of Fire, Memory and Renewal’](https://www.cornellsun.com/article/2025/11/what-remains-traces-of-fire-memory-and-renewal)
 

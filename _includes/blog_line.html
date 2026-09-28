@@ -1,0 +1,24 @@
+{%- comment -%}
+  The one line of text a blog entry shows (/blog/ rows and the homepage
+  "From the blog"), as plain text (Markdown rendered, tags stripped):
+  - a post: its front-matter `excerpt`, else its first 24 words;
+  - an album: its `album_caption`, else the first sentence of its
+    `description`, else nothing.
+  Usage: capture the output of include blog_line.html entry=post, then
+  strip it.
+{%- endcomment -%}
+{%- assign _bl = include.entry -%}
+{%- if _bl.collection == "albums" -%}
+  {%- assign _bl_line = _bl.album_caption -%}
+  {%- if _bl_line == nil or _bl_line == "" -%}
+    {%- assign _bl_line = "" -%}
+    {%- if _bl.description and _bl.description != "" -%}
+      {%- assign _bl_first = _bl.description | split: ". " | first -%}
+      {%- if _bl_first != _bl.description -%}{%- assign _bl_line = _bl_first | append: "." -%}{%- else -%}{%- assign _bl_line = _bl.description -%}{%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{{ _bl_line | markdownify | strip_html | strip }}
+{%- else -%}
+  {%- assign _bl_own = _bl.excerpt | markdownify | strip_html | strip -%}
+  {%- if _bl_own != "" -%}{{ _bl_own }}{%- else -%}{{ _bl.content | strip_html | normalize_whitespace | truncatewords: 24 }}{%- endif -%}
+{%- endif -%}

@@ -2,22 +2,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="SygV5RMPuPkt2CGGy3ULlEGrnAX7MDRn-ZFpCmfJHN0">
 <title>{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }} &mdash; {{ site.title_suffix | default: site.title }}{% else %}{{ site.title }}{% endif %}</title>
-<meta name="description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+{%- comment -%}
+  One description for the meta, Open Graph and Twitter tags: the page's
+  `description`, else its front-matter `excerpt`, else (posts) the first 160
+  characters of the body, else the site description. (With
+  excerpt_separator "" an unset excerpt can be an empty drop, so it is
+  stripped and compared, not just tested.)
+{%- endcomment -%}
+{%- assign meta_desc = page.description | strip -%}
+{%- assign page_excerpt = page.excerpt | strip_html | strip -%}
+{%- if meta_desc == "" -%}
+  {%- if page_excerpt != "" -%}{%- assign meta_desc = page_excerpt | truncate: 160 -%}
+  {%- elsif page.layout == 'post' -%}{%- assign meta_desc = page.content | strip_html | normalize_whitespace | truncate: 160 -%}
+  {%- else -%}{%- assign meta_desc = site.description -%}{%- endif -%}
+{%- endif -%}
+<meta name="description" content="{{ meta_desc | escape }}">
 <meta name="author" content="{{ site.author }}">
-<link rel="canonical" href="{{ page.url | absolute_url }}">
+{% unless page.noindex %}<link rel="canonical" href="{{ page.url | absolute_url }}">{% endunless %}
 {% feed_meta %}
 
 <!-- Anti-AI/crawler directives -->
-<meta name="robots" content="noai, noimageai">
+<meta name="robots" content="{% if page.noindex %}noindex, {% endif %}noai, noimageai">
 <meta name="tdm-reservation" content="1">
 
 <!-- Open Graph -->
 <meta property="og:title" content="{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
-<meta property="og:description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+<meta property="og:description" content="{{ meta_desc | escape }}">
 <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 <meta property="og:site_name" content="{{ site.title }}">
-<meta property="og:image" content="{% if page.images and page.images.size > 0 %}{{ page.images[0].src | absolute_url }}{% else %}{{ '/assets/images/headshot.jpeg' | absolute_url }}{% endif %}">
+{%- comment -%}
+  Social preview image: the medium (1600px) JPEG variant of the page's first
+  photo, never the multi-MB original. Falls back to the headshot.
+{%- endcomment -%}
+{% assign og_image = '/assets/images/headshot.jpeg' | absolute_url %}
+{% assign og_w = 640 %}{% assign og_h = 640 %}
+{% assign og_card = 'summary' %}
+{% if page.images and page.images.size > 0 %}
+  {% assign og_first = page.images.first %}
+  {% capture og_src %}{% include image_src.html src=og_first.src variant="med" %}{% endcapture %}
+  {% assign og_image = og_src | strip | absolute_url %}
+  {% assign og_key = og_first.src | remove_first: '/assets/images/' %}
+  {% assign og_meta = site.data.image_meta[og_key] %}
+  {% if og_meta and og_meta.med %}{% assign og_w = og_meta.med.w %}{% assign og_h = og_meta.med.h %}{% else %}{% assign og_w = og_meta.w %}{% assign og_h = og_meta.h %}{% endif %}
+  {% assign og_card = 'summary_large_image' %}
+{% endif %}
+<meta property="og:image" content="{{ og_image }}">
+{% if og_w %}<meta property="og:image:width" content="{{ og_w }}">
+<meta property="og:image:height" content="{{ og_h }}">{% endif %}
+<meta property="og:image:alt" content="{% if page.images and page.images.size > 0 %}{{ page.images[0].caption | default: page.title | escape }}{% else %}Ryan Ye{% endif %}">
 {% if page.layout == 'post' %}
 <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
 <meta property="article:author" content="{{ site.author }}">
@@ -25,21 +58,28 @@
 {% endfor %}{% endif %}
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="{{ og_card }}">
 {% if site.twitter_username %}<meta name="twitter:site" content="@{{ site.twitter_username }}">{% endif %}
 <meta name="twitter:title" content="{% if page.full_title %}{{ page.full_title }}{% elsif page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
-<meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
-<meta name="twitter:image" content="{% if page.images and page.images.size > 0 %}{{ page.images[0].src | absolute_url }}{% else %}{{ '/assets/images/headshot.jpeg' | absolute_url }}{% endif %}">
+<meta name="twitter:description" content="{{ meta_desc | escape }}">
+<meta name="twitter:image" content="{{ og_image }}">
+
+<meta name="color-scheme" content="light dark">
 
 <!-- Stylesheet (bump site.css_version in _config.yml when styles.css changes) -->
 <link rel="stylesheet" href="{{ '/assets/css/styles.css' | relative_url }}?v={{ site.css_version }}">
 
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Fonts are self-hosted; the @font-face rules are at the top of styles.css.
+     Preloading the files every page renders with lets them arrive with the
+     stylesheet, so the first view renders in Inter; the metric-matched
+     "Inter Fallback" keeps any late swap from moving text. The italics and
+     JetBrains Mono load only when a page uses them. -->
+<link rel="preload" href="{{ '/assets/fonts/inter-latin-400-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/inter-latin-600-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/dm-serif-display-latin-400-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<!-- Favicon: serif "RY" in the accent color (web fonts cannot load inside a data URI, so Georgia) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='47' text-anchor='middle' font-family='Georgia,serif' font-size='40' letter-spacing='-2' fill='%23A0603C'%3ERY%3C/text%3E%3C/svg%3E">
 
 <!-- Structured data (JSON-LD) -->
 <script type="application/ld+json">
@@ -72,7 +112,7 @@
   "email": "{{ site.email }}",
   "image": "{{ '/assets/images/headshot.jpeg' | absolute_url }}",
   "jobTitle": "Undergraduate Computer Science Student",
-  "description": "{{ site.description }}",
+  "description": "Computer science student at Cornell University (Class of {{ site.data.about.education.expected | split: ' ' | last }}) doing AI for science research in the Sun Lab: agents for scientific discovery and computer vision for animal behavior.",
   "memberOf": {
     "@type": "CollegeOrUniversity",
     "@id": "https://www.cornell.edu",
@@ -86,12 +126,12 @@
     "url": "https://www.cornell.edu"
   },
   "knowsAbout": [
+    "AI for Science",
+    "Agents for Scientific Discovery",
     "Machine Learning",
     "Computer Vision",
     "Deep Learning",
-    "Artificial Intelligence",
     "Animal Behavior Analysis",
-    "Cornell University",
     "Computer Science"
   ],
   "sameAs": [
@@ -115,7 +155,8 @@
 </script>
 {% endif %}
 
-<!-- Apply saved theme immediately to prevent flash of wrong theme -->
+<!-- Apply a saved theme choice before first paint. Palettes live in styles.css;
+     with no saved choice the OS preference applies through CSS alone. -->
 <script>
-(function(){var t=localStorage.getItem('theme');if(!t)return;var m={warm:{'--bg':'#FAF5EE','--surface':'#FFFFFF','--border':'#E6D9C8','--text':'#2A1F16','--muted':'#7A6555','--accent':'#A0603C','--accent-soft':'#F5E6DC','--accent-dark':'#9E5A40','--color-code-bg':'#F5E6DC','--color-code-text':'#2A1F16','--theme-dot-border':'transparent'},linen:{'--bg':'#F8F5F1','--surface':'#FFFFFF','--border':'#DDD6CE','--text':'#2A2218','--muted':'#7A6C5E','--accent':'#5C4F43','--accent-soft':'#EDE6DC','--accent-dark':'#3A2E24','--color-code-bg':'#EDE6DC','--color-code-text':'#2A2218','--theme-dot-border':'transparent'},pure:{'--bg':'#F7F7F7','--surface':'#FFFFFF','--border':'#E0E0E0','--text':'#111111','--muted':'#6E6E6E','--accent':'#111111','--accent-soft':'#EBEBEB','--accent-dark':'#333333','--color-code-bg':'#EBEBEB','--color-code-text':'#111111','--theme-dot-border':'transparent'},barely:{'--bg':'#242220','--surface':'#2E2B28','--border':'#383430','--text':'#EDE8E2','--muted':'#A0958C','--accent':'#B89A7D','--accent-soft':'#35302B','--accent-dark':'#D4B896','--color-code-bg':'#35302B','--color-code-text':'#EDE8E2','--theme-dot-border':'transparent'},'dark-mono':{'--bg':'#181818','--surface':'#222222','--border':'#2E2E2E','--text':'#E8E8E8','--muted':'#999999','--accent':'#E8E8E8','--accent-soft':'#2A2A2A','--accent-dark':'#AAAAAA','--color-code-bg':'#2A2A2A','--color-code-text':'#E8E8E8','--theme-dot-border':'#555555'}};var v=m[t];if(!v)return;var r=document.documentElement.style;for(var k in v)r.setProperty(k,v[k]);})();
+(function(){try{var t=localStorage.getItem('theme');if(t==='warm'||t==='linen'||t==='pure')t='light';else if(t==='barely'||t==='dark-mono')t='dark';if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
 </script>

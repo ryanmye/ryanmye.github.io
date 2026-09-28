@@ -1,0 +1,27 @@
+# Homepage news list. The template sorts by `date` (newest first) and shows
+# the three newest. The date prints as "Mon YYYY" unless `display` is set,
+# which is printed as-is (use it when only the season or year is known; the
+# `date` still decides the order). `text` is Markdown.
+# Don't add items that repeat something already on the homepage (the
+# publications list sits right above).
+- date: 2026-09-30
+  text: "Released [Worship Rig](https://ryanmye.github.io/worship-rig/), a Mac app that turns a MIDI keyboard into a live keys rig for worship sets."
+
+- date: 2026-06-01
+  display: "Summer 2026"
+  text: "Built the statistical validation layer for an automated hypothesis discovery system in the Sun Lab (AIMI Junior Affiliate project)."
+
+- date: 2026-03-14
+  text: "Built most of the frontend for [Traveling Salesman](https://github.com/boaz-ng/traveling-salesmen), a conversational flight search tool, at the Cornell AI Hackathon."
+
+- date: 2026-02-01
+  text: "Joined the Sun Lab's multi-lab animal behavior video recognition project (MABe)."
+
+- date: 2025-12-01
+  text: "My piece *Though the Mountains Fall Into the Sea* was part of an AAP exhibit. [Read about the exhibit](/blog/2025/12/01/i-was-part-of-an-art-exhibit/)."
+
+- date: 2025-11-15
+  text: "[Sisyphus](https://github.com/matthewj5/sisyphus), our AI productivity app, was one of 5 winners among 38 projects at the Claude Builders Club Hackathon."
+
+- date: 2025-05-01
+  text: "Joined the Sun Lab (PI: Jennifer Sun) as a BURE fellow, working on computer vision for dairy calf behavior."

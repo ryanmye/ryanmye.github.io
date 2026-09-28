@@ -1,65 +1,79 @@
 # About page content
 bio: |
   I'm an undergraduate at Cornell ([College of Engineering](https://www.duffield.cornell.edu)) with interests in ***machine
-  learning***, ***computer vision***, and ***AI for scientific discovery***. I enjoy working at the
-  intersection of AI and real-world systems—especially where better data and automation
-  can help researchers scale their work.
+  learning***, ***computer vision***, and ***AI for scientific discovery***. I work where
+  better data and automation can help researchers scale their work.
 
-  I conduct research in the [Sun Lab](https://akanksha-sarkar.github.io/SunLab-website/) (PI: Jennifer Sun), working on computer vision
+  I conduct research in the [Sun Lab](https://lab.jenjsun.com/) (PI: Jennifer Sun), working on computer vision
   methods for dairy calf behavior analysis to support veterinary researchers studying
   early indicators of disease and welfare. Outside of academics, I play violin in a
   quartet and serve in [Cru](https://www.crucornell.com) as a student leader in worship team. When the weather is
   nice, I like to throw around a Frisbee; however, the weather is never nice in
   Ithaca.
 
-interests:
-  - "Machine learning and computer vision — deep learning for perception and recognition"
-  - "AI for science and real-world systems — using ML to accelerate research domains"
-  - "Representation learning and foundation models — self-supervised and pretrained models"
-  - "Data-efficient learning methods — few-shot and weakly supervised approaches"
+# The internship ask, its own line under the credential line on the
+# homepage (18px/600): conversational, but it cannot be missed. There is
+# no headline between the credential line and the ask (the owner removed
+# it).
+seeking: "This cycle I'm looking for a Summer 2027 software engineering internship."
 
-education:
-  institution: "Cornell University"
-  degree: "B.S. in Computer Science (College of Engineering)"
-  expected: "May 2028"
-  gpa: "4.05"
-  coursework:
-    - "Deep Learning, Computer Vision, Systems Organization"
-    - "Algorithms, Machine Learning, Discrete Math, Data Structures"
-    - "Functional Programming (OCaml)"
-    - "Linear Algebra, Differential Equations, Multivariable Calculus"
-    - "iOS Development"
+# The homepage intro paragraph (about 60 words; Markdown): the research
+# plus one stack clause (resume.tex Technical Skills). School, degree and
+# class year are on the credential line under the name (built from
+# `education`), so the intro does not repeat them.
+intro: |
+  I do AI for science research in the [Sun Lab](https://lab.jenjsun.com/) (PI: Jennifer Sun). Right now I'm working on
+  agents for open-ended scientific discovery; I've also built computer vision models for animal behavior, from dairy
+  calf posture on farm video to video models that recognize behavior across labs. I work in Python and PyTorch, and
+  build web apps with React and Node.js.
 
-skills:
-  programming: "Python, Java, C/C++, OCaml"
-  machine_learning: "PyTorch, Hugging Face Transformers, NumPy, pandas, Matplotlib"
-  tools: "Git, VS Code, Jupyter Notebook, IntelliJ, PyCharm, SSH, vibe-coding"
-
-blog_blurb: "Notes, thoughts, and life-updates."
-
-bio_profile: |
-  I'm Ryan Ye, an undergraduate studying Computer Science at Cornell University
-  ([College of Engineering](https://www.duffield.cornell.edu), Class of 2027). I conduct research in the
-  [Sun Lab at Cornell](https://akanksha-sarkar.github.io/SunLab-website/) (PI: Jennifer Sun), building computer vision
-  systems for dairy calf behavior analysis to support veterinary researchers studying
-  early indicators of disease and welfare. I'm interested in ***machine learning***,
-  ***computer vision***, and ***AI for scientific discovery***—and I enjoy working at the
-  intersection of AI and real-world systems. 
-  
-  Outside academics, I play violin in a quartet and serve as a worship team leader in [Cru at Cornell](https://www.crucornell.com). 
+# The hero's second paragraph, directly under `intro` (Markdown).
+outside: |
+  Outside academics, I play violin in a quartet and serve as a worship team leader in [Cru at Cornell](https://www.crucornell.com).
   When the weather is nice, I like to throw around a Frisbee; however, the weather is
   never nice in Ithaca.
 
+# One sentence opening /cv/.
+cv_summary: "Computer Science undergraduate at Cornell (Class of 2028) doing AI for science research in the Sun Lab, now on agents for scientific discovery; looking for Summer 2027 software engineering internships."
+
+education:
+  institution: "Cornell University"
+  institution_url: "https://www.cornell.edu/"
+  degree: "B.S. in Computer Science (College of Engineering)"
+  # The homepage credential line: "<institution> · <degree_short> · Class of <year of expected>"
+  degree_short: "B.S. Computer Science"
+  expected: "May 2028"
+  gpa: "4.02"
+  coursework:
+    - "Deep Learning, Computer Vision, Machine Learning"
+    - "Systems Programming and Practices (C), Algorithms, Discrete Math, Data Structures and Algorithms"
+    - "Functional Programming (OCaml), iOS Development"
+    - "Linear Algebra, Differential Equations, Multivariable Calculus"
+
+# Three plain lines on the CV; must match the Technical Skills lines in resume/resume.tex.
+skills:
+  languages: "Python, Java, C/C++, OCaml, JavaScript (Node.js, Express.js, React), HTML/CSS"
+  libraries: "PyTorch, JAX, Hugging Face Transformers and PEFT, NumPy, pandas, Matplotlib"
+  tools: "Git, SSH, SLURM/HPC, CUDA, Jupyter, VS Code"
+
+blog_blurb: "Notes, thoughts, and life-updates."
+
 teaching:
   - title: "Basic Coding — Co-Founder & President"
-    date: "Aug 2020 - May 2024"
+    date: "Aug 2020 – Jun 2024"
     subtitle: "Volunteer online programming education during COVID-19"
     bullets:
       - "Taught Python, Java, and C/C++ to elementary and middle school students"
-      - "Reached 300+ students across multiple U.S. states"
+      - "Reached 300+ students across 8 U.S. states"
+  - title: "Teaching Assistant, Computer Science — Conestoga High School"
+    date: "Fall 2023"
+    subtitle: "AP Computer Science A"
+    bullets:
+      - "Developed class materials and assignments with the course teacher"
 
 honors:
+  - "BURE Fellow (Bowers Undergraduate Research Experience)"
   - "CIDA Grant Recipient"
+  - "AIMI Junior Affiliate"
   - "4× AIME Qualifier"
   - "USACO Silver Division"
-  - "Conestoga High School CS Department Award"

@@ -4,9 +4,13 @@ _site/
 .jekyll-cache/
 .jekyll-metadata
 
-# Dependency files
-Gemfile.lock
+# Dependency files (Gemfile.lock IS committed for reproducible builds)
 vendor/
+.bundle/
+
+# Python
+__pycache__/
+*.pyc
 
 # OS artifacts
 .DS_Store
@@ -24,6 +28,7 @@ Thumbs.db
 _drafts/
 assets/images/drafts/
 _editor_tmp/
-.bundle/
+resume/resume.pdf
 
-CLAUDE.md
+# Claude Code worktrees (local only)
+.claude/worktrees/

@@ -1,62 +1,138 @@
-# Projects showcase (ordered: present first, then by end date descending)
+# Projects showcase (ordered: present first, then by end date descending).
+# Research projects live in research.yml, not here.
+# `summary`: the one-line result shown in the lists (Markdown; bold the one
+#   key number, sparingly).
+# `short` (optional, featured projects): the homepage's version of the
+#   summary, one to two lines in the homepage Projects column (Markdown);
+#   the homepage falls back to `summary`, /projects/ always shows `summary`.
+# `context`: short muted meta (course, team size, event).
+# `featured: true` (at most two): listed first on the homepage and
+#   /projects/ with the summary (other homepage rows show title, context
+#   and date), full width with a larger title on /projects/.
+# `description` and `bullets` sit behind "Details" on /projects/.
+# `site` (optional): a project page, shown as "site →" before "code →" (`url`).
+# `image` (optional, /projects/ only): {src, alt, width, height}. A real
+#   picture of the project (a screenshot or a results figure), saved under
+#   /assets/images/projects/ at 16:10 and about 1200px wide; width and height
+#   are its pixel size. The list shows it at 16:10, cropped to fill, and
+#   links it to `site`, else `url`. Leave it out when there is no real
+#   picture; nothing is drawn in its place. The homepage never shows it.
 projects:
-  - title: "Automated Calf Behavior Analysis System"
-    date: "May 2025 - present"
-    description: "Computer vision pipeline for analyzing calf posture and behavior from overhead video. Designed to help veterinary researchers scale behavioral data collection beyond manual observation."
-    tags: ["Python", "YOLO", "DINO", "Computer Vision"]
+  - title: "Worship Rig"
+    date: "Sep 2026"
+    featured: true
+    short: "A Mac app that turns a MIDI keyboard into a keys rig for worship bands, with its own Web Audio engine, 43 instruments, and a key drone."
+    summary: "A Mac app that turns a MIDI keyboard into a keys rig for a worship band. Each song sets up to four sounds, their effects, and a drone in the song's key, played by its own Web Audio engine with **43 instruments** and backed by over 1,000 automated tests."
+    context: "Personal project; Electron, Web Audio"
+    description: "Built for the keys player in a worship band: plug in a MIDI keyboard, pick a song from the setlist, and play. It runs as a Mac app (Electron) or in Chrome, and everything, the sounds included, stays on the Mac, so nothing streams during a set."
     bullets:
-      - "YOLO-based object detection for calf localization"
-      - "DINO feature extraction for posture classification"
-      - "Evaluation of VLMs for pose and eartag recognition"
-    url: null
-
-  - title: "Traveling Salesman — Conversational Flight Search"
-    date: "Mar 2026"
-    description: "Hackathon project: conversational flight search tool with an interactive trip planner. Describe trips in natural language (e.g. 'fly from NYC to somewhere warm in late June, under $400') and get results on an interactive 2D/3D map."
-    tags: ["UI envisioning", "vibe coding"]
-    bullets:
-      - "Designed and implemented the frontend for Traveling Salesman, a conversational flight search tool with an interactive trip planner"
-      - "Built React UI with split-screen chat, interactive 2D/3D map, and collaborative trip sharing"
-    url: "https://github.com/boaz-ng/traveling-salesmen"
+      - "An audio engine on Web Audio that loads each song's samples and reverbs ahead of time and schedules every event on the audio clock, so the same graph renders offline for tests and level calibration"
+      - "43 instruments: 23 multisampled (grand, upright, electric pianos, mallets, guitars), 16 synth patches, and a drawbar organ with a rotary speaker and four presets, plus a drone that holds the root, fifth, and octave of the song's key"
+      - "An 8-band EQ per sound drawn over a piano keyboard, 19 factory songs, setlists, transpose, MIDI Learn, WAV recording through an AudioWorklet, a menu-bar mode, and 8 themes"
+      - "A converter that reads Apple's EXS instrument format and turns GarageBand and Logic sampled instruments into packs the app plays, kept on the user's Mac for licensing"
+      - "Over 1,000 automated tests (offline audio renders, Playwright, Electron) and a 20-minute soak test; GitHub Actions builds the Apple Silicon and Intel releases"
+    url: "https://github.com/ryanmye/worship-rig"
+    site: "https://ryanmye.github.io/worship-rig/"
+    image:
+      src: "/assets/images/projects/worship-rig.webp"
+      alt: "The Worship Rig perform screen: the song name and key, a six-song setlist, keys and pad channel strips with faders, the key drone controls, notes, and an on-screen keyboard."
+      width: 1200
+      height: 750
     cv: true
-    cv_tech: "React.js, Backend Integration, REST API"
+    cv_tech: "Electron, JavaScript, Web Audio"
     cv_bullets:
-      - "Designed and implemented the frontend for Traveling Salesman, a conversational flight search tool with an interactive trip planner"
-      - "Built React.js UI with split-screen chat, interactive 2D/3D map, and collaborative trip sharing; integrated with FastAPI backend via REST"
+      - "Mac app (Electron) that turns a MIDI keyboard into a keys rig for worship bands: 43 instruments, a key drone, setlists, a per-sound 8-band EQ, WAV recording"
+      - "Web Audio engine that also renders offline for tests and level calibration; GarageBand/Logic sample converter; 1,000+ automated tests; CI releases for Apple Silicon and Intel"
 
-  - title: "Sisyphus — AI Productivity App"
-    date: "Nov 2025"
-    description: "Full-stack web application that enforces productivity commitments through AI verification. Placed Top 5 out of 40+ teams in a course competition."
-    tags: ["Full-Stack", "React.js", "Claude API"]
+  - title: "DoRA Re-Implementation and Evaluation"
+    date: "Spring 2026"
+    featured: true
+    short: "4-person team re-implementation of DoRA; I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
+    summary: "4-person team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B. Trained on little data, both methods often ranked the right AMC12 answer highest but failed to generate it; more data closed the gap, and DoRA reached 46%, ahead of LoRA's 36% on the same data. I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
+    context: "CS 4782 (Deep Learning), 4-person team"
+    description: "CS 4782 final project, Spring 2026. We wrote DoRA as a PyTorch layer, fine-tuned Qwen2.5-3B with it and with LoRA on 1K to 27.5K math problems, and tested on AMC12 2024/2025 and the MATH benchmark. To separate what a model knows from what it can write out, we scored AMC12 three ways: a one-token probe over the answer letters, generate then probe, and plain generation."
     bullets:
-      - "Designed and implemented full-stack application with React frontend and Node.js backend"
-      - "Photo-based task verification using Claude API; automated accountability system with email notifications"
+      - "Team finding: after training the base model on 7.5K problems, the probe picked the right AMC12 2024 answer 38% of the time for both methods, but generated answers were right 18% (LoRA) and 12% (DoRA). With 27.5K problems the gap closed and DoRA reached 46%, against LoRA's 36% on the same data"
+      - "At 3B scale we only partly reproduced the paper's DoRA-over-LoRA result, and fine-tuning lowered MATH accuracy for both methods"
+      - "Ran all training and evaluation on Cornell's HPC cluster: ranks 2, 4, and 8, three dataset sizes, base and instruct models"
+      - "Wrote the evaluation harness (logit-probe and two-pass scoring), the benchmark and training-data scripts with a leakage filter, checkpoint averaging, the tables and figures, and the first draft of the report"
+      - "Diagnosed a critical bug in the team's DoRA layer and contributed to the problem formulation"
+    url: "https://github.com/leonjiao5/cs4782-project"
+    image:
+      src: "/assets/images/projects/dora.webp"
+      alt: "Bar chart of AMC12 2024 accuracy for LoRA and DoRA trained on a light and a heavy dataset, comparing the logit probe with two-pass and greedy answers."
+      width: 1200
+      height: 750
+    cv: true
+    cv_tech: "PyTorch, Hugging Face PEFT"
+    cv_bullets:
+      - "4-person team re-implementation of DoRA in PyTorch, tested against LoRA on Qwen2.5-3B (AMC12, MATH)"
+      - "Ran all experiments on the HPC cluster; built the evaluation harness (logit-probe, two-pass, and generation scoring), data pipeline, and analysis; diagnosed a critical bug in the DoRA layer"
+
+  - title: "Traveling Salesman: Conversational Flight Search"
+    date: "Mar 2026"
+    summary: "Hackathon project: describe a trip in plain language and see matching flights on a 2D map or 3D globe. I built most of the React frontend: the trip planner, the map and globe, and the plan cards, and reworked the chat panel."
+    context: "Cornell AI Hackathon; React frontend"
+    description: "Built at the Cornell AI Hackathon in March 2026. A Claude agent turns a request like \"fly from NYC to somewhere warm in late June, under $400\" into airports and dates, searches Google Flights, and ranks the results; the page shows the parsed requirements, the routes, and the ranked flight plans."
+    bullets:
+      - "Built the route view: a 2D map with wraparound panning and a 3D globe with drag-to-rotate and zoom (d3-geo), with multi-leg routes, layovers, and an airport table generated from a public dataset"
+      - "Built the requirements strip and ranked plan cards, reworked the chat panel, and connected the frontend to the backend's chat endpoint"
+      - "Added the agent tool that sends the parsed trip to the page each turn, so the planner fills in as you talk"
+      - "Flight search, the rest of the agent backend, and trip sharing were built by teammates"
+    url: "https://github.com/boaz-ng/traveling-salesmen"
+    image:
+      src: "/assets/images/projects/traveling-salesman.webp"
+      alt: "The Traveling Salesman frontend: fields for origin, destinations, dates, budget, and preference above a 3D globe showing routes from LAX to Tokyo and Shanghai."
+      width: 1200
+      height: 750
+    cv: true
+    cv_tech: "React, d3-geo"
+    cv_bullets:
+      - "Built most of the React frontend for a conversational flight search tool: trip planner, ranked flight plans, and a reworked chat panel"
+      - "Route map as a 2D map and a draggable 3D globe (d3-geo) with multi-leg routes and layovers"
+
+  - title: "Sisyphus: AI Productivity App"
+    date: "Nov 2025"
+    short: "4-person hackathon app that checks photo check-ins with Claude and emails your ex if you slack off; one of **5 winners** among 38 projects."
+    summary: "4-person team at the Claude Builders Club Hackathon at Cornell: a web app that times your tasks, checks photo check-ins with Claude's vision API, and emails your ex if you fail. One of **5 winners** among 38 projects (Fun Award). I worked on the frontend and the AI validation."
+    context: "Claude Builders Club Hackathon, 4-person team"
+    description: "Built in one day on November 15, 2025. You fill out an onboarding questionnaire, queue timed tasks, and when a timer ends you prove you were working with webcam photos or uploads. A Node and Express backend asks Claude whether the photos show the task; fail, and it emails your ex."
+    bullets:
+      - "Worked on the frontend, including the onboarding questionnaire and the app's look, and on the Claude prompt that decides whether check-in photos show real work"
+      - "One of 5 winning teams among 38 projects; won the Fun Award"
     url: "https://github.com/matthewj5/sisyphus"
     cv: true
-    cv_tech: "Full-Stack, React.js, Claude API, REST API"
+    cv_tech: "JavaScript, Node.js, Express.js, Claude API"
     cv_bullets:
-      - "Designed and implemented full-stack application with React frontend and Node.js backend"
-      - "AI-powered task verification via Claude API; automated accountability system with email notifications"
-      - "Top 5 out of 40+ teams in course competition"
+      - "Web app that checks task photos with the Claude API; one of 5 winners among 38 projects (Fun Award), 4-person team"
+      - "Worked on the frontend and the AI photo validation"
+
+  - title: "Personal Website"
+    date: "Mar 2026 – present"
+    summary: "This site: Jekyll on GitHub Pages, with a local writing studio (Sinatra API, vanilla JS) and a Spotify line fed by GitHub Actions."
+    context: "Personal project; Jekyll, Sinatra, GitHub Actions"
+    description: "This site. Built with Jekyll and hosted on GitHub Pages: blog, photo albums, project showcase, research section, and a data-driven CV."
+    bullets:
+      - "Local writing studio: a Sinatra API and a vanilla-JS editor for posts and photo albums, with git publish"
+      - "Spotify widget fed by a GitHub Actions job that writes to an orphan branch; PR checks with html-proofer"
+    url: "https://github.com/ryanmye/ryanmye.github.io"
+    image:
+      src: "/assets/images/projects/personal-website.webp"
+      alt: "The homepage of this site in the light theme: name, school and class year, the internship ask, the intro, the photo, and the Selected work cards."
+      width: 1200
+      height: 750
 
   - title: "Transformer-Based Piano Melody Generation"
-    date: "Aug 2023 - Apr 2024"
-    description: "Research project exploring neural music generation with transformer architectures trained on large MIDI datasets."
-    tags: ["Python", "PyTorch", "Transformers", "Music AI"]
+    date: "Aug 2023 – Apr 2024"
+    summary: "Trained transformer models on **20k+ MIDI files** (MAESTRO, Lakh) and compared them with CNN, RNN, and LSTM architectures."
+    context: "Personal project"
+    description: "Personal project exploring neural music generation with transformer architectures trained on large MIDI datasets."
     bullets:
-      - "Trained on 20k+ MIDI files from MAESTRO and Lakh datasets"
-      - "Compared CNN, RNN, LSTM, and Transformer architectures"
-      - "Demonstrated improved musical coherence with fine-tuned pretrained transformers"
+      - "Trained and fine-tuned on 20k+ MIDI files from the MAESTRO and Lakh datasets"
+      - "Compared CNN, RNN, LSTM, and Transformer architectures; generated compositions conditioned on input melodies"
     url: null
     cv: true
     cv_tech: "Python, PyTorch, MusicAutobot"
     cv_bullets:
-      - "Trained transformer models on 20k+ MIDI files from MAESTRO and Lakh datasets"
-      - "Compared CNN, RNN, LSTM, and Transformer architectures for musical coherence"
-
-  - title: "Personal Website"
-    date: "Mar 2026"
-    description: "This site! A clean, fast academic personal website built with Jekyll and hosted on GitHub Pages. Includes a blog, project showcase, and research section."
-    tags: ["Jekyll", "HTML/CSS", "GitHub Pages", "vibe coding"]
-    bullets: []
-    url: "https://github.com/ryanmye/ryanmye.github.io"
+      - "Trained transformer models on 20k+ MIDI files from the MAESTRO and Lakh datasets"
+      - "Compared CNN, RNN, LSTM, and Transformer architectures for music generation"

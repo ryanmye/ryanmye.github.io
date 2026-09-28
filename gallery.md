@@ -2,99 +2,71 @@
 layout: default
 title: "Gallery"
 permalink: /gallery/
-description: "Photo gallery from Ryan Ye's blog — campus life, travel, and events."
-album_lightbox: true
+description: "Photo gallery from Ryan Ye's blog: campus life, travel, and events."
 ---
 
-<div class="page-header">
+<header class="page-head">
   <h1>Gallery</h1>
-</div>
+</header>
 
-{% assign has_post_albums = false %}
+{%- comment -%}
+  Album cards only (the photos themselves live on each post or album page).
+  Cards come from both blog posts with `images` and standalone albums (the
+  `albums` collection), merged and sorted newest first. Standalone albums
+  with `draft: true` are skipped here; they also need `published: false` in
+  their front matter or Jekyll will still build the page.
+{%- endcomment -%}
+{% assign with_photos = "" | split: "" %}
 {% for post in site.posts %}
   {% if post.images and post.images.size > 0 %}
-    {% assign has_post_albums = true %}
-    {% break %}
+    {% assign with_photos = with_photos | push: post %}
   {% endif %}
 {% endfor %}
-
-{% assign has_standalone_albums = false %}
 {% for album in site.albums %}
-  {% unless album.draft %}
+  {% unless album.draft == true or album.published == false %}
     {% if album.images and album.images.size > 0 %}
-      {% assign has_standalone_albums = true %}
-      {% break %}
+      {% assign with_photos = with_photos | push: album %}
     {% endif %}
   {% endunless %}
 {% endfor %}
+{% assign albums_sorted = with_photos | sort: "date" | reverse %}
 
-{% if has_post_albums or has_standalone_albums %}
-
-<div class="content-section">
-  <h2 class="section-title">Albums</h2>
+{% if albums_sorted.size > 0 %}
+<section class="page-section page-section-first" aria-label="Albums">
   <div class="gallery-grid">
-    {% for post in site.posts %}
-      {% if post.images and post.images.size > 0 %}
-      <a href="{{ post.url | relative_url }}" class="gallery-album-card">
+    {% for item in albums_sorted %}
+      {% assign cover = item.images[0] %}
+      {% assign cover_key = cover.src | remove_first: '/assets/images/' %}
+      {% assign cover_meta = site.data.image_meta[cover_key] %}
+      {% capture cover_src %}{% include image_src.html src=cover.src variant="thumb" %}{% endcapture %}
+      <a href="{{ item.url | relative_url }}" class="gallery-album-card">
         <div class="gallery-album-cover">
-          <img src="{{ post.images[0].src | relative_url }}" alt="{{ post.title }}" loading="lazy">
+          <img src="{{ cover_src | strip }}" alt="" {% if cover_meta and cover_meta.thumb %}width="{{ cover_meta.thumb.w }}" height="{{ cover_meta.thumb.h }}"{% endif %} {% if forloop.index > 2 %}loading="lazy"{% else %}fetchpriority="high"{% endif %} decoding="async">
         </div>
         <div class="gallery-album-info">
-          <h2 class="gallery-album-title">{{ post.title }}</h2>
+          {%- comment -%}
+            Card title: a post's `album_title`, else its title. Caption (one
+            line, hidden when empty): `album_caption`; for a standalone album
+            without one, the first sentence of its `description`.
+          {%- endcomment -%}
+          {% assign card_caption = item.album_caption %}
+          {% if card_caption == nil or card_caption == "" %}
+            {% if item.collection == "albums" and item.description and item.description != "" %}
+              {% assign first_sentence = item.description | split: ". " | first %}
+              {% if first_sentence != item.description %}{% assign card_caption = first_sentence | append: "." %}{% else %}{% assign card_caption = item.description %}{% endif %}
+            {% endif %}
+          {% endif %}
+          <h2 class="gallery-album-title">{{ item.album_title | default: item.title }}</h2>
+          {% if card_caption and card_caption != "" %}<p class="gallery-album-caption">{{ card_caption }}</p>{% endif %}
           <p class="gallery-album-meta">
-            <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
-            &middot; {{ post.images.size }} photo{% if post.images.size != 1 %}s{% endif %}
+            {% if item.date %}<time datetime="{{ item.date | date_to_xmlschema }}">{{ item.date | date: "%b %-d, %Y" }}</time> &middot; {% endif %}
+            {{ item.images.size }} photo{% if item.images.size != 1 %}s{% endif %}
           </p>
         </div>
       </a>
-      {% endif %}
-    {% endfor %}
-    {% for album in site.albums %}
-      {% unless album.draft %}
-        {% if album.images and album.images.size > 0 %}
-        <a href="{{ album.url | relative_url }}" class="gallery-album-card">
-          <div class="gallery-album-cover">
-            <img src="{{ album.images[0].src | relative_url }}" alt="{{ album.title }}" loading="lazy">
-          </div>
-          <div class="gallery-album-info">
-            <h2 class="gallery-album-title">{{ album.title }}</h2>
-            <p class="gallery-album-meta">
-              {% if album.date %}<time datetime="{{ album.date | date_to_xmlschema }}">{{ album.date | date: "%b %-d, %Y" }}</time> &middot; {% endif %}
-              {{ album.images.size }} photo{% if album.images.size != 1 %}s{% endif %}
-            </p>
-          </div>
-        </a>
-        {% endif %}
-      {% endunless %}
     {% endfor %}
   </div>
-</div>
-
-<div class="content-section">
-  <h2 class="section-title">All Photos</h2>
-  <div class="album-grid">
-    {% assign photo_idx = 0 %}
-    {% for post in site.posts %}
-      {% if post.images and post.images.size > 0 %}
-        {% for img in post.images %}
-        {% include photo_card.html src=img.src caption=img.caption index=photo_idx fallback_alt=post.title %}
-        {% assign photo_idx = photo_idx | plus: 1 %}
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
-    {% for album in site.albums %}
-      {% unless album.draft %}
-        {% if album.images and album.images.size > 0 %}
-          {% for img in album.images %}
-          {% include photo_card.html src=img.src caption=img.caption index=photo_idx fallback_alt=album.title %}
-          {% assign photo_idx = photo_idx | plus: 1 %}
-          {% endfor %}
-        {% endif %}
-      {% endunless %}
-    {% endfor %}
-  </div>
-</div>
-
+</section>
 {% else %}
-<p class="news-empty">No photo albums yet.</p>
+<p class="empty-note">No photo albums yet.</p>
 {% endif %}

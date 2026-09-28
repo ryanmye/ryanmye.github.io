@@ -1,0 +1,99 @@
+% One-page resume for SWE internship applications. Source of truth for facts is
+% the master resume; keep the two in sync. Build: tectonic resume/resume.tex
+% then move resume/resume.pdf to the repo root (see README).
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[margin=0.5in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks,pdftitle={Ryan Ye - Resume},pdfauthor={Ryan Ye},pdfsubject={Computer Science, Cornell University}]{hyperref}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+\titleformat{\section}{\normalsize\bfseries\scshape}{}{0pt}{}[\vspace{-2pt}\titlerule]
+\titlespacing{\section}{0pt}{6pt}{3pt}
+
+\newcommand{\entry}[4]{%
+  \noindent\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    \textbf{#1} & #2 \\
+    \textit{#3} & \textit{#4} \\
+  \end{tabular*}\vspace{-1pt}}
+
+\newcommand{\entryshort}[2]{%
+  \noindent\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    \textbf{#1} & #2 \\
+  \end{tabular*}\vspace{-1pt}}
+
+\setlist[itemize]{leftmargin=1.2em, itemsep=0pt, topsep=1pt, parsep=0pt, partopsep=0pt}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Ryan Ye}\\[2pt]
+  \href{mailto:rmy43@cornell.edu}{rmy43@cornell.edu} $\cdot$
+  \href{https://ryanmye.github.io}{ryanmye.github.io} $\cdot$
+  \href{https://www.linkedin.com/in/rmy43}{linkedin.com/in/rmy43} $\cdot$
+  \href{https://github.com/ryanmye}{github.com/ryanmye}
+\end{center}
+
+\section{Education}
+\entry{Cornell University}{Ithaca, NY}{B.S. in Computer Science, College of Engineering, GPA 4.02}{Expected May 2028}
+\begin{itemize}
+  \item \textbf{Coursework:} Deep Learning, Computer Vision, Machine Learning, Systems Programming (C), Algorithms, Data Structures, Functional Programming (OCaml), Discrete Math, Linear Algebra, Differential Equations, Multivariable Calculus
+  \item \textbf{Honors:} BURE Fellow, CIDA Grant Recipient, AIMI Junior Affiliate, 4-time AIME Qualifier, USACO Silver Division
+\end{itemize}
+
+\section{Technical Skills}
+\begin{itemize}
+  \item \textbf{Languages:} Python, Java, C/C++, OCaml, JavaScript (Node.js, Express.js, React), HTML/CSS
+  \item \textbf{Libraries:} PyTorch, JAX, Hugging Face Transformers and PEFT, NumPy, pandas, Matplotlib
+  \item \textbf{Tools:} Git, SSH, SLURM/HPC, CUDA, Jupyter, VS Code
+\end{itemize}
+
+\section{Research Experience}
+\entry{Undergraduate Researcher, Sun Lab at Cornell University}{May 2025 -- Present}{PI: Jennifer Sun. AI for science: scientific discovery agents and computer vision for animal behavior}{}
+\begin{itemize}
+  \item \textbf{Statistical validation for automated hypothesis discovery (AIMI Junior Affiliate project), Summer 2026.} Found and fixed an admission-conditioning bug that let an MCTS-based discovery system's false discovery rate run 35--41\% against a 10\% target; shipped two corrected registration modes
+  \item Showed that reusing holdout data under adaptive tree selection pushed the false discovery rate to 99.3\% at scale, which led to the conservative controller becoming the default; built the validation layer from scratch (anytime-valid evidence interface, e-value fixes, interval-null tests) and benchmarked 8 controllers on four real-world datasets
+  \item \textbf{Multi-lab video behavior recognition (MABe), Feb 2026 -- Present.} Beat the frozen-backbone baseline on 9 of 15 lab datasets (13 of 15 on at least one split) by LoRA fine-tuning a frozen video foundation model with a self-authored kinematic auxiliary loss; on one lab, video alone beat the pose-tracking ceiling
+  \item Built the 8-stage SLURM pipeline with 5-fold cross-validation and ensemble threshold calibration across all 15 datasets, staging up to 1.9 TB of video per lab on node-local NVMe; brought it up on Blackwell GPUs (CUDA 12.8)
+  \item \textbf{Automated calf behavior analysis (BURE Fellow, CIDA grant), May 2025 -- Present.} Raised best posture-classification F1 from 0.928 to 0.957 across 24 runs comparing DINOv2 and DINOv3 ensembles on 300 to 1,000 images; fine-tuned YOLO on calf data I annotated in CVAT. Poster presented at ADSA 2026; manuscript in preparation
+\end{itemize}
+
+\section{Projects}
+\entry{Worship Rig}{Sep 2026}{Personal project. Electron, JavaScript, Web Audio}{\href{https://ryanmye.github.io/worship-rig/}{Site} $\cdot$ \href{https://github.com/ryanmye/worship-rig}{GitHub}}
+\begin{itemize}
+  \item Built and shipped a Mac app that turns a MIDI keyboard into a keys rig for worship bands: a Web Audio engine with 43 instruments and a key drone, a GarageBand sample converter, and 1,000+ automated tests
+\end{itemize}
+
+\entry{DoRA Re-Implementation and Evaluation}{Spring 2026}{CS 4782 Deep Learning final project, 4-person team. PyTorch, Hugging Face PEFT}{\href{https://github.com/leonjiao5/cs4782-project}{GitHub}}
+\begin{itemize}
+  \item Team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B (AMC12, MATH); ran all HPC experiments
+  \item Built the evaluation harness (logit-probe and two-pass scoring separating what a model knows from what it generates), the data pipeline with a leakage filter, and the analysis and figures; diagnosed a critical bug in the DoRA layer
+\end{itemize}
+
+\entry{Traveling Salesman: Conversational Flight Search}{Mar 2026}{Cornell AI Hackathon, frontend. React, d3-geo}{\href{https://github.com/boaz-ng/traveling-salesmen}{GitHub}}
+\begin{itemize}
+  \item Built most of the React frontend: the trip planner, ranked flight plans, and routes on a 2D map and 3D globe
+\end{itemize}
+
+\entry{Sisyphus: AI Productivity App}{Nov 2025}{Claude Builders Club Hackathon, 4-person team. Node.js, Express.js, Claude API}{\href{https://github.com/matthewj5/sisyphus}{GitHub}}
+\begin{itemize}
+  \item One of 5 winners of 38 projects (Fun Award): checks photo check-ins with Claude; worked on the frontend and AI validation
+\end{itemize}
+
+\section{Publications}
+\begin{itemize}
+  \item M. M. Ferreira, K. M. Dadallage, T. Ward, H. McCray, \textbf{R. M. Ye}, J. J. Sun, F. A. Leal Yepes. ``A smarter lung ultrasonography solution for lung consolidation classification in dairy calves using a deep learning approach.'' \textit{Journal of Dairy Science}, 2026. Supporting author
+  \item \textbf{R. M. Ye}, M. Madureira Ferreira, J. J. Sun, F. A. Leal Yepes. ``Automating pose detection in calves: a computer vision framework for non-invasive behavioral monitoring.'' Poster, ADSA Annual Meeting, 2026
+  \item \textbf{R. Ye}, Y. Chen, K. A. Kelly. ``The effects of firm performance on CEO compensation and CEO pay ratio before and during COVID-19.'' \textit{Research in Economics} 77(4), 453--458, 2023. First author
+\end{itemize}
+
+\section{Leadership}
+\noindent\textbf{Basic Coding}, Co-Founder. Free coding classes for 300+ students in 8 states during COVID-19 \hfill Aug 2020 -- Jun 2024
+
+\end{document}

@@ -11,19 +11,21 @@
     "dateModified": "{{ page.date | date_to_xmlschema }}",
     "author": {
       "@type": "Person",
+      "@id": "{{ site.url }}{{ site.baseurl }}/#ryan-ye",
       "name": "{{ site.author }}",
       "url": "{{ site.url }}{{ site.baseurl }}/"
     },
     "publisher": {
       "@type": "Person",
+      "@id": "{{ site.url }}{{ site.baseurl }}/#ryan-ye",
       "name": "{{ site.author }}"
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "{{ page.url | absolute_url }}"
     },
-    "url": "{{ page.url | absolute_url }}"{% if page.images and page.images.size > 0 %},
-    "image": "{{ page.images[0].src | absolute_url }}"{% endif %}{% if page.tags and page.tags.size > 0 %},
+    "url": "{{ page.url | absolute_url }}"{% if page.images and page.images.size > 0 %}{% assign ld_first = page.images.first %}{% capture ld_img %}{% include image_src.html src=ld_first.src variant="med" %}{% endcapture %},
+    "image": "{{ ld_img | strip | absolute_url }}"{% endif %}{% if page.tags and page.tags.size > 0 %},
     "keywords": {{ page.tags | jsonify }}{% endif %}
   }
   </script>
@@ -35,21 +37,13 @@
 
   <main id="main-content" role="main">
     <div class="container">
-      <article>
+      <div class="page-content">
+      <article class="post-reading">
+        {% include breadcrumb.html %}
+        {%- comment -%} Tags stay in front matter (JSON-LD keywords, og article:tag) but are not shown. {%- endcomment -%}
         <header class="post-header">
           <h1>{{ page.title }}</h1>
-          <p class="post-date">
-            <time datetime="{{ page.date | date_to_xmlschema }}">
-              {{ page.date | date: "%B %-d, %Y" }}
-            </time>
-          </p>
-          {% if page.tags and page.tags.size > 0 %}
-          <div class="tags" aria-label="Post tags">
-            {% for tag in page.tags %}
-            <span class="tag">{{ tag }}</span>
-            {% endfor %}
-          </div>
-          {% endif %}
+          <p class="post-date"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time></p>
         </header>
 
         <div class="post-content">
@@ -71,11 +65,20 @@
           {{ processed_content }}
         </div>
 
-        {% if page.images and page.images.size > 0 %}
-        <section class="post-album">
-          <h2>Album</h2>
+        {%- comment -%}
+          The photo section shows only the post's images that are not already
+          in the body (src compared against the rendered content), so no photo
+          appears twice on the page. The gallery still counts them all.
+        {%- endcomment -%}
+        {% assign extra_images = "" | split: "" %}
+        {% for img in page.images %}
+          {% unless content contains img.src %}{% assign extra_images = extra_images | push: img %}{% endunless %}
+        {% endfor %}
+        {% if extra_images.size > 0 %}
+        <section class="post-album" aria-labelledby="post-photos">
+          <h2 class="section-title" id="post-photos">{% if extra_images.size < page.images.size %}More photos{% else %}Photos{% endif %}</h2>
           <div class="album-grid">
-            {% for img in page.images %}
+            {% for img in extra_images %}
             {% include photo_card.html src=img.src caption=img.caption index=forloop.index0 fallback_alt=page.title %}
             {% endfor %}
           </div>
@@ -95,6 +98,7 @@
           {% endif %}
         </div>
       </nav>
+      </div>
     </div>
   </main>
 

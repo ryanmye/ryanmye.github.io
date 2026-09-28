@@ -1,0 +1,22 @@
+---
+layout: default
+title: "Page not found"
+permalink: /404.html
+sitemap: false
+noindex: true
+---
+
+<header class="page-head">
+  <h1>Page not found</h1>
+  <p class="page-lede">There's nothing at this address.</p>
+</header>
+
+<section class="page-section page-section-first" aria-labelledby="notfound-pages">
+  <h2 class="section-title" id="notfound-pages">Try instead</h2>
+  <ul class="cv-list" role="list">
+    <li><a href="{{ '/research/' | relative_url }}">Research</a></li>
+    <li><a href="{{ '/projects/' | relative_url }}">Projects</a></li>
+    <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+    <li><a href="{{ '/cv/' | relative_url }}">CV</a></li>
+  </ul>
+</section>
