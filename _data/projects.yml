@@ -18,6 +18,23 @@
 #   links it to `site`, else `url`. Leave it out when there is no real
 #   picture; nothing is drawn in its place. The homepage never shows it.
 projects:
+  - title: "Geometric Art"
+    date: "Oct 2026"
+    summary: "A browser app that rebuilds a photo from geometric shapes: overlapping translucent shapes, a gap-free triangle mesh, or a polygon mosaic. It runs entirely on your machine, with nothing uploaded."
+    context: "Personal project; TypeScript, Web Workers"
+    description: "Drop in a photo (iPhone HEIC included) or pick a sample, press Start, and watch the picture rebuild. The same engines also run from the command line, which is how the animations in the geometric art album were made."
+    bullets:
+      - "Overlapping shapes: each new shape is picked from random candidates and refined by hill climbing, its colour computed directly as the best fit, with candidates drawn more often where the picture is worst"
+      - "Triangle mesh and polygon mosaic: Delaunay triangles or Voronoi cells over a set of points, optimized by threshold accepting (a relative of simulated annealing) that rescores only the cells around each moved point"
+      - "Searches run in parallel across a pool of web workers, and the same seed always gives the same picture"
+    url: "https://github.com/ryanmye/geometric-art"
+    site: "https://ryanmye.github.io/geometric-art/"
+    image:
+      src: "/assets/images/projects/geometric-art.webp"
+      alt: "The Mona Lisa next to the same painting rebuilt as a mesh of flat-coloured triangles."
+      width: 675
+      height: 422
+
   - title: "Worship Rig"
     date: "Sep 2026"
     featured: true
@@ -116,11 +133,6 @@ projects:
       - "Local writing studio: a Sinatra API and a vanilla-JS editor for posts and photo albums, with git publish"
       - "Spotify widget fed by a GitHub Actions job that writes to an orphan branch; PR checks with html-proofer"
     url: "https://github.com/ryanmye/ryanmye.github.io"
-    image:
-      src: "/assets/images/projects/personal-website.webp"
-      alt: "The homepage of this site in the light theme: name, school and class year, the internship ask, the intro, the photo, and the Selected work cards."
-      width: 1200
-      height: 750
 
   - title: "Transformer-Based Piano Melody Generation"
     date: "Aug 2023 – Apr 2024"
