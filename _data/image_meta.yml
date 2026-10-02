@@ -2,6 +2,270 @@
 # Each key is a path under assets/images/. `cf_id` (when set) is reserved
 # for Cloudflare Images integration and is preserved on regeneration.
 ---
+albums/20260123134918-IMG_6980.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260123134918-IMG_6980-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260123134918-IMG_6980-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260123192728-IMG_6985.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260123192728-IMG_6985-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260123192728-IMG_6985-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260125122117-IMG_7002.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260125122117-IMG_7002-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260125122117-IMG_7002-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260131112314-IMG_7062.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260131112314-IMG_7062-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260131112314-IMG_7062-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260201171946-IMG_7116.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260201171946-IMG_7116-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260201171946-IMG_7116-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260218124912-IMG_7226.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260218124912-IMG_7226-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260218124912-IMG_7226-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260218173342-IMG_7228.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260218173342-IMG_7228-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260218173342-IMG_7228-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260223015752-IMG_7267.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260223015752-IMG_7267-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260223015752-IMG_7267-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260223130949-IMG_7275.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260223130949-IMG_7275-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260223130949-IMG_7275-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260228175329-IMG_7319.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260228175329-IMG_7319-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260228175329-IMG_7319-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260301165413-IMG_7337.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260301165413-IMG_7337-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260301165413-IMG_7337-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260315131045-IMG_7590-2.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260315131045-IMG_7590-2-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260315131045-IMG_7590-2-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260315132424-IMG_7617.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260315132424-IMG_7617-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260315132424-IMG_7617-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260329185811-IMG_7807.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260329185811-IMG_7807-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260329185811-IMG_7807-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260330182027-IMG_7865.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260330182027-IMG_7865-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260330182027-IMG_7865-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260401173935-IMG_7907.jpg:
+  h: 1920
+  med:
+    h: 1200
+    src: albums/20260401173935-IMG_7907-med.jpg
+    w: 1600
+  thumb:
+    h: 450
+    src: albums/20260401173935-IMG_7907-thumb.jpg
+    w: 600
+  w: 2560
+albums/20260402112345-IMG_7939.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260402112345-IMG_7939-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260402112345-IMG_7939-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260404203704-IMG_9120.jpg:
+  h: 1920
+  med:
+    h: 1200
+    src: albums/20260404203704-IMG_9120-med.jpg
+    w: 1600
+  thumb:
+    h: 450
+    src: albums/20260404203704-IMG_9120-thumb.jpg
+    w: 600
+  w: 2560
+albums/20260405070011-IMG_7981.jpg:
+  h: 1920
+  med:
+    h: 1200
+    src: albums/20260405070011-IMG_7981-med.jpg
+    w: 1600
+  thumb:
+    h: 450
+    src: albums/20260405070011-IMG_7981-thumb.jpg
+    w: 600
+  w: 2560
+albums/20260410192108-IMG_8082.jpg:
+  h: 1920
+  med:
+    h: 1200
+    src: albums/20260410192108-IMG_8082-med.jpg
+    w: 1600
+  thumb:
+    h: 450
+    src: albums/20260410192108-IMG_8082-thumb.jpg
+    w: 600
+  w: 2560
+albums/20260410205635-IMG_8128.jpg:
+  h: 1920
+  med:
+    h: 1200
+    src: albums/20260410205635-IMG_8128-med.jpg
+    w: 1600
+  thumb:
+    h: 450
+    src: albums/20260410205635-IMG_8128-thumb.jpg
+    w: 600
+  w: 2560
+albums/20260413180036-IMG_8165.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260413180036-IMG_8165-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260413180036-IMG_8165-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260413184154-IMG_8185.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260413184154-IMG_8185-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260413184154-IMG_8185-thumb.jpg
+    w: 600
+  w: 1920
+albums/20260417124537-IMG_8241.jpg:
+  h: 2560
+  med:
+    h: 2133
+    src: albums/20260417124537-IMG_8241-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260417124537-IMG_8241-thumb.jpg
+    w: 600
+  w: 1920
 albums/20260423142901-Screenshot_2026-04-23_at_14.22.20.png:
   h: 1676
   med:
@@ -179,27 +443,182 @@ albums/20260424013659-Screenshot_2026-04-24_at_01.34.33.png:
     w: 600
   w: 1256
 albums/20260426132505-IMG_8462.JPG:
-  w: 4032
   h: 3024
-  thumb:
-    src: albums/20260426132505-IMG_8462-thumb.jpg
-    w: 600
-    h: 800
   med:
+    h: 2133
     src: albums/20260426132505-IMG_8462-med.jpg
     w: 1600
-    h: 2133
-albums/20260426132512-IMG_8468.JPG:
-  w: 4032
-  h: 3024
   thumb:
-    src: albums/20260426132512-IMG_8468-thumb.jpg
-    w: 600
     h: 800
+    src: albums/20260426132505-IMG_8462-thumb.jpg
+    w: 600
+  w: 4032
+albums/20260426132512-IMG_8468.JPG:
+  h: 3024
   med:
+    h: 2133
     src: albums/20260426132512-IMG_8468-med.jpg
     w: 1600
+  thumb:
+    h: 800
+    src: albums/20260426132512-IMG_8468-thumb.jpg
+    w: 600
+  w: 4032
+albums/20260426200148-IMG_8510.jpg:
+  h: 2560
+  med:
     h: 2133
+    src: albums/20260426200148-IMG_8510-med.jpg
+    w: 1600
+  thumb:
+    h: 800
+    src: albums/20260426200148-IMG_8510-thumb.jpg
+    w: 600
+  w: 1920
+albums/20261002143611-geometric-art-seed-1-frames-3-shared-1667-768px.gif:
+  w: 573
+  h: 768
+  thumb:
+    src: albums/20261002143611-geometric-art-seed-1-frames-3-shared-1667-768px-thumb.jpg
+    w: 573
+    h: 768
+  animated: true
+albums/20261002185249-IMG_0210-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_0210-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_0211-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_0211-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_0249-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_0249-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_0327-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_0327-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_6664-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_6664-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_6792-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_6792-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_7301-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_7301-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_7309-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_7309-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_7605-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_7605-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_7761-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_7761-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_7807-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_7807-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_7883-shapes-seed-1.gif:
+  w: 1024
+  h: 768
+  thumb:
+    src: albums/20261002185249-IMG_7883-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 450
+  animated: true
+albums/20261002185249-IMG_8018-shapes-seed-1.gif:
+  w: 1024
+  h: 768
+  thumb:
+    src: albums/20261002185249-IMG_8018-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 450
+  animated: true
+albums/20261002185249-IMG_8241-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_8241-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_9011-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_9011-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_9171-shapes-seed-1.gif:
+  w: 768
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_9171-shapes-seed-1-thumb.jpg
+    w: 600
+    h: 800
+  animated: true
+albums/20261002185249-IMG_9807-shapes-seed-1.gif:
+  w: 580
+  h: 1024
+  thumb:
+    src: albums/20261002185249-IMG_9807-shapes-seed-1-thumb.jpg
+    w: 580
+    h: 1024
+  animated: true
 drafts/20260328022349-IMG_2768.jpeg:
   h: 3024
   med:

@@ -3,7 +3,7 @@ layout: post
 title: "first real blog post"
 date: 2026-03-17T01:15:00-05:00
 tags: [brief life update, test post]
-description: "Ryan Ye's first blog post — a life update from Cornell covering an NYC hackathon trip, Ithaca fake springs, and launching this personal website."
+excerpt: "it's not a real blogpost I just needed to put something up"
 images:
   - src: "/assets/images/posts/20260402020615-IMG_7555.JPG"
     caption: "times square at night (wasn't as crazy as I thought)"
