@@ -463,18 +463,42 @@
   }
 
   // Paste, drag, or the toolbar image button: upload, then let Toast UI insert it.
-  // Browsers cannot show HEIC and SVG is not allowed; say so instead of
-  // uploading a file the site cannot display. Returns the files to keep.
+  // The API keeps JPEG, PNG, GIF, WebP and SVG (sanitized), and converts
+  // HEIC/HEIF/AVIF and TIFF/BMP to JPEG. Anything else is skipped here with a
+  // toast. Returns the files to keep. (The API checks the bytes again.)
+  var IMAGE_EXT = /\.(jpe?g|png|gif|webp|svg|hei[cf]|avif|tiff?|bmp)$/i;
+  var IMAGE_TYPE = /^image\/(jpe?g|pjpeg|png|gif|webp|svg\+xml|hei[cf](-sequence)?|avif|tiff|bmp|x-ms-bmp)$/i;
+  var SUPPORTED = 'JPEG, PNG, GIF, WebP, SVG, HEIC, AVIF, TIFF or BMP';
+  var NEEDS_NEW_API = /\.(svg|hei[cf]|avif|tiff?|bmp)$|^image\/(svg|hei|avif|tiff|bmp|x-ms-bmp)/i;
+  var oldApi = false;
   function usableImages(list) {
     var out = [];
     Array.prototype.forEach.call(list, function (f) {
-      var name = f.name || '';
-      if (/svg/i.test(f.type) || /\.svg$/i.test(name)) toast('Skipped ' + name + ': SVG images are not supported.', { type: 'error' });
-      else if (/hei[cf]/i.test(f.type) || /\.hei[cf]$/i.test(name)) {
-        toast('Skipped ' + name + ': browsers cannot show HEIC. Export it as JPEG first (Photos: File › Export).', { type: 'error', duration: 9000 });
-      } else if (/^image\//.test(f.type) || /\.(jpe?g|png|gif|webp)$/i.test(name)) out.push(f);
+      var name = f.name || 'pasted image';
+      if (oldApi && (NEEDS_NEW_API.test(name) || NEEDS_NEW_API.test(f.type || ''))) {
+        toast('Skipped ' + name + ': restart bin/dev first, the running editor API cannot handle this type yet.', { type: 'error', duration: 9000 });
+      } else if (IMAGE_TYPE.test(f.type || '') || IMAGE_EXT.test(name)) out.push(f);
+      else {
+        var ext = (name.match(/\.([^.]+)$/) || [])[1];
+        toast('Skipped ' + name + ': ' + (ext ? '.' + ext.toLowerCase() + ' files are' : 'that file is') +
+          ' not supported. Use ' + SUPPORTED + '.', { type: 'error', duration: 9000 });
+      }
     });
     return out;
+  }
+
+  // Browsers cannot draw these before upload (HEIC/TIFF), so the tile shows the
+  // file name until the API answers with the converted JPEG.
+  function needsServerPreview(f) {
+    return /hei[cf]|tiff/i.test(f.type || '') || /\.(hei[cf]|tiff?)$/i.test(f.name || '');
+  }
+
+  // A toast for what the API did to the file: converted it, or took unsafe
+  // parts out of an SVG.
+  function uploadNote(name, res) {
+    if (res.converted_from) toast('Converted ' + name + ' to JPEG.');
+    var n = (res.svg_removed || []).length;
+    if (n) toast('Cleaned ' + name + ': removed ' + plural(n, 'part') + ' that could run code or load outside files.', { duration: 7000 });
   }
 
   // Uploads into the text of the item it started in; if another item is open
@@ -490,6 +514,7 @@
       t.setText('Uploading ' + name + '… ' + Math.round(p * 100) + '%');
     }).then(function (res) {
       t.dismiss();
+      uploadNote(name, res);
       if (!sameRef(ref, state.current)) {
         toast('Image uploaded for “' + itemTitle + '”; it was not inserted because you switched posts.', { duration: 7000 });
         return;
@@ -638,7 +663,8 @@
       });
       fig.dataset.id = p.id;
       var frame = el('div', 'studio-photo-frame');
-      frame.appendChild(el('img', null, null, { alt: '', loading: 'lazy', draggable: false, src: p.localUrl || imgUrl(p.src, true) }));
+      if (p.localUrl || p.src) frame.appendChild(el('img', null, null, { alt: '', loading: 'lazy', draggable: false, src: p.localUrl || imgUrl(p.src, true) }));
+      else frame.appendChild(el('span', 'studio-photo-name', p.fileName || 'Uploading'));
       var badge = p.fromBody ? 'In text' : (isAlbum() && i === 0 ? 'Cover' : '');
       if (badge) frame.appendChild(el('span', 'studio-photo-badge', badge));
       if (p.uploading) {
@@ -689,7 +715,8 @@
     files.forEach(function (file) {
       var p = newPhoto('', '', true);
       p.uploading = true;
-      p.localUrl = URL.createObjectURL(file);
+      p.fileName = file.name || 'image';
+      if (!needsServerPreview(file)) p.localUrl = URL.createObjectURL(file);
       state.photos.push(p);
       var ref = state.current;
       upload(file, { album: isAlbum(), draft: isPost() && $('post-draft').checked }, function (frac) {
@@ -699,6 +726,9 @@
       }).then(function (res) {
         p.src = res.url;
         p.uploading = false;
+        uploadNote(p.fileName, res);
+        // Show what was stored (the sanitized SVG, the converted JPEG), not the local file.
+        if (p.localUrl && (res.svg_removed || res.converted_from)) { URL.revokeObjectURL(p.localUrl); p.localUrl = null; photoSig = ''; }
         // Only touch the grid of the item this upload started in.
         if (sameRef(ref, state.current)) { renderPhotos(); onFormChange(); }
         else toast('An upload finished after you left that ' + ref.type + ', so it was not added. Add it again there.');
@@ -1607,6 +1637,10 @@
   // One-time notice when the API cannot make thumbnails (no ImageMagick).
   function checkServer() {
     api('GET', '/info').then(function (info) {
+      // An API started before the image-format update has no `heic` field and
+      // would store a HEIC as-is or refuse an SVG.
+      oldApi = !('heic' in info);
+      if (oldApi) toast('The editor API is running old code. Restart bin/dev to upload HEIC, AVIF, SVG, TIFF or BMP files.', { type: 'error', duration: 0 });
       if (info.thumbnails || storage(function (s) { return s.getItem('studio:warned-thumbs'); })) return;
       storage(function (s) { s.setItem('studio:warned-thumbs', '1'); });
       toast('Thumbnails are off: the API cannot find ImageMagick (brew install imagemagick), so new photos get no -thumb/-med versions.', { type: 'error', duration: 0 });

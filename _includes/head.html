@@ -32,25 +32,37 @@
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 <meta property="og:site_name" content="{{ site.title }}">
 {%- comment -%}
-  Social preview image: the medium (1600px) JPEG variant of the page's first
-  photo, never the multi-MB original. Falls back to the headshot.
+  Social preview image (og:image, twitter:image, and the post JSON-LD
+  `image` in _layouts/post.html, which reuses og_first / og_image): the
+  medium (1600px) JPEG variant of the page's first photo, never the
+  multi-MB original. An animated GIF/WebP has no med, so it uses its still
+  first-frame thumb. Falls back to the headshot when there is no photo, when
+  the first photo is an SVG (social sites do not show SVG), or when an
+  animated one has no thumb.
 {%- endcomment -%}
 {% assign og_image = '/assets/images/headshot.jpeg' | absolute_url %}
 {% assign og_w = 640 %}{% assign og_h = 640 %}
 {% assign og_card = 'summary' %}
+{% assign og_first = nil %}
 {% if page.images and page.images.size > 0 %}
-  {% assign og_first = page.images.first %}
-  {% capture og_src %}{% include image_src.html src=og_first.src variant="med" %}{% endcapture %}
-  {% assign og_image = og_src | strip | absolute_url %}
-  {% assign og_key = og_first.src | remove_first: '/assets/images/' %}
+  {% assign og_candidate = page.images.first %}
+  {% assign og_ext = og_candidate.src | split: '.' | last | downcase %}
+  {% assign og_key = og_candidate.src | remove_first: '/assets/images/' %}
   {% assign og_meta = site.data.image_meta[og_key] %}
-  {% if og_meta and og_meta.med %}{% assign og_w = og_meta.med.w %}{% assign og_h = og_meta.med.h %}{% else %}{% assign og_w = og_meta.w %}{% assign og_h = og_meta.h %}{% endif %}
-  {% assign og_card = 'summary_large_image' %}
+  {% assign og_variant = 'med' %}
+  {% if og_meta.animated %}{% if og_meta.thumb %}{% assign og_variant = 'thumb' %}{% else %}{% assign og_variant = nil %}{% endif %}{% endif %}
+  {% if og_ext != 'svg' and og_variant %}
+    {% assign og_first = og_candidate %}
+    {% capture og_src %}{% include image_src.html src=og_first.src variant=og_variant %}{% endcapture %}
+    {% assign og_image = og_src | strip | absolute_url %}
+    {% if og_meta and og_meta[og_variant] %}{% assign og_w = og_meta[og_variant].w %}{% assign og_h = og_meta[og_variant].h %}{% else %}{% assign og_w = og_meta.w %}{% assign og_h = og_meta.h %}{% endif %}
+    {% assign og_card = 'summary_large_image' %}
+  {% endif %}
 {% endif %}
 <meta property="og:image" content="{{ og_image }}">
 {% if og_w %}<meta property="og:image:width" content="{{ og_w }}">
 <meta property="og:image:height" content="{{ og_h }}">{% endif %}
-<meta property="og:image:alt" content="{% if page.images and page.images.size > 0 %}{{ page.images[0].caption | default: page.title | escape }}{% else %}Ryan Ye{% endif %}">
+<meta property="og:image:alt" content="{% if og_first %}{{ og_first.caption | default: page.title | escape }}{% else %}Ryan Ye{% endif %}">
 {% if page.layout == 'post' %}
 <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
 <meta property="article:author" content="{{ site.author }}">

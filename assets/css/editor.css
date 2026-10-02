@@ -586,6 +586,8 @@
 .studio-photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .studio-photo.is-body .studio-photo-frame img { opacity: 0.5; }
 .studio-photo.is-uploading img { opacity: 0.5; filter: saturate(0.4); }
+/* HEIC/TIFF before the API returns its JPEG: the file name instead of a preview. */
+.studio-photo-name { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 12px; font-size: 13px; color: var(--muted); text-align: center; overflow-wrap: anywhere; }
 .studio-photo-badge {
   position: absolute;
   left: 6px;

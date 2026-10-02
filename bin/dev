@@ -11,9 +11,12 @@ cd "$(dirname "$0")/.."
 SITE_PORT="${STUDIO_SITE_PORT:-4000}"
 API_PORT="${STUDIO_API_PORT:-4001}"
 API_LOG=/tmp/studio-editor-api.log
-# Extra Jekyll config that tells _layouts/editor.html which API port to call.
+# Extra Jekyll config that tells _layouts/editor.html which API port to call
+# and loads the dev-only plugins.
 PORT_CONFIG="${TMPDIR:-/tmp}/studio-config-$$.yml"
 printf 'studio_api_port: %s\n' "$API_PORT" > "$PORT_CONFIG"
+# Dev-only plugins (bin/dev-plugins/svg_headers.rb: a CSP on served SVGs).
+printf 'plugins_dir: [_plugins, bin/dev-plugins]\n' >> "$PORT_CONFIG"
 API_PID=""
 STOPPING="${TMPDIR:-/tmp}/studio-stopping-$$"
 cleanup() {

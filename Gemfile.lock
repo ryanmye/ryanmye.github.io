@@ -141,6 +141,7 @@ DEPENDENCIES
   jekyll-sitemap
   kramdown-parser-gfm
   mini_magick (~> 4.12)
+  rexml (~> 3.4)
   sinatra (~> 3.0)
   webrick (~> 1.7)
 

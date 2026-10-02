@@ -8,7 +8,7 @@
   {%- comment -%} No aria-label when there is no caption: the img alt then names the button. {%- endcomment -%}
   <button type="button" class="album-photo-trigger" data-album-index="{{ include.index }}" data-full-src="{{ pc_full_src | strip }}" data-original-src="{{ pc_orig_src | strip }}" data-caption="{{ pc_caption | escape }}"{% if pc_caption != '' %} aria-label="Open photo: {{ pc_caption | escape }}"{% endif %}>
     {%- comment -%} The first two photos are usually in the first viewport (one of them is the LCP), so they load eagerly. {%- endcomment -%}
-    <img src="{{ pc_grid_src | strip }}" {% if pc_meta and pc_meta.thumb %}width="{{ pc_meta.thumb.w }}" height="{{ pc_meta.thumb.h }}"{% endif %} alt="{{ pc_caption | default: include.fallback_alt }}" decoding="async"{% if include.index < 2 %} fetchpriority="high"{% else %} loading="lazy" fetchpriority="low"{% endif %}>
+    <img src="{{ pc_grid_src | strip }}" {% if pc_meta and pc_meta.thumb %}width="{{ pc_meta.thumb.w }}" height="{{ pc_meta.thumb.h }}"{% elsif pc_meta and pc_meta.w %}width="{{ pc_meta.w }}" height="{{ pc_meta.h }}"{% endif %} alt="{{ pc_caption | default: include.fallback_alt }}" decoding="async"{% if include.index < 2 %} fetchpriority="high"{% else %} loading="lazy" fetchpriority="low"{% endif %}>
   </button>
   {% if pc_caption != "" %}<figcaption>{{ pc_caption }}</figcaption>{% endif %}
 </figure>

@@ -3,26 +3,33 @@
 
 # Backfill thumbnail generator for album/post/draft images.
 #
-# Scans assets/images/{posts,albums,drafts}/ for source images, generates
-# <basename>-thumb.jpg (<=600w, q78) and <basename>-med.jpg (<=1600w, q82)
-# next to each source, and writes a manifest to _data/image_meta.yml.
+# Scans assets/images/{posts,albums,drafts}/ for source images (JPEG, PNG,
+# WebP, GIF, SVG), generates <basename>-thumb.jpg (<=600w, q78) and
+# <basename>-med.jpg (<=1600w, q82) next to each raster source, and writes a
+# manifest to _data/image_meta.yml. Animated GIF/WebP get only a thumb of
+# their first frame (`animated: true`); SVGs get no variants, only their size.
+# The rules are shared with the editor server (scripts/image_pipeline.rb).
 #
 # Usage:
-#   bundle exec ruby scripts/generate_thumbnails.rb [--force] [--only posts|albums|drafts] [--verbose]
+#   bundle exec ruby scripts/generate_thumbnails.rb [--force] [--only posts|albums|drafts] [--verbose] [--strip-metadata]
 #
 # Idempotent: skips images whose thumbs already exist and are newer than source.
+# --strip-metadata (opt-in) also rewrites existing raster originals that still
+# carry EXIF/XMP/IPTC (GPS, camera, capture time) or a rotation tag, the way
+# uploads are stored now: orientation baked in, metadata removed, re-encoded
+# at quality 92 (animated GIF/WebP: stripped only); their variants are then
+# regenerated. Files without metadata are left untouched, so it is safe to
+# run twice. It changes committed originals, so review the diff before
+# publishing.
 # Requires ImageMagick on PATH (brew install imagemagick).
 
 require 'fileutils'
 require 'optparse'
 require 'yaml'
 require 'pathname'
+require_relative 'image_pipeline'
 
-begin
-  require 'mini_magick'
-rescue LoadError
-  abort "error: mini_magick gem not installed. Run `bundle install` first."
-end
+abort 'error: mini_magick gem or ImageMagick missing. Run `bundle install` and `brew install imagemagick`.' unless ImagePipeline::MAGICK_AVAILABLE
 
 ROOT      = File.expand_path('..', __dir__)
 IMAGE_DIR = File.join(ROOT, 'assets', 'images')
@@ -30,71 +37,22 @@ DATA_DIR  = File.join(ROOT, '_data')
 MANIFEST  = File.join(DATA_DIR, 'image_meta.yml')
 
 SUBDIRS   = %w[posts albums drafts].freeze
-EXTS      = %w[.png .jpg .jpeg .PNG .JPG .JPEG].freeze
 
-THUMB_W   = 600
-MED_W     = 1600
-THUMB_Q   = 78
-MED_Q     = 82
-
-options = { force: false, only: nil, verbose: false }
+options = { force: false, only: nil, verbose: false, strip: false }
 OptionParser.new do |opts|
   opts.banner = 'Usage: generate_thumbnails.rb [options]'
   opts.on('--force', 'Regenerate thumbnails even if up to date') { options[:force] = true }
   opts.on('--only SUBDIR', SUBDIRS, "Only process one of: #{SUBDIRS.join(', ')}") { |v| options[:only] = v }
   opts.on('--verbose', 'Log every processed file') { options[:verbose] = true }
+  opts.on('--strip-metadata', 'Rewrite originals that still carry EXIF/XMP/IPTC or a rotation tag') { options[:strip] = true }
   opts.on('-h', '--help', 'Show help') { puts opts; exit }
 end.parse!
 
-unless system('magick -version > /dev/null 2>&1') || system('convert -version > /dev/null 2>&1')
-  abort "error: ImageMagick not found on PATH. Install with `brew install imagemagick`."
-end
-
-def variant_path(source_abs, variant)
-  dir  = File.dirname(source_abs)
-  base = File.basename(source_abs, File.extname(source_abs))
-  File.join(dir, "#{base}-#{variant}.jpg")
-end
-
-def needs_regen?(source_abs, variant_abs, force)
-  return true if force
-  return true unless File.exist?(variant_abs)
-  File.mtime(variant_abs) < File.mtime(source_abs)
-end
-
-def write_variant(source_abs, out_abs, max_w, quality, verbose:)
-  img = MiniMagick::Image.open(source_abs)
-  orig_w = img.width
-  orig_h = img.height
-
-  img.combine_options do |c|
-    c.auto_orient
-    if File.extname(source_abs).downcase == '.png'
-      c.background 'white'
-      c.alpha 'remove'
-      c.alpha 'off'
-    end
-    c.strip
-    c.resize "#{max_w}x>"
-    c.interlace 'Plane'
-    c.quality quality.to_s
-  end
-  img.format 'jpg'
-  img.write(out_abs)
-
-  out = MiniMagick::Image.open(out_abs)
-  puts "  wrote #{File.basename(out_abs)} (#{out.width}x#{out.height}, #{format_bytes(File.size(out_abs))})" if verbose
-  [out.width, out.height, orig_w, orig_h]
-end
 
 def format_bytes(n)
   return "#{n} B" if n < 1024
   return format('%.1f KB', n / 1024.0) if n < 1024 * 1024
   format('%.1f MB', n / (1024.0 * 1024.0))
-end
-
-def thumb_or_med_suffix?(name)
-  name =~ /-(thumb|med)\.jpg\z/i
 end
 
 def iso_path(abs)
@@ -140,6 +98,7 @@ manifest = load_existing_manifest(MANIFEST)
 processed = 0
 skipped = 0
 errors = 0
+stripped = 0
 
 subdirs = options[:only] ? [options[:only]] : SUBDIRS
 
@@ -149,14 +108,25 @@ subdirs.each do |sub|
 
   Dir.glob(File.join(src_dir, '*')).sort.each do |abs|
     next unless File.file?(abs)
-    next unless EXTS.include?(File.extname(abs))
-    next if thumb_or_med_suffix?(File.basename(abs))
+    next unless ImagePipeline::SOURCE_EXTS.include?(File.extname(abs).downcase)
+    next if ImagePipeline.variant_file?(abs)
 
     rel_key = iso_path(abs)
-    thumb_abs = variant_path(abs, 'thumb')
-    med_abs   = variant_path(abs, 'med')
-
-    if !needs_regen?(abs, thumb_abs, options[:force]) && !needs_regen?(abs, med_abs, options[:force]) && manifest.key?(rel_key)
+    restripped = false
+    if options[:strip] && ImagePipeline.raster?(abs)
+      begin
+        if ImagePipeline.strip_in_place!(abs)
+          restripped = true
+          stripped += 1
+          puts "strip #{rel_key}"
+        end
+      rescue StandardError => e
+        warn "error stripping #{rel_key}: #{e.message}"
+        errors += 1
+        next
+      end
+    end
+    if !options[:force] && !restripped && manifest.key?(rel_key) && ImagePipeline.variants_fresh?(abs)
       skipped += 1
       puts "skip  #{rel_key}" if options[:verbose]
       next
@@ -165,18 +135,20 @@ subdirs.each do |sub|
     puts "gen   #{rel_key}"
 
     begin
-      thumb_w, thumb_h, orig_w, orig_h = write_variant(abs, thumb_abs, THUMB_W, THUMB_Q, verbose: options[:verbose])
-      med_w,   med_h,   _,      _      = write_variant(abs, med_abs,   MED_W,   MED_Q,   verbose: options[:verbose])
-
+      fields = ImagePipeline.build_entry(abs, ->(p) { iso_path(p) })
       existing = manifest[rel_key] || {}
-      entry = {
-        'w' => orig_w,
-        'h' => orig_h,
-        'thumb' => { 'src' => iso_path(thumb_abs), 'w' => thumb_w, 'h' => thumb_h },
-        'med'   => { 'src' => iso_path(med_abs),   'w' => med_w,   'h' => med_h }
-      }
-      entry['cf_id'] = existing['cf_id'] if existing.key?('cf_id')
-      manifest[rel_key] = entry
+      if fields.nil?
+        manifest.delete(rel_key) # an SVG with no usable size: nothing to record
+        processed += 1
+        next
+      end
+      if options[:verbose]
+        %w[thumb med].each do |v|
+          puts "  wrote #{fields[v]['src']} (#{fields[v]['w']}x#{fields[v]['h']}, #{format_bytes(File.size(File.join(IMAGE_DIR, fields[v]['src'])))})" if fields[v]
+        end
+      end
+      fields['cf_id'] = existing['cf_id'] if existing.key?('cf_id')
+      manifest[rel_key] = fields
       processed += 1
     rescue StandardError => e
       warn "error processing #{rel_key}: #{e.message}"
@@ -198,6 +170,7 @@ puts '---'
 puts "processed: #{processed}"
 puts "skipped:   #{skipped}"
 puts "pruned:    #{removed.size}"
+puts "stripped:  #{stripped}" if options[:strip]
 puts "errors:    #{errors}"
 puts "manifest:  #{Pathname.new(MANIFEST).relative_path_from(Pathname.new(ROOT))}  (#{manifest.size} entries)"
 exit(errors.zero? ? 0 : 1)

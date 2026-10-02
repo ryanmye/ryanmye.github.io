@@ -24,8 +24,8 @@
       "@type": "WebPage",
       "@id": "{{ page.url | absolute_url }}"
     },
-    "url": "{{ page.url | absolute_url }}"{% if page.images and page.images.size > 0 %}{% assign ld_first = page.images.first %}{% capture ld_img %}{% include image_src.html src=ld_first.src variant="med" %}{% endcapture %},
-    "image": "{{ ld_img | strip | absolute_url }}"{% endif %}{% if page.tags and page.tags.size > 0 %},
+    "url": "{{ page.url | absolute_url }}"{% comment %} Same pick as og:image (head.html sets og_first / og_image): no SVG, an animated GIF's still thumb. {% endcomment %}{% if og_first %},
+    "image": "{{ og_image }}"{% endif %}{% if page.tags and page.tags.size > 0 %},
     "keywords": {{ page.tags | jsonify }}{% endif %}
   }
   </script>

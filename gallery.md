@@ -41,7 +41,7 @@ description: "Photo gallery from Ryan Ye's blog: campus life, travel, and events
       {% capture cover_src %}{% include image_src.html src=cover.src variant="thumb" %}{% endcapture %}
       <a href="{{ item.url | relative_url }}" class="gallery-album-card">
         <div class="gallery-album-cover">
-          <img src="{{ cover_src | strip }}" alt="" {% if cover_meta and cover_meta.thumb %}width="{{ cover_meta.thumb.w }}" height="{{ cover_meta.thumb.h }}"{% endif %} {% if forloop.index > 2 %}loading="lazy"{% else %}fetchpriority="high"{% endif %} decoding="async">
+          <img src="{{ cover_src | strip }}" alt="" {% if cover_meta and cover_meta.thumb %}width="{{ cover_meta.thumb.w }}" height="{{ cover_meta.thumb.h }}"{% elsif cover_meta and cover_meta.w %}width="{{ cover_meta.w }}" height="{{ cover_meta.h }}"{% endif %} {% if forloop.index > 2 %}loading="lazy"{% else %}fetchpriority="high"{% endif %} decoding="async">
         </div>
         <div class="gallery-album-info">
           {%- comment -%}

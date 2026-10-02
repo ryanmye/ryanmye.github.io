@@ -12,6 +12,10 @@ gem "jekyll-feed"
 group :development do
   gem "sinatra", "~> 3.0"
   gem "mini_magick", "~> 4.12"
+  # SVG upload sanitizer (scripts/image_pipeline.rb). A bundled gem since
+  # Ruby 3.0, so it must be listed to be loadable under Bundler; kramdown
+  # also depends on it.
+  gem "rexml", "~> 3.4"
 end
 
 # Link/HTML checks run by .github/workflows/ci.yml.

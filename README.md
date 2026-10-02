@@ -114,7 +114,11 @@ Use `ruby -rbundler/setup`, not `bundle exec ruby`: the repo path contains a spa
 passes it through `RUBYOPT`, which Ruby splits on spaces.
 
 Uploads go to `_editor_tmp/` first and move into `assets/images/{posts,drafts,albums}/` on save,
-which also creates thumbnails and updates `_data/image_meta.yml`. The server only answers requests
+which also creates thumbnails and updates `_data/image_meta.yml`. The studio keeps JPEG, PNG, GIF
+and WebP in their own format (animated GIFs stay animated), turns HEIC/HEIF/AVIF (iPhone photos,
+with macOS `sips`) and TIFF/BMP into JPEG, and cleans SVGs of scripts, event handlers and outside
+links. Every photo is stored with its rotation applied and its EXIF, XMP and IPTC data removed, so
+location, camera and capture time never reach the site. Other types are refused with a message. The server only answers requests
 addressed to `127.0.0.1:4001` / `localhost:4001` and only accepts browser requests from
 `http://127.0.0.1:4000` or `http://localhost:4000`, requires `Content-Type: application/json` on
 JSON routes, refuses file paths outside `assets/images/` and `_editor_tmp/`, only deletes images
@@ -138,13 +142,19 @@ Images belong in `assets/images/posts/` or `assets/images/albums/`; reference th
 ## Thumbnails
 
 Albums and the gallery load `-thumb.jpg` (600px) and `-med.jpg` (1600px) variants listed in
-`_data/image_meta.yml`. The editor server makes them on save. For images added by hand:
+`_data/image_meta.yml`. The editor server makes them on save. An animated GIF or WebP gets only a
+thumb of its first frame (the page and lightbox show the animated file), and an SVG gets no variants
+(it is always shown as is). For images added by hand:
 
 ```bash
 bundle exec ruby scripts/generate_thumbnails.rb            # only missing or stale ones
 bundle exec ruby scripts/generate_thumbnails.rb --force    # regenerate everything
 bundle exec ruby scripts/generate_thumbnails.rb --only albums --verbose
+bundle exec ruby scripts/generate_thumbnails.rb --strip-metadata  # also strip EXIF/GPS from older originals
 ```
+
+`--strip-metadata` rewrites originals added before uploads were stripped (only the ones that still
+carry metadata or a rotation tag), so check the diff before publishing.
 
 Commit the source image, both variants, and `_data/image_meta.yml` together.
 

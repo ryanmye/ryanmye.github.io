@@ -5,6 +5,9 @@
 # (`bundle exec ruby` breaks when the repo path contains a space.)
 # STUDIO_SITE_PORT (default 4000) is the Jekyll port allowed to call this API;
 # STUDIO_API_PORT (default 4001) is the port this listens on.
+# Uploads: JPEG, PNG, GIF, WebP and SVG are kept (rasters with orientation
+# baked in and EXIF/XMP/IPTC removed, SVGs sanitized); HEIC/HEIF/AVIF (via
+# macOS sips) and TIFF/BMP are stored as JPEG. See scripts/image_pipeline.rb.
 
 require 'sinatra'
 require 'json'
@@ -14,18 +17,11 @@ require 'yaml'
 require 'base64'
 require 'open3'
 require 'digest'
+require_relative 'image_pipeline'
 
-# Thumbnails need the mini_magick gem AND an ImageMagick binary on PATH.
-IMAGE_TOOL = %w[magick convert].find do |bin|
-  ENV['PATH'].to_s.split(File::PATH_SEPARATOR).any? { |dir| File.executable?(File.join(dir, bin)) }
-end
-begin
-  require 'mini_magick'
-  MINI_MAGICK_AVAILABLE = !IMAGE_TOOL.nil?
-rescue LoadError
-  MINI_MAGICK_AVAILABLE = false
-end
-warn 'Thumbnails disabled: install ImageMagick (brew install imagemagick).' unless MINI_MAGICK_AVAILABLE
+# Thumbnails need the mini_magick gem AND an ImageMagick binary on PATH
+# (ImagePipeline::MAGICK_AVAILABLE).
+warn 'Thumbnails disabled: install ImageMagick (brew install imagemagick).' unless ImagePipeline::MAGICK_AVAILABLE
 
 SITE_PORT = Integer(ENV['STUDIO_SITE_PORT'] || 4000)
 API_PORT = Integer(ENV['STUDIO_API_PORT'] || 4001)
@@ -70,11 +66,8 @@ ALBUM_TEXT_KEYS = %w[album_caption].freeze
 POST_KEYS = (%w[layout title date tags description images draft] + POST_TEXT_KEYS).freeze
 ALBUM_KEYS = (%w[layout title date description images draft published] + ALBUM_TEXT_KEYS).freeze
 
-THUMB_W = 600
-MED_W = 1600
-THUMB_Q = 78
-MED_Q = 82
-VARIANT_EXTS = %w[.png .jpg .jpeg].freeze
+# Variant sizes, accepted formats, conversion and SVG sanitizing live in
+# scripts/image_pipeline.rb (shared with generate_thumbnails.rb).
 STALE_UPLOAD_SECONDS = 24 * 3600
 
 [POSTS_DIR, DRAFTS_DIR, IMAGES_DIR, DRAFT_IMAGES_DIR, ALBUM_IMAGES_DIR, ALBUMS_DIR].each { |d| FileUtils.mkdir_p(d) }
@@ -469,7 +462,7 @@ helpers do
   end
 
   def variant_file?(path)
-    File.basename(path.to_s) =~ /-(thumb|med)\.jpg\z/i
+    ImagePipeline.variant_file?(path)
   end
 
   # References are checked against the canonical path as well as the given
@@ -481,19 +474,17 @@ helpers do
     return false unless abs && !variant_file?(abs)
     [src, canonical_src(src)].uniq.each { |s| return false unless find_image_references(s, exclude_path: exclude_path).empty? }
     deleted = File.exist?(abs) && File.delete(abs) && true
-    if VARIANT_EXTS.include?(File.extname(abs).downcase) && File.basename(abs) !~ /-(thumb|med)\.jpg\z/i
+    # Only raster sources have -thumb/-med files (an SVG never does, so a
+    # same-named JPEG's variants are never touched); every source may have a
+    # manifest entry.
+    if ImagePipeline.raster?(abs)
       %w[thumb med].each do |v|
         variant_abs = variant_abs_path(abs, v)
         File.delete(variant_abs) if File.exist?(variant_abs)
       end
-      remove_image_manifest_entry(image_meta_key(abs))
     end
+    remove_image_manifest_entry(image_meta_key(abs))
     deleted
-  end
-
-  def ext_for_mime(mime)
-    { 'image/jpeg' => 'jpg', 'image/jpg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif',
-      'image/webp' => 'webp', 'image/svg+xml' => 'svg' }.fetch(mime.to_s.downcase, 'bin')
   end
 
   # Move images from _editor_tmp/ to assets/images/ when a post is saved.
@@ -523,65 +514,41 @@ helpers do
   end
 
   def variant_abs_path(source_abs, variant)
-    dir = File.dirname(source_abs)
-    base = File.basename(source_abs, File.extname(source_abs))
-    File.join(dir, "#{base}-#{variant}.jpg")
+    ImagePipeline.variant_path(source_abs, variant)
   end
 
+  # Raster: every variant it needs exists and is newer than the source.
+  # SVG: it has a manifest entry (its size), or has no size to record.
   def thumbnails_fresh?(source_abs)
-    thumb_abs = variant_abs_path(source_abs, 'thumb')
-    med_abs = variant_abs_path(source_abs, 'med')
-    File.exist?(thumb_abs) && File.exist?(med_abs) &&
-      File.mtime(thumb_abs) >= File.mtime(source_abs) &&
-      File.mtime(med_abs) >= File.mtime(source_abs)
+    return load_image_manifest.key?(image_meta_key(source_abs)) || SvgSanitizer.size(File.read(source_abs)).nil? if ImagePipeline.svg?(source_abs)
+    ImagePipeline.variants_fresh?(source_abs)
   end
 
-  # Generate thumb + med JPEG variants next to source_abs and update the
-  # _data/image_meta.yml manifest. No-op without mini_magick + ImageMagick.
+  # Write the variants for source_abs and its _data/image_meta.yml entry:
+  # JPEG/PNG/WebP/still GIF get -thumb.jpg + -med.jpg; an animated GIF/WebP
+  # gets only a -thumb.jpg of its first frame (`animated: true`, no med, so
+  # the site shows the original); an SVG gets only its size. Raster sources
+  # need mini_magick + ImageMagick (no-op otherwise).
   def generate_thumbnails_for(source_abs)
     return unless File.exist?(source_abs)
-    return unless VARIANT_EXTS.include?(File.extname(source_abs).downcase)
-    return if File.basename(source_abs) =~ /-(thumb|med)\.jpg\z/i
-    return unless MINI_MAGICK_AVAILABLE
+    return unless ImagePipeline::SOURCE_EXTS.include?(File.extname(source_abs).downcase)
+    return if variant_file?(source_abs)
+    return unless ImagePipeline::MAGICK_AVAILABLE || ImagePipeline.svg?(source_abs)
 
     key = image_meta_key(source_abs)
     return unless key
 
-    thumb_abs = variant_abs_path(source_abs, 'thumb')
-    med_abs = variant_abs_path(source_abs, 'med')
-    thumb_w, thumb_h, orig_w, orig_h = write_image_variant(source_abs, thumb_abs, THUMB_W, THUMB_Q)
-    med_w, med_h, = write_image_variant(source_abs, med_abs, MED_W, MED_Q)
-
+    fields = ImagePipeline.build_entry(source_abs, method(:image_meta_key))
+    unless fields
+      remove_image_manifest_entry(key)
+      return
+    end
     update_image_manifest(key) do |entry|
-      entry['w'] = orig_w
-      entry['h'] = orig_h
-      entry['thumb'] = { 'src' => image_meta_key(thumb_abs), 'w' => thumb_w, 'h' => thumb_h }
-      entry['med']   = { 'src' => image_meta_key(med_abs),   'w' => med_w,   'h' => med_h }
+      %w[w h thumb med animated].each { |k| entry.delete(k) }
+      entry.merge!(fields)
     end
   rescue StandardError => e
     warn "generate_thumbnails_for(#{source_abs}): #{e.message}"
-  end
-
-  def write_image_variant(source_abs, out_abs, max_w, quality)
-    img = MiniMagick::Image.open(source_abs)
-    orig_w = img.width
-    orig_h = img.height
-    img.combine_options do |c|
-      c.auto_orient
-      if File.extname(source_abs).downcase == '.png'
-        c.background 'white'
-        c.alpha 'remove'
-        c.alpha 'off'
-      end
-      c.strip
-      c.resize "#{max_w}x>"
-      c.interlace 'Plane'
-      c.quality quality.to_s
-    end
-    img.format 'jpg'
-    img.write(out_abs)
-    out = MiniMagick::Image.open(out_abs)
-    [out.width, out.height, orig_w, orig_h]
   end
 
   def load_image_manifest
@@ -628,10 +595,12 @@ helpers do
   def copy_image(src_abs, dest_abs)
     FileUtils.mkdir_p(File.dirname(dest_abs))
     FileUtils.cp(src_abs, dest_abs)
-    return unless VARIANT_EXTS.include?(File.extname(src_abs).downcase)
-    %w[thumb med].each do |v|
-      from = variant_abs_path(src_abs, v)
-      FileUtils.cp(from, variant_abs_path(dest_abs, v)) if File.exist?(from)
+    return unless ImagePipeline::SOURCE_EXTS.include?(File.extname(src_abs).downcase)
+    if ImagePipeline.raster?(src_abs)
+      %w[thumb med].each do |v|
+        from = variant_abs_path(src_abs, v)
+        FileUtils.cp(from, variant_abs_path(dest_abs, v)) if File.exist?(from)
+      end
     end
     manifest = load_image_manifest
     entry = manifest[image_meta_key(src_abs)]
@@ -677,7 +646,11 @@ helpers do
 
   # Extract markdown images that embed base64 data URLs:
   #   ![alt](data:image/png;base64,AAAA...)
-  # Writes decoded files under drafts/posts images folder and rewrites URLs.
+  # Each is decoded to a temp file and stored exactly like an upload
+  # (ImagePipeline.store): the type comes from the bytes, never from the
+  # claimed MIME type, SVGs are sanitized and rasters stripped. Anything it
+  # refuses stays inline in the text and is never written as a file (an <img>
+  # data URL cannot run script).
   def extract_base64_images(body, slug:, draft:)
     out = body.to_s.dup
     dest_dir = draft ? DRAFT_IMAGES_DIR : IMAGES_DIR
@@ -686,20 +659,31 @@ helpers do
     # Stop at ')' to avoid swallowing the whole file. This matches the common markdown pattern.
     re = /!\[(?<alt>[^\]]*)\]\((?<data>data:(?<mime>image\/[^;)\s]+);base64,(?<b64>[^)]+))\)/
     out.gsub!(re) do
-      idx += 1
-      ext = ext_for_mime(Regexp.last_match(:mime))
+      whole = Regexp.last_match(0)
       b64 = Regexp.last_match(:b64)
       alt = Regexp.last_match(:alt).to_s
-      filename_base = "embedded-#{sanitize_slug(slug)}-#{idx}"
-      filename = "#{filename_base}.#{ext}"
-      n = 1
-      while File.exist?(File.join(dest_dir, filename))
-        filename = "#{filename_base}-#{n}.#{ext}"
-        n += 1
+      Dir.mktmpdir('dataurl') do |tmp|
+        raw = File.join(tmp, 'raw')
+        File.binwrite(raw, Base64.decode64(b64))
+        begin
+          stored, = ImagePipeline.store(raw, File.join(tmp, 'img'))
+        rescue ImagePipeline::UploadError => e
+          warn "extract_base64_images: left a data URL inline (#{e.message})"
+          next whole
+        end
+        idx += 1
+        ext = File.extname(stored)
+        filename_base = "embedded-#{sanitize_slug(slug)}-#{idx}"
+        filename = "#{filename_base}#{ext}"
+        n = 1
+        while File.exist?(File.join(dest_dir, filename))
+          filename = "#{filename_base}-#{n}#{ext}"
+          n += 1
+        end
+        FileUtils.mkdir_p(dest_dir)
+        FileUtils.mv(stored, File.join(dest_dir, filename))
+        "![#{alt}](#{url_prefix}#{filename})"
       end
-      FileUtils.mkdir_p(dest_dir)
-      File.binwrite(File.join(dest_dir, filename), Base64.decode64(b64))
-      "![#{alt}](#{url_prefix}#{filename})"
     end
     out
   end
@@ -925,7 +909,7 @@ end
 
 # What this server can do (the studio warns once when thumbnails are off).
 get '/info' do
-  json({ 'thumbnails' => MINI_MAGICK_AVAILABLE, 'image_tool' => IMAGE_TOOL, 'site_port' => SITE_PORT,
+  json({ 'thumbnails' => ImagePipeline::MAGICK_AVAILABLE, 'image_tool' => ImagePipeline::IMAGE_TOOL, 'heic' => !ImagePipeline::SIPS.nil?, 'site_port' => SITE_PORT,
          'stale_uploads' => stale_uploads.length })
 end
 
@@ -1053,45 +1037,67 @@ end
 # Serve uploaded images directly so the editor preview works without
 # waiting for Jekyll to rebuild. Checks temp dir first, then final location.
 # ?variant=thumb serves the 600px -thumb.jpg when one exists (studio grid).
+# This origin can publish to git, so nothing served here may run script: an
+# SVG opened directly in a tab gets a CSP that blocks script and every
+# outside load (on top of the upload sanitizer), and nosniff stops a browser
+# from reading any file as HTML.
 get '/assets/images/*' do |path|
   temp_path = confined_path(File.join(TEMP_IMAGES_DIR, path), TEMP_ROOT)
   final_path = confined_path(File.join(IMAGES_ROOT, path), IMAGES_ROOT)
   halt 400, 'invalid path' unless temp_path && final_path
-  if File.file?(temp_path)
-    send_file temp_path
-  elsif File.file?(final_path)
-    thumb = variant_abs_path(final_path, 'thumb')
-    send_file(params['variant'] == 'thumb' && File.file?(thumb) ? thumb : final_path)
-  else
-    halt 404
-  end
+  headers 'X-Content-Type-Options' => 'nosniff',
+          'Content-Security-Policy' => "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox"
+  file =
+    if File.file?(temp_path)
+      temp_path
+    elsif File.file?(final_path)
+      thumb = variant_abs_path(final_path, 'thumb')
+      params['variant'] == 'thumb' && File.file?(thumb) ? thumb : final_path
+    end
+  halt 404 unless file
+  send_file file, type: ImagePipeline::MIME.fetch(File.extname(file).downcase, 'application/octet-stream')
 end
 
 post '/images' do
-  locked do
-    file = params['image'] && params['image'][:tempfile]
-    filename = params['image'] && params['image'][:filename]
-    halt 400, 'no image' unless file && filename
+  file = params['image'] && params['image'][:tempfile]
+  filename = params['image'] && params['image'][:filename]
+  halt 400, 'no image' unless file && filename
 
-    safe = filename.gsub(/[^a-zA-Z0-9.\-]/, '_')
-    basename = File.basename(safe, '.*')
-    ext = File.extname(safe)
-    halt 415, 'SVG images are not supported' if ext.downcase == '.svg'
-    ts = Time.now.strftime('%Y%m%d%H%M%S')
-    is_album = params['album'].to_s == 'true'
-    is_draft = params['draft'].to_s == 'true'
-    subdir = is_album ? 'albums' : (is_draft ? 'drafts' : 'posts')
-    # Several files uploaded in the same second with the same name would collide.
-    final_name = "#{ts}-#{basename}#{ext}"
-    n = 1
-    while File.exist?(File.join(TEMP_IMAGES_DIR, subdir, final_name)) || File.exist?(File.join(IMAGES_ROOT, subdir, final_name))
-      final_name = "#{ts}-#{basename}-#{n}#{ext}"
-      n += 1
+  safe = filename.gsub(/[^a-zA-Z0-9.\-]/, '_')
+  # No "-thumb"/"-med" ending (the name would read as a variant) and at most
+  # 80 characters.
+  basename = File.basename(safe, '.*').sub(/(-(thumb|med))+\z/i, '')[0, 80].sub(/[.\-]+\z/, '')
+  basename = 'image' if basename.empty? || basename.start_with?('.')
+  is_album = params['album'].to_s == 'true'
+  is_draft = params['draft'].to_s == 'true'
+  subdir = is_album ? 'albums' : (is_draft ? 'drafts' : 'posts')
+
+  # Sanitize/convert/strip outside the write lock (it can take seconds), then
+  # take the lock only to pick a free name and move the file in.
+  Dir.mktmpdir('upload') do |tmp|
+    begin
+      stored, info = ImagePipeline.store(file.path, File.join(tmp, 'img'), ext_hint: File.extname(safe))
+    rescue ImagePipeline::UploadError => e
+      halt e.status, "#{filename} #{e.message}."
     end
-    # Write to _editor_tmp/ so Jekyll doesn't detect the change and rebuild.
-    # Images are promoted to assets/images/ when the post is saved.
-    FileUtils.cp(file.path, File.join(TEMP_IMAGES_DIR, subdir, final_name))
-    json({ url: "/assets/images/#{subdir}/#{final_name}", basename: basename }, 201)
+    warn "SVG upload #{filename}: removed #{info['svg_removed'].join(', ')}" if info['svg_removed']&.any?
+    ext = File.extname(stored)
+    locked do
+      ts = Time.now.strftime('%Y%m%d%H%M%S')
+      # Several files uploaded in the same second with the same name would
+      # collide. The check ignores the extension: "x.png" and "x.svg" would
+      # otherwise share x-thumb.jpg, and a HEIC becomes .jpg anyway.
+      stem = "#{ts}-#{basename}"
+      n = 1
+      while [TEMP_IMAGES_DIR, IMAGES_ROOT].any? { |root| Dir.glob(File.join(root, subdir, "#{stem}.*")).any? }
+        stem = "#{ts}-#{basename}-#{n}"
+        n += 1
+      end
+      # Write to _editor_tmp/ so Jekyll doesn't detect the change and rebuild.
+      # Images are promoted to assets/images/ when the post is saved.
+      FileUtils.mv(stored, File.join(TEMP_IMAGES_DIR, subdir, stem + ext))
+      json({ url: "/assets/images/#{subdir}/#{stem}#{ext}", basename: basename }.merge(info), 201)
+    end
   end
 end
 
