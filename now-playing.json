@@ -1,0 +1,27 @@
+{
+  "track": {
+    "name": "Send Me (Live)",
+    "url": "https://open.spotify.com/track/5f9NBSHUJ85cpV1tfDDJM9",
+    "artists": [
+      {
+        "name": "Bethel Music",
+        "url": "https://open.spotify.com/artist/26T4yOaOoFJvUvxR87Y9HO"
+      },
+      {
+        "name": "Jenn Johnson",
+        "url": "https://open.spotify.com/artist/0cuW2lF0YWb9VUyHOnvnsO"
+      },
+      {
+        "name": "Chris Quilala",
+        "url": "https://open.spotify.com/artist/45HXIkMqrQerbaPuw6FgKD"
+      }
+    ],
+    "played_at": "2026-10-03T19:41:17.045Z"
+  },
+  "fetched_at": "2026-10-03T21:30:29Z",
+  "context": {
+    "type": "playlist",
+    "name": "surrender my life",
+    "url": "https://open.spotify.com/playlist/1eQ5bBxjfhMjB797PyQmgq"
+  }
+}
