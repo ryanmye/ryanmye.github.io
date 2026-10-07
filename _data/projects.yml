@@ -72,19 +72,21 @@ projects:
 
   - title: "World Seed"
     date: "Oct 2026"
-    summary: "A planet and civilization simulator that runs in the browser. From one seed it generates a planet (plate tectonics, climate, rivers, biomes) and simulates about **2,000 years** of settlement history on it, with no backend and no AI model."
-    context: "Personal project; TypeScript, Three.js, Web Worker"
-    description: "Type a seed and get a planet you can spin, then play or scrub through its history as peoples settle, migrate, farm, trade, and build. Everything is generated from the seed by code, and the same seed always gives the same world, so a URL fully describes a planet."
+    summary: "A planet and civilization simulator that runs in the browser. Give it a number and it builds a planet, then simulates its history year by year: peoples spreading from a few cradles, farming, sailing, trading, forming states, going to war, and founding faiths and dynasties. No backend and no language model; the same seed always gives the same world."
+    context: "Personal project; TypeScript, three.js, Web Worker"
+    description: "By default it simulates 2,000 years, and it can keep going. Every name, event, and line of the chronicle comes from code. The simulation is deterministic, so a seed is a world, and the address bar holds the seed and any nudges you have given, so a link reproduces the world you were looking at."
     bullets:
-      - "Planet generation: plates, elevation, erosion, climate, rivers, and biomes, all derived from the seed"
-      - "History simulation: a yearly model of population, migration, land use, trade, roads, ports, and dams, with settlements that are founded, grow, and are sometimes abandoned, and a chronicle of what happened"
-      - "A Three.js globe with a timeline, layer toggles, data view modes, and close-up 3D settlement models; generation and simulation run in a Web Worker, so the globe appears before the history finishes"
-      - "Deterministic by design: each subsystem draws from its own seeded random stream and the simulation uses only basic arithmetic, so results match across browsers"
+      - "The planet: tectonic plates raise mountains and open oceans, and temperature, rainfall, rivers, and biomes follow from the land"
+      - "The history: migration and farming, voyages and exploration, species and crops, trade, roads and ports, states and wars, pirates and bandits, goods, disease, rulers and dynasties, faiths, ideas, tourism, and landmarks that are raised, ruined, and restored"
+      - "Looking at it: a 3D globe or a flat map with views such as terrain, population, factions, and faiths; a chronicle of events; a street-level city view with 3D buildings; and sagas that tell a prose history of the world, a people, a state, a city, or a ruling house"
+      - "Nudges: urge a people, a state, or a town to explore, settle, make war or peace, or take up a faith. An order raises the odds of something the simulation could do anyway, and the rules decide whether it happens"
+      - "Built to be reproducible: each system draws from its own seeded random stream and uses only arithmetic that every JavaScript engine computes identically, and the tests check that turning any optional system off gives exactly the world without it"
+      - "The simulation runs in a Web Worker, so the globe is on screen while history is still being computed, and worlds are cached in the browser"
     url: "https://github.com/ryanmye/worldseed"
     site: "https://ryanmye.github.io/worldseed/"
     image:
       src: "/assets/images/projects/worldseed.webp"
-      alt: "World Seed showing a generated planet as a globe with named regions and settlements, a timeline at year 379 of 2000, and panels listing peoples, trade, and a chronicle of events."
+      alt: "World Seed at seed 42 in the year 4067: a globe covered in colored states, cities, and trade lanes, with panels for peoples, factions, goods, faiths, and a chronicle of events."
       width: 1200
       height: 750
 
