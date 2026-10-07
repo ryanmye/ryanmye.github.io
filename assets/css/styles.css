@@ -802,9 +802,10 @@ main {
   color: var(--muted);
 }
 
-/* Spotify "recently listened": a quiet 13px line that may wrap to a second
-   line (never more). Both lines are reserved, so the page does not move
-   when the data arrives. */
+/* Spotify "recently listened" (_includes/spotify_line.html, in the homepage
+   hero and the /projects/ page head): a quiet 13px line that may wrap to a
+   second line (never more). Both lines are reserved, so the page does not
+   move when the data arrives or the fetch fails. */
 .spotify-widget {
   display: flex;
   align-items: baseline;
@@ -826,6 +827,7 @@ main {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
+  max-height: 3.2em; /* two lines even where line-clamp is unsupported */
   overflow: hidden;
 }
 
@@ -1527,6 +1529,18 @@ main:has(.hero) { padding-top: var(--s-7); }
 .page-links {
   margin-top: var(--s-3);
   font-size: var(--fs-2);
+}
+
+/* The Spotify line under a lede (/projects/): 12px below it and as wide as
+   it (34em of the body size, not of the line's own 13px). The shared
+   .spotify-widget rule reserves its two lines (3.2em); the negative bottom
+   margin takes that height and the 12px back from the 96px above the first
+   section, so the section sits where it does without the line and nothing
+   moves when the line loads or the fetch fails. */
+.page-head .spotify-widget {
+  margin-top: var(--s-3);
+  margin-bottom: calc(-3.2em - var(--s-3));
+  max-width: calc(34 * var(--fs-3));
 }
 
 .page-links a { text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 0.2em; }

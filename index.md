@@ -57,10 +57,7 @@ description: "Personal website of Ryan Ye, a computer science student at Cornell
   </div>
   <div class="hero-intro">
     {{ about.intro | markdownify }}{{ about.outside | markdownify }}
-    <p class="spotify-widget" id="spotify-widget" hidden>
-      {% include icon.html name="spotify" class="spotify-icon" %}
-      <span id="spotify-now-playing"></span>
-    </p>
+    {% include spotify_line.html %}
   </div>
 </header>
 
@@ -156,78 +153,3 @@ description: "Personal website of Ryan Ye, a computer science student at Cornell
   </ul>
 </section>
 {% endif %}
-
-<script>
-(function () {
-  function timeAgo(isoStr) {
-    var d    = new Date(isoStr);
-    var now  = new Date();
-    var secs = Math.floor((now - d) / 1000);
-    if (secs < 60)  return secs + ' second' + (secs === 1 ? '' : 's') + ' ago';
-    var mins = Math.floor(secs / 60);
-    if (mins < 60)  return mins + ' minute' + (mins === 1 ? '' : 's') + ' ago';
-    var hrs  = Math.floor(mins / 60);
-    if (hrs  < 24)  return hrs  + ' hour'   + (hrs  === 1 ? '' : 's') + ' ago';
-    var days = Math.floor(hrs  / 24);
-    return days + ' day' + (days === 1 ? '' : 's') + ' ago';
-  }
-
-  function escapeHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-              .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  }
-
-  /* Long names are shortened (with an ellipsis; the full name stays in the
-     link title) so the whole line, "(N hours ago)" included, fits in the
-     two reserved lines at desktop widths. */
-  function clip(str, n) {
-    str = String(str || '');
-    return str.length > n ? str.slice(0, n - 1).replace(/\s+$/, '') + '\u2026' : str;
-  }
-
-  function link(href, name, n) {
-    var shown = escapeHtml(clip(name, n));
-    return href ? '<a href="' + href + '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(name) + '">' + shown + '</a>' : shown;
-  }
-
-  function safeUrl(u) {
-    return /^https:\/\/open\.spotify\.com\//.test(u) ? u : '';
-  }
-
-  /* Spotify "recently listened". The JSON lives on the spotify-data branch
-     (written by .github/workflows/update-spotify.yml) so updates never touch
-     main or trigger a deploy. If anything fails the widget stays hidden. */
-  var widget = document.getElementById('spotify-widget');
-  var spotifyEl = document.getElementById('spotify-now-playing');
-  if (widget && spotifyEl) {
-    var controller = new AbortController();
-    var timeoutId = setTimeout(function () { controller.abort(); }, 5000);
-    var url = 'https://raw.githubusercontent.com/{{ site.github_username }}/{{ site.github_username }}.github.io/spotify-data/now-playing.json';
-    fetch(url, { signal: controller.signal, cache: 'no-cache' })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (data) {
-        if (!data || !data.track) return;
-        var t = data.track;
-        var artistLinks = (t.artists || []).slice(0, 2).map(function (a) {
-          var href = safeUrl(a.url);
-          return link(href, a.name, 28);
-        }).join(', ');
-        var trackHref = safeUrl(t.url);
-        var html = 'listened to ' + link(trackHref, t.name, 48) +
-          (artistLinks ? ' by ' + artistLinks : '');
-        if (data.context && data.context.name) {
-          var ctxType = data.context.type || '';
-          var ctxLabel = ctxType === 'playlist' ? 'playlist' : ctxType === 'album' ? 'album' : ctxType === 'artist' ? 'artist' : '';
-          var ctxHref = safeUrl(data.context.url || '');
-          html += ' from ' + (ctxLabel ? ctxLabel + ' ' : '') +
-            link(ctxHref, data.context.name, 36);
-        }
-        if (t.played_at) html += ' <span class="spotify-time">(' + timeAgo(t.played_at) + ')</span>';
-        spotifyEl.innerHTML = html;
-        widget.hidden = false;
-      })
-      .catch(function () { /* keep hidden */ })
-      .finally(function () { clearTimeout(timeoutId); });
-  }
-})();
-</script>

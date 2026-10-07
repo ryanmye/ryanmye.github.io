@@ -1,4 +1,5 @@
-# Projects showcase (ordered: present first, then by end date descending).
+# Projects showcase. The order is Ryan's choice (Oct 2026): DoRA, Worship
+# Rig, World Seed, Geometric Art, then the rest. Keep it unless he says so.
 # Research projects live in research.yml, not here.
 # `summary`: the one-line result shown in the lists (Markdown; bold the one
 #   key number, sparingly).
@@ -18,22 +19,30 @@
 #   links it to `site`, else `url`. Leave it out when there is no real
 #   picture; nothing is drawn in its place. The homepage never shows it.
 projects:
-  - title: "Geometric Art"
-    date: "Oct 2026"
-    summary: "A browser app that rebuilds a photo from geometric shapes: overlapping translucent shapes, a gap-free triangle mesh, or a polygon mosaic. It runs entirely on your machine, with nothing uploaded."
-    context: "Personal project; TypeScript, Web Workers"
-    description: "Drop in a photo (iPhone HEIC included) or pick a sample, press Start, and watch the picture rebuild. The same engines also run from the command line, which is how the animations in the geometric art album were made."
+  - title: "DoRA Re-Implementation and Evaluation"
+    date: "Spring 2026"
+    featured: true
+    short: "4-person team re-implementation of DoRA; I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
+    summary: "4-person team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B. Trained on little data, both methods often ranked the right AMC12 answer highest but failed to generate it; more data closed the gap, and DoRA reached 46%, ahead of LoRA's 36% on the same data. I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
+    context: "CS 4782 (Deep Learning), 4-person team"
+    description: "CS 4782 final project, Spring 2026. We wrote DoRA as a PyTorch layer, fine-tuned Qwen2.5-3B with it and with LoRA on 1K to 27.5K math problems, and tested on AMC12 2024/2025 and the MATH benchmark. To separate what a model knows from what it can write out, we scored AMC12 three ways: a one-token probe over the answer letters, generate then probe, and plain generation."
     bullets:
-      - "Overlapping shapes: each new shape is picked from random candidates and refined by hill climbing, its colour computed directly as the best fit, with candidates drawn more often where the picture is worst"
-      - "Triangle mesh and polygon mosaic: Delaunay triangles or Voronoi cells over a set of points, optimized by threshold accepting (a relative of simulated annealing) that rescores only the cells around each moved point"
-      - "Searches run in parallel across a pool of web workers, and the same seed always gives the same picture"
-    url: "https://github.com/ryanmye/geometric-art"
-    site: "https://ryanmye.github.io/geometric-art/"
+      - "Team finding: after training the base model on 7.5K problems, the probe picked the right AMC12 2024 answer 38% of the time for both methods, but generated answers were right 18% (LoRA) and 12% (DoRA). With 27.5K problems the gap closed and DoRA reached 46%, against LoRA's 36% on the same data"
+      - "At 3B scale we only partly reproduced the paper's DoRA-over-LoRA result, and fine-tuning lowered MATH accuracy for both methods"
+      - "Ran all training and evaluation on Cornell's HPC cluster: ranks 2, 4, and 8, three dataset sizes, base and instruct models"
+      - "Wrote the evaluation harness (logit-probe and two-pass scoring), the benchmark and training-data scripts with a leakage filter, checkpoint averaging, the tables and figures, and the first draft of the report"
+      - "Diagnosed a critical bug in the team's DoRA layer and contributed to the problem formulation"
+    url: "https://github.com/leonjiao5/cs4782-project"
     image:
-      src: "/assets/images/projects/geometric-art.webp"
-      alt: "The Mona Lisa next to the same painting rebuilt as a mesh of flat-coloured triangles."
-      width: 675
-      height: 422
+      src: "/assets/images/projects/dora.webp"
+      alt: "Bar chart of AMC12 2024 accuracy for LoRA and DoRA trained on a light and a heavy dataset, comparing the logit probe with two-pass and greedy answers."
+      width: 1200
+      height: 750
+    cv: true
+    cv_tech: "PyTorch, Hugging Face PEFT"
+    cv_bullets:
+      - "4-person team re-implementation of DoRA in PyTorch, tested against LoRA on Qwen2.5-3B (AMC12, MATH)"
+      - "Ran all experiments on the HPC cluster; built the evaluation harness (logit-probe, two-pass, and generation scoring), data pipeline, and analysis; diagnosed a critical bug in the DoRA layer"
 
   - title: "Worship Rig"
     date: "Sep 2026"
@@ -61,30 +70,40 @@ projects:
       - "Mac app (Electron) that turns a MIDI keyboard into a keys rig for worship bands: 43 instruments, a key drone, setlists, a per-sound 8-band EQ, WAV recording"
       - "Web Audio engine that also renders offline for tests and level calibration; GarageBand/Logic sample converter; 1,000+ automated tests; CI releases for Apple Silicon and Intel"
 
-  - title: "DoRA Re-Implementation and Evaluation"
-    date: "Spring 2026"
-    featured: true
-    short: "4-person team re-implementation of DoRA; I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
-    summary: "4-person team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B. Trained on little data, both methods often ranked the right AMC12 answer highest but failed to generate it; more data closed the gap, and DoRA reached 46%, ahead of LoRA's 36% on the same data. I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
-    context: "CS 4782 (Deep Learning), 4-person team"
-    description: "CS 4782 final project, Spring 2026. We wrote DoRA as a PyTorch layer, fine-tuned Qwen2.5-3B with it and with LoRA on 1K to 27.5K math problems, and tested on AMC12 2024/2025 and the MATH benchmark. To separate what a model knows from what it can write out, we scored AMC12 three ways: a one-token probe over the answer letters, generate then probe, and plain generation."
+  - title: "World Seed"
+    date: "Oct 2026"
+    summary: "A planet and civilization simulator that runs in the browser. From one seed it generates a planet (plate tectonics, climate, rivers, biomes) and simulates about **2,000 years** of settlement history on it, with no backend and no AI model."
+    context: "Personal project; TypeScript, Three.js, Web Worker"
+    description: "Type a seed and get a planet you can spin, then play or scrub through its history as peoples settle, migrate, farm, trade, and build. Everything is generated from the seed by code, and the same seed always gives the same world, so a URL fully describes a planet."
     bullets:
-      - "Team finding: after training the base model on 7.5K problems, the probe picked the right AMC12 2024 answer 38% of the time for both methods, but generated answers were right 18% (LoRA) and 12% (DoRA). With 27.5K problems the gap closed and DoRA reached 46%, against LoRA's 36% on the same data"
-      - "At 3B scale we only partly reproduced the paper's DoRA-over-LoRA result, and fine-tuning lowered MATH accuracy for both methods"
-      - "Ran all training and evaluation on Cornell's HPC cluster: ranks 2, 4, and 8, three dataset sizes, base and instruct models"
-      - "Wrote the evaluation harness (logit-probe and two-pass scoring), the benchmark and training-data scripts with a leakage filter, checkpoint averaging, the tables and figures, and the first draft of the report"
-      - "Diagnosed a critical bug in the team's DoRA layer and contributed to the problem formulation"
-    url: "https://github.com/leonjiao5/cs4782-project"
+      - "Planet generation: plates, elevation, erosion, climate, rivers, and biomes, all derived from the seed"
+      - "History simulation: a yearly model of population, migration, land use, trade, roads, ports, and dams, with settlements that are founded, grow, and are sometimes abandoned, and a chronicle of what happened"
+      - "A Three.js globe with a timeline, layer toggles, data view modes, and close-up 3D settlement models; generation and simulation run in a Web Worker, so the globe appears before the history finishes"
+      - "Deterministic by design: each subsystem draws from its own seeded random stream and the simulation uses only basic arithmetic, so results match across browsers"
+    url: "https://github.com/ryanmye/worldseed"
+    site: "https://ryanmye.github.io/worldseed/"
     image:
-      src: "/assets/images/projects/dora.webp"
-      alt: "Bar chart of AMC12 2024 accuracy for LoRA and DoRA trained on a light and a heavy dataset, comparing the logit probe with two-pass and greedy answers."
+      src: "/assets/images/projects/worldseed.webp"
+      alt: "World Seed showing a generated planet as a globe with named regions and settlements, a timeline at year 379 of 2000, and panels listing peoples, trade, and a chronicle of events."
       width: 1200
       height: 750
-    cv: true
-    cv_tech: "PyTorch, Hugging Face PEFT"
-    cv_bullets:
-      - "4-person team re-implementation of DoRA in PyTorch, tested against LoRA on Qwen2.5-3B (AMC12, MATH)"
-      - "Ran all experiments on the HPC cluster; built the evaluation harness (logit-probe, two-pass, and generation scoring), data pipeline, and analysis; diagnosed a critical bug in the DoRA layer"
+
+  - title: "Geometric Art"
+    date: "Oct 2026"
+    summary: "A browser app that rebuilds a photo from geometric shapes: overlapping translucent shapes, a gap-free triangle mesh, or a polygon mosaic. It runs entirely on your machine, with nothing uploaded."
+    context: "Personal project; TypeScript, Web Workers"
+    description: "Drop in a photo (iPhone HEIC included) or pick a sample, press Start, and watch the picture rebuild. The same engines also run from the command line, which is how the animations in the geometric art album were made."
+    bullets:
+      - "Overlapping shapes: each new shape is picked from random candidates and refined by hill climbing, its color computed directly as the best fit, with candidates drawn more often where the picture is worst"
+      - "Triangle mesh and polygon mosaic: Delaunay triangles or Voronoi cells over a set of points, optimized by threshold accepting (a relative of simulated annealing) that rescores only the cells around each moved point"
+      - "Searches run in parallel across a pool of web workers, and the same seed always gives the same picture"
+    url: "https://github.com/ryanmye/geometric-art"
+    site: "https://ryanmye.github.io/geometric-art/"
+    image:
+      src: "/assets/images/projects/geometric-art.webp"
+      alt: "The Mona Lisa next to the same painting rebuilt as a mesh of flat-colored triangles."
+      width: 675
+      height: 422
 
   - title: "Traveling Salesman: Conversational Flight Search"
     date: "Mar 2026"
@@ -108,6 +127,21 @@ projects:
       - "Built most of the React frontend for a conversational flight search tool: trip planner, ranked flight plans, and a reworked chat panel"
       - "Route map as a 2D map and a draggable 3D globe (d3-geo) with multi-leg routes and layovers"
 
+  - title: "Personal Website"
+    date: "Mar 2026 – present"
+    summary: "This site: Jekyll on GitHub Pages, with a local writing studio (Sinatra API, vanilla JS) and a Spotify line fed by GitHub Actions."
+    context: "Personal project; Jekyll, Sinatra, GitHub Actions"
+    description: "This site. Built with Jekyll and hosted on GitHub Pages: blog, photo albums, project showcase, research section, and a data-driven CV."
+    bullets:
+      - "Local writing studio: a Sinatra API and a vanilla-JS editor for posts and photo albums, with git publish"
+      - "Spotify widget fed by a GitHub Actions job that writes to an orphan branch; PR checks with html-proofer"
+    url: "https://github.com/ryanmye/ryanmye.github.io"
+    image:
+      src: "/assets/images/projects/personal-website.webp"
+      alt: "The homepage of this site: the name, the Cornell line, the internship ask, a short intro, and a round photo with contact icons."
+      width: 1200
+      height: 750
+
   - title: "Sisyphus: AI Productivity App"
     date: "Nov 2025"
     short: "4-person hackathon app that checks photo check-ins with Claude and emails your ex if you slack off; one of **5 winners** among 38 projects."
@@ -123,16 +157,6 @@ projects:
     cv_bullets:
       - "Web app that checks task photos with the Claude API; one of 5 winners among 38 projects (Fun Award), 4-person team"
       - "Worked on the frontend and the AI photo validation"
-
-  - title: "Personal Website"
-    date: "Mar 2026 – present"
-    summary: "This site: Jekyll on GitHub Pages, with a local writing studio (Sinatra API, vanilla JS) and a Spotify line fed by GitHub Actions."
-    context: "Personal project; Jekyll, Sinatra, GitHub Actions"
-    description: "This site. Built with Jekyll and hosted on GitHub Pages: blog, photo albums, project showcase, research section, and a data-driven CV."
-    bullets:
-      - "Local writing studio: a Sinatra API and a vanilla-JS editor for posts and photo albums, with git publish"
-      - "Spotify widget fed by a GitHub Actions job that writes to an orphan branch; PR checks with html-proofer"
-    url: "https://github.com/ryanmye/ryanmye.github.io"
 
   - title: "Transformer-Based Piano Melody Generation"
     date: "Aug 2023 – Apr 2024"

@@ -12,7 +12,7 @@ twitter_username: "ryanmye0"
 theme: null
 
 # Cache-busting version for assets/css/styles.css — bump when the stylesheet changes.
-css_version: 12
+css_version: 13
 
 plugins:
   - jekyll-sitemap
