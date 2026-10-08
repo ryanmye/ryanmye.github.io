@@ -1531,18 +1531,6 @@ main:has(.hero) { padding-top: var(--s-7); }
   font-size: var(--fs-2);
 }
 
-/* The Spotify line under a lede (/projects/): 12px below it and as wide as
-   it (34em of the body size, not of the line's own 13px). The shared
-   .spotify-widget rule reserves its two lines (3.2em); the negative bottom
-   margin takes that height and the 12px back from the 96px above the first
-   section, so the section sits where it does without the line and nothing
-   moves when the line loads or the fetch fails. */
-.page-head .spotify-widget {
-  margin-top: var(--s-3);
-  margin-bottom: calc(-3.2em - var(--s-3));
-  max-width: calc(34 * var(--fs-3));
-}
-
 .page-links a { text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 0.2em; }
 
 /* Breadcrumb (_includes/breadcrumb.html): "← Home", or "← Home / Blog" under

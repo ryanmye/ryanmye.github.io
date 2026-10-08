@@ -8,7 +8,6 @@ description: "Projects by Ryan Ye, Cornell CS student: machine learning and soft
 <header class="page-head">
   <h1>Projects</h1>
   <p class="page-lede">Course, hackathon, and personal projects. Research is on the <a href="{{ '/research/' | relative_url }}">research page</a>.</p>
-  {% include spotify_line.html %}
 </header>
 
 {%- comment -%}
