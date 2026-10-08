@@ -17,40 +17,43 @@ google_scholar: "https://scholar.google.com/citations?user=RhqHy9sAAAAJ&hl=en"
 positions:
   - title: "Statistical Validation for Automated Hypothesis Discovery"
     slug: "statistical-validation"
-    card_summary: "The statistical layer that checks an automated scientific-discovery agent's findings. I built it and found where its false-discovery guarantees broke."
+    card_summary: "A separate statistical check on what AI discovery agents report, so only a small, preset share of reported findings are false. I implemented the tests and reporting rules, ran the agents, and stress-tested the check."
     role: "Undergraduate Researcher"
     lab: "Sun Lab"
     pi: "Jennifer Sun"
     institution: "Cornell University"
-    date: "Summer 2026"
+    date: "Jun 2026 – present"
     description: |
-      Showed that an automated scientific discovery system reported far more false findings
-      than it promised: its false discovery rate (the share of reported findings that are
-      wrong) ran 35 to 41% against a 10% target, and up to 99.3% when adaptive selection
-      reused holdout data, which led to the conservative controller becoming the default.
-      I built the system's statistical validation layer, which checks its findings; the
-      system searches over thousands of hypotheses and would otherwise mostly report noise.
-      AIMI Junior Affiliate project.
+      A separate statistical check that decides which of an AI discovery agent's findings
+      get reported, so that only a small, preset share of them are false. Left to pick
+      their own findings, the agents we tested reported many that were false. Here the
+      agent searches as usual and then submits everything it considered; each item gets
+      one test on data the agent never had access to, and a standard multiple-testing
+      correction decides what is reported. On test datasets where the true relationships
+      are known, this held false findings under the target for every agent, and most
+      agents lost some true findings in exchange. I implemented the tests and the
+      reporting rules, which are standard statistical procedures, ran the agent systems,
+      and ran the stress tests. AIMI Junior Affiliate project.
     focus:
-      - title: "Validation layer from scratch"
-        detail: "A config-gated add-on with a typed anytime-valid evidence interface, e-value robustness fixes, interval-null tests, and a portfolio-FDR test suite"
-      - title: "Finding where the guarantees broke"
-        detail: "The FDR controller only saw values that had already cleared a self-referential local threshold; shipped two corrected registration modes. A separate scaling mismatch had the default controller silently making zero discoveries across 261,904 real clinical-trial p-values"
-      - title: "Adaptive-selection vulnerability"
-        detail: "Showed that a smarter tree selector could exploit reused holdout data to bias which hypotheses got tested"
-      - title: "Validation against real data"
-        detail: "Four real-world datasets including a 250K-row clinical-trials corpus; benchmarked 8 candidate controllers against the published online-FDR literature; drove a null-data incoherence failure mode from 67% to 10.5%"
+      - title: "The statistical tests"
+        detail: "One pre-set test for each type of claim (correlations, group differences, interactions, adjusted associations, trends), each giving a p-value and an e-value. Checked by simulation, across sample sizes, that each test's false-positive rate stays near its nominal level when there is no effect"
+      - title: "Reporting rules"
+        detail: "Standard false discovery rate procedures (Benjamini-Hochberg, Benjamini-Yekutieli, and e-value versions) applied to everything an agent submitted. Fresh data without the correction was not enough for any agent, and the correction on data the agent had already searched was not enough for all of them; only the two together held the error rate for every agent"
+      - title: "Running the agents"
+        detail: "Ran several agent systems of different designs on the same task: explore a dataset, submit a ranked list of everything it considered, and mark which items it would report as findings"
+      - title: "Stress tests"
+        detail: "Showed that the error control can fail when results from the held-out data are fed back to the agent, or when the agent is given the held-out data to manage itself"
     homepage: true
     index_title: "Statistical Validation for Hypothesis Discovery"
-    index_description: "Showed that an automated hypothesis discovery system's false discovery rate ran 35 to 41% against a 10% target, and built the statistical validation layer that checks its findings."
+    index_description: "A separate statistical check that keeps the share of false findings AI discovery agents report under a preset level. I implemented the tests and reporting rules, ran the agents, and stress-tested the check."
     cv: true
     cv_title: "Sun Lab · statistical validation"
-    cv_date: "Summer 2026"
+    cv_date: "Jun 2026 – present"
     cv_subtitle: "Statistical validation for automated hypothesis discovery"
     cv_bullets:
-      - "Showed an MCTS-based discovery system's false discovery rate ran 35 to 41% against a 10% target; shipped two corrected registration modes"
-      - "Showed that reusing holdout data under adaptive tree selection pushed the false discovery rate to 99.3% at scale, which led to the conservative controller becoming the default"
-      - "Built the validation layer (anytime-valid evidence interface, e-value fixes, interval-null tests) and benchmarked 8 controllers on four real-world datasets"
+      - "Implemented a separate statistical check on what AI discovery agents report: one pre-set test per finding on held-out data, then a standard false discovery rate correction over everything the agent submitted"
+      - "Ran several agent systems on test datasets where the true relationships are known; the check held false findings under the target rate for every agent, where the agents' own reports did not"
+      - "Stress-tested the check: showed its error control can fail when held-out results are fed back to the agent"
 
   - title: "Video Behavior Recognition Across Labs (MABe)"
     slug: "mabe"

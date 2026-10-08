@@ -9,7 +9,7 @@
 
 - date: 2026-06-01
   display: "Summer 2026"
-  text: "Built the statistical validation layer for an automated hypothesis discovery system in the Sun Lab (AIMI Junior Affiliate project)."
+  text: "Started work on statistical checks for what AI discovery agents report, in the Sun Lab (AIMI Junior Affiliate project)."
 
 - date: 2026-03-14
   text: "Built most of the frontend for [Traveling Salesman](https://github.com/boaz-ng/traveling-salesmen), a conversational flight search tool, at the Cornell AI Hackathon."
