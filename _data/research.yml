@@ -87,7 +87,7 @@ positions:
     cv_bullets:
       - "Beat the frozen-backbone baseline on 9 of 15 datasets (13 of 15 on at least one split) by LoRA fine-tuning a frozen video foundation model with a self-authored kinematic auxiliary loss"
       - "Built the 5-fold cross-validation, threshold calibration, and 8-stage SLURM training pipeline used across all 15 datasets; brought it up on Blackwell GPUs with CUDA 12.8"
-      - "Wrote the staging pipeline that moves terabytes of video to node-local NVMe, a balanced sampler for multi-label class imbalance, and the JAX baseline for the Kaggle competition the project grew out of"
+      - "Wrote the staging pipeline that moves terabytes of video to node-local NVMe, a balanced sampler for multi-label class imbalance, and ported the JAX baseline for the Kaggle competition the project grew out of to PyTorch"
 
   - title: "AI for Animal Behavior Monitoring"
     slug: "calf-behavior"
@@ -110,9 +110,9 @@ positions:
       vision-language models for posture and ear tag recognition.
     focus:
       - title: "Self-supervised vision for livestock monitoring"
-        detail: "Posture classification from frozen DINOv2/DINOv3 features with lightweight classifier heads, plus a YOLO detector fine-tuned on a self-annotated calf dataset; best F1 rose from 0.928 at 300 training images to 0.957 at 1,000"
+        detail: "Posture classification from frozen DINOv2/DINOv3 features with lightweight classifier heads, plus a YOLO detector fine-tuned on a self-annotated calf dataset; mean F1 rose from 0.928 with 300 training images to 0.957 with 1,000 (24 runs per setting)"
       - title: "Vision-language models on farm imagery"
-        detail: "Benchmarked Qwen, Gemma 3, PaliGemma, and NVLM for ear tag and pose recognition; 77% of ear tag OCR responses were unreadable on real farm images"
+        detail: "Benchmarked Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, and NVLM for ear tag and pose recognition; 77% of ear tag OCR responses were unreadable on real farm images"
       - title: "Bridging AI and veterinary research"
         detail: "An interactive Jupyter workflow so veterinary researchers can run experiments and interpret results without an ML background"
       - title: "ADSA 2026 poster"
@@ -120,15 +120,15 @@ positions:
     note: "Conducted as part of the Bowers Undergraduate Research Experience (BURE) with support from a CIDA grant."
     homepage: true
     index_title: "Calf Behavior Monitoring"
-    index_description: "Reached F1 0.957 on calf posture classification from DINO features and a YOLO detector fine-tuned on a dataset I annotated; poster presented at ADSA 2026."
+    index_description: "Reached a mean F1 of 0.957 on calf posture classification from DINO features and a YOLO detector fine-tuned on a dataset I annotated; poster presented at ADSA 2026."
     cv: true
     cv_title: "Sun Lab · calf behavior"
     cv_date: "May 2025 – present"
-    cv_subtitle: "Bowers Undergraduate Research Experience (BURE) — CIDA Grant Recipient"
+    cv_subtitle: "Calf behavior monitoring (BURE Fellow, CIDA grant)"
     cv_bullets:
-      - "Built a calf posture classification pipeline from DINOv2/DINOv3 features and a YOLO detector fine-tuned on a self-annotated dataset; best F1 0.957"
-      - "Ran 24 comparison runs across training-set sizes benchmarking DINOv2 vs. DINOv3 ensembles"
-      - "Benchmarked vision-language models (Qwen, Gemma 3, PaliGemma, NVLM) for ear tag and pose recognition on farm imagery"
+      - "Built a calf posture classification pipeline from DINOv2/DINOv3 features and a YOLO detector fine-tuned on a self-annotated dataset; mean F1 0.957 with 1,000 training images"
+      - "Compared DINOv2 and DINOv3 ensembles at four training-set sizes, 24 runs per setting"
+      - "Benchmarked vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear tag and pose recognition on farm imagery"
       - "Built an interactive Jupyter workflow for veterinary researchers"
       - "Poster presented at ADSA 2026; manuscript in preparation"
 

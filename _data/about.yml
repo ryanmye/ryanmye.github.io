@@ -46,7 +46,7 @@ education:
   gpa: "4.02"
   coursework:
     - "Deep Learning, Computer Vision, Machine Learning"
-    - "Systems Programming and Practices (C), Algorithms, Discrete Math, Data Structures and Algorithms"
+    - "Computer System Organization (C), Algorithms, Discrete Math, Data Structures"
     - "Functional Programming (OCaml), iOS Development"
     - "Linear Algebra, Differential Equations, Multivariable Calculus"
 
@@ -63,7 +63,7 @@ teaching:
     date: "Aug 2020 – Jun 2024"
     subtitle: "Volunteer online programming education during COVID-19"
     bullets:
-      - "Taught Python, Java, and C/C++ to elementary and middle school students"
+      - "Taught Python, Java, and C++ to elementary and middle school students"
       - "Reached 300+ students across 8 U.S. states"
   - title: "Teaching Assistant, Computer Science — Conestoga High School"
     date: "Fall 2023"

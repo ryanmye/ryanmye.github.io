@@ -94,7 +94,7 @@ projects:
     date: "Oct 2026"
     summary: "A browser app that rebuilds a photo from geometric shapes: overlapping translucent shapes, a gap-free triangle mesh, or a polygon mosaic. It runs entirely on your machine, with nothing uploaded."
     context: "Personal project; TypeScript, Web Workers"
-    description: "Drop in a photo (iPhone HEIC included) or pick a sample, press Start, and watch the picture rebuild. The same engines also run from the command line, which is how the animations in the geometric art album were made."
+    description: "Drop in a photo (iPhone HEIC included) or pick a sample, press Start, and watch the picture rebuild. The same engines also run from the command line. The animations in the geometric art album were made with the app."
     bullets:
       - "Overlapping shapes: each new shape is picked from random candidates and refined by hill climbing, its color computed directly as the best fit, with candidates drawn more often where the picture is worst"
       - "Triangle mesh and polygon mosaic: Delaunay triangles or Voronoi cells over a set of points, optimized by threshold accepting (a relative of simulated annealing) that rescores only the cells around each moved point"
