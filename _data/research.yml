@@ -42,7 +42,7 @@ positions:
       - title: "Running the agents"
         detail: "Ran several agent systems of different designs on the same task: explore a dataset, submit a ranked list of everything it considered, and mark which items it would report as findings"
       - title: "Stress tests"
-        detail: "Showed that the error control can fail when results from the held-out data are fed back to the agent, or when the agent is given the held-out data to manage itself"
+        detail: "Showed that the error control can fail when results from the held-out data are fed back to the agent, or when the agent is given the held-out data to manage itself. Over the summer I also ran comparisons with an existing method in which an AI agent designs the validation tests"
     homepage: true
     index_title: "Statistical Validation for Hypothesis Discovery"
     index_description: "A separate statistical check that keeps the share of false findings AI discovery agents report under a preset level. I implemented the tests and reporting rules, ran the agents, and stress-tested the check."
