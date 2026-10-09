@@ -46,7 +46,7 @@ description: "CV of Ryan Ye, computer science student at Cornell University — 
   <h2 class="section-title" id="cv-skills">Skills</h2>
   <dl class="cv-body skill-grid">
     <dt>Languages</dt><dd>{{ site.data.about.skills.languages }}</dd>
-    <dt>Libraries</dt><dd>{{ site.data.about.skills.libraries }}</dd>
+    <dt>ML</dt><dd>{{ site.data.about.skills.libraries }}</dd>
     <dt>Tools</dt><dd>{{ site.data.about.skills.tools }}</dd>
   </dl>
 </section>

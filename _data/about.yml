@@ -52,9 +52,9 @@ education:
 
 # Three plain lines on the CV; must match the Technical Skills lines in resume/resume.tex.
 skills:
-  languages: "Python, Java, C/C++, OCaml, JavaScript (Node.js, Express.js, React), HTML/CSS"
-  libraries: "PyTorch, JAX, Hugging Face Transformers and PEFT, NumPy, pandas, Matplotlib"
-  tools: "Git, SSH, SLURM/HPC, CUDA, Jupyter, VS Code"
+  languages: "Python, Java, C/C++, TypeScript/JavaScript, OCaml"
+  libraries: "PyTorch, Hugging Face Transformers, PEFT, scikit-learn, NumPy, pandas, OpenCV, YOLO"
+  tools: "Git, GitHub Actions, SLURM/HPC, CUDA, Playwright, React, Node.js, Claude API"
 
 blog_blurb: "Notes, thoughts, and life-updates."
 
