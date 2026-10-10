@@ -1,0 +1,23 @@
+{
+  "track": {
+    "name": "\u54ea\u6837\u5462",
+    "url": "https://open.spotify.com/track/2wjqe6ZArwQIwekcJInz3A",
+    "artists": [
+      {
+        "name": "\u679c\u59b9",
+        "url": "https://open.spotify.com/artist/52BoWwtSNTRErCHq3gHfQo"
+      },
+      {
+        "name": "Aioz",
+        "url": "https://open.spotify.com/artist/5EMjv6vDJAEcksJoCfOZC9"
+      }
+    ],
+    "played_at": "2026-10-10T07:24:39.633Z"
+  },
+  "fetched_at": "2026-10-10T08:45:26Z",
+  "context": {
+    "type": "playlist",
+    "name": "mandornb",
+    "url": "https://open.spotify.com/playlist/4fx7axG0d1041gOkUXUnXp"
+  }
+}
