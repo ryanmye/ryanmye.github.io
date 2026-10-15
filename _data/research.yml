@@ -143,8 +143,19 @@ positions:
 # "R. M. Ye" in `authors`, appends the lowercased `role` to the venue
 # ("Venue · supporting author"), and right-aligns `year`.
 publications:
-  - title: "Automating pose detection in calves: a computer vision framework for non-invasive behavioral monitoring"
+  - title: "A community benchmark enables high-resolution, cross-lab quantification of mouse social behavior"
     rank: 1
+    authors: "Markus Marks, …, Ryan M. Ye, et al."
+    venue: "Science (under review), 2026"
+    url: null
+    selected: true
+    description: "A benchmark of annotated video and pose tracking from 15 laboratories, a community behavior classification challenge, and a behavior classifier that generalizes to labs it was not trained on."
+    role: "Co-author"
+    year: "2026"
+    type: "review"
+
+  - title: "Automating pose detection in calves: a computer vision framework for non-invasive behavioral monitoring"
+    rank: 2
     authors: "Ryan M. Ye, Marina Madureira Ferreira, Jennifer J. Sun, Francisco A. Leal Yepes"
     venue: "ADSA Annual Meeting, 2026 (poster)"
     url: null
@@ -155,7 +166,7 @@ publications:
     type: "poster"
 
   - title: "A smarter lung ultrasonography solution for lung consolidation classification in dairy calves using a deep learning approach"
-    rank: 2
+    rank: 3
     authors: "Marina Madureira Ferreira, Keshawa M. Dadallage, Tyler Ward, Hannah McCray, Ryan M. Ye, Jennifer J. Sun, Francisco A. Leal Yepes"
     venue: "Journal of Dairy Science, 2026"
     url: "https://doi.org/10.3168/jds.2026-28434"
@@ -166,7 +177,7 @@ publications:
     type: "journal"
 
   - title: "The effects of firm performance on CEO compensation and CEO pay ratio before and during COVID-19"
-    rank: 3
+    rank: 4
     authors: "Ryan Ye, Yanan Chen, Kyle A. Kelly"
     venue: "Research in Economics 77(4), 2023"
     url: "https://doi.org/10.1016/j.rie.2023.07.002"
