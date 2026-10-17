@@ -1,0 +1,19 @@
+{
+  "track": {
+    "name": "\u81f4\u4f60",
+    "url": "https://open.spotify.com/track/1BH8aQSiigtTbbqms4XpwR",
+    "artists": [
+      {
+        "name": "Yihuik\u82e1\u6167",
+        "url": "https://open.spotify.com/artist/07h8O5G4IO8l723aNOqip2"
+      }
+    ],
+    "played_at": "2026-10-17T21:02:11.895Z"
+  },
+  "fetched_at": "2026-10-17T21:48:22Z",
+  "context": {
+    "type": "playlist",
+    "name": "mandornb",
+    "url": "https://open.spotify.com/playlist/4fx7axG0d1041gOkUXUnXp"
+  }
+}
