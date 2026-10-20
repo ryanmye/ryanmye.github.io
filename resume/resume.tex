@@ -28,6 +28,11 @@
     \textbf{#1} & #2 \\
   \end{tabular*}\vspace{-1pt}}
 
+\newcommand{\subentry}[2]{%
+  \noindent\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    \textbf{\textit{#1}} & \textit{#2} \\
+  \end{tabular*}\vspace{-1pt}}
+
 \setlist[itemize]{leftmargin=1.2em, itemsep=0pt, topsep=1pt, parsep=0pt, partopsep=0pt}
 
 \begin{document}
@@ -51,19 +56,27 @@
 \begin{itemize}
   \item \textbf{Languages:} Python, Java, C/C++, TypeScript/JavaScript, OCaml
   \item \textbf{ML:} PyTorch, Hugging Face Transformers, PEFT, scikit-learn, NumPy, pandas, OpenCV, YOLO
-  \item \textbf{Tools:} Git, GitHub Actions, SLURM/HPC, CUDA, Playwright, React, Node.js, Claude API
+  \item \textbf{Tools:} Git, GitHub Actions, SLURM/HPC, Playwright, React, Node.js, Claude API
 \end{itemize}
 
 \section{Research Experience}
 \entry{Undergraduate Researcher, Sun Lab at Cornell University}{May 2025 -- Present}{PI: Jennifer Sun. AI for science: scientific discovery agents and computer vision for animal behavior}{}
+\subentry{Statistical validation for automated hypothesis discovery (AIMI Junior Affiliate)}{Jun 2026 -- Present}
 \begin{itemize}
-  \item \textbf{Statistical validation for automated hypothesis discovery (AIMI Junior Affiliate), Jun 2026 -- Present.} Implemented the randomization tests (p- and e-values for 11 claim types) and the false discovery rate reporting rules behind an independent check on what AI discovery agents report
+  \item Implemented the randomization tests (p- and e-values for 11 claim types) and the false discovery rate reporting rules behind an independent check on what AI discovery agents report
   \item Ran five agent systems, 500+ runs in 13 test settings with known ground truth: the agents' own reports were 18 to 66\% false; the check brought that below 1\% for every agent; stress tests showed it can fail if held-out results leak
-  \item \textbf{Multi-lab video behavior recognition (MABe), Feb 2026 -- Present.} Beat the frozen-backbone baseline on 9 of 15 lab datasets (13 of 15 on at least one split) by LoRA fine-tuning a video foundation model with a self-authored kinematic auxiliary loss; on one lab, video alone beat the pose-tracking ceiling
+\end{itemize}
+\subentry{Multi-lab video behavior recognition (MABe)}{Feb 2026 -- Present}
+\begin{itemize}
+  \item Beat the frozen-backbone baseline on 9 of 15 lab datasets (13 of 15 on at least one split) by LoRA fine-tuning a video foundation model with a self-authored kinematic auxiliary loss; on one lab, video alone beat the pose-tracking ceiling
   \item Wrote and ran the 8-stage SLURM chain that took all 15 labs from raw video to evaluated 5-fold ensembles, staging up to 1.9 TB of features per lab on node-local NVMe; ran on Blackwell GPUs
   \item Switched the VideoPRISM backbone from JAX to a third-party PyTorch port and checked parity, which enabled LoRA fine-tuning; wrote the PyTorch training stage, video loader, and 21 unit tests
-  \item \textbf{Calf behavior monitoring (BURE Fellow, CIDA grant), May 2025 -- Present.} Mean posture-classification F1 rose from 0.928 with 300 training images to 0.957 with 1,000 (24 runs per setting, DINOv2 vs.\ DINOv3 ensembles); fine-tuned YOLO on self-annotated calf data (CVAT); manuscript in preparation
-  \item Benchmarked five vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear-tag and pose recognition; built a Jupyter workflow so veterinary researchers can run experiments themselves
+\end{itemize}
+\subentry{Calf behavior monitoring (BURE Fellow, CIDA grant)}{May 2025 -- Present}
+\begin{itemize}
+  \item Built a two-stage posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 self-annotated images from 14 pens and 6 cameras: F1 0.93 with 300 labels, 0.98 with 2,988; 0.94+ on unseen cameras, calves, and days
+  \item Rebuilt the evaluation (time-blocked test set, McNemar tests with Holm correction, block bootstrap), overturning two earlier claims; self-supervised features beat supervised ImageNet ones by 0.11--0.12 F1 at 50--100 labels
+  \item Benchmarked five vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear-tag and pose recognition; built a Jupyter workflow for veterinary researchers; first-author manuscript in preparation
 \end{itemize}
 
 \section{Publications}
