@@ -46,7 +46,7 @@ education:
   gpa: "4.02"
   coursework:
     - "Deep Learning, Computer Vision, Machine Learning"
-    - "Computer System Organization (C), Algorithms, Discrete Math, Data Structures"
+    - "Computer System Organization (C), Algorithms, Discrete Math, Data Structures, Networks"
     - "Functional Programming (OCaml), iOS Development"
     - "Linear Algebra, Differential Equations, Multivariable Calculus"
 

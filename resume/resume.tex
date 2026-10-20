@@ -43,7 +43,7 @@
 \section{Education}
 \entry{Cornell University}{Ithaca, NY}{B.S. in Computer Science, College of Engineering, GPA 4.02}{Expected May 2028}
 \begin{itemize}
-  \item \textbf{Coursework:} Deep Learning, Computer Vision, Machine Learning, Computer System Organization (C), Algorithms, Data Structures, Functional Programming (OCaml), Discrete Math, Linear Algebra
+  \item \textbf{Coursework:} Deep Learning, Computer Vision, Machine Learning, Computer System Organization (C), Algorithms, Data Structures, Networks, Functional Programming (OCaml), Discrete Math, Linear Algebra
   \item \textbf{Honors:} BURE Fellow, CIDA Grant Recipient, AIMI Junior Affiliate, 4-time AIME Qualifier, USACO Silver Division
 \end{itemize}
 
@@ -61,8 +61,8 @@
   \item Ran five agent systems, 500+ runs in 13 test settings with known ground truth: the agents' own reports were 18 to 66\% false; the check brought that below 1\% for every agent; stress tests showed it can fail if held-out results leak
   \item \textbf{Multi-lab video behavior recognition (MABe), Feb 2026 -- Present.} Beat the frozen-backbone baseline on 9 of 15 lab datasets (13 of 15 on at least one split) by LoRA fine-tuning a video foundation model with a self-authored kinematic auxiliary loss; on one lab, video alone beat the pose-tracking ceiling
   \item Wrote and ran the 8-stage SLURM chain that took all 15 labs from raw video to evaluated 5-fold ensembles, staging up to 1.9 TB of features per lab on node-local NVMe; ran on Blackwell GPUs
-  \item Moved the VideoPRISM backbone from JAX to PyTorch with parity checked, which enabled LoRA fine-tuning; wrote the PyTorch training stage, video loader, and 21 unit tests
-  \item \textbf{Calf behavior monitoring (BURE Fellow, CIDA grant), May 2025 -- Present.} Mean posture-classification F1 rose from 0.928 with 300 training images to 0.957 with 1,000 (24 runs per setting, DINOv2 vs.\ DINOv3 ensembles); fine-tuned YOLO on calf data I annotated in CVAT. Poster presented at ADSA 2026; manuscript in preparation
+  \item Switched the VideoPRISM backbone from JAX to a third-party PyTorch port and checked parity, which enabled LoRA fine-tuning; wrote the PyTorch training stage, video loader, and 21 unit tests
+  \item \textbf{Calf behavior monitoring (BURE Fellow, CIDA grant), May 2025 -- Present.} Mean posture-classification F1 rose from 0.928 with 300 training images to 0.957 with 1,000 (24 runs per setting, DINOv2 vs.\ DINOv3 ensembles); fine-tuned YOLO on self-annotated calf data (CVAT); manuscript in preparation
   \item Benchmarked five vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear-tag and pose recognition; built a Jupyter workflow so veterinary researchers can run experiments themselves
 \end{itemize}
 

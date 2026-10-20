@@ -78,7 +78,7 @@ positions:
       - title: "Training infrastructure"
         detail: "An 8-stage SLURM chain (stage video, fine-tune, extract, stage features, train 5-fold, evaluate, copy back, clean up) run across all 15 datasets on Cornell's GPU cluster, with per-fold parallel jobs and a merge step added to the lab's cross-validation and threshold calibration"
       - title: "Backbone, data and GPU bring-up"
-        detail: "Moved the VideoPRISM backbone from JAX to PyTorch with output parity checked, which made LoRA fine-tuning possible; staged video, and extracted features of up to 1.9 TB per lab, onto node-local NVMe to end NFS deadlocks; brought the pipeline up on Blackwell GPUs through a toggleable parallel CUDA 12.8 environment; 21 unit tests"
+        detail: "Switched the VideoPRISM backbone from JAX to a third-party PyTorch port and checked output parity, which made LoRA fine-tuning possible; staged video, and extracted features of up to 1.9 TB per lab, onto node-local NVMe to end NFS deadlocks; brought the pipeline up on Blackwell GPUs through a toggleable parallel CUDA 12.8 environment; 21 unit tests"
     homepage: true
     index_title: "Behavior Recognition Across Labs (MABe)"
     index_description: "Beat the frozen-backbone baseline on 9 of 15 animal behavior datasets by LoRA fine-tuning a video foundation model, and built the training pipeline that runs across all 15."
@@ -89,7 +89,7 @@ positions:
     cv_bullets:
       - "Beat the frozen-backbone baseline on 9 of 15 datasets (13 of 15 on at least one split) by LoRA fine-tuning a video foundation model with a self-authored kinematic auxiliary loss"
       - "Wrote and ran the 8-stage SLURM chain that took all 15 labs from raw video to evaluated 5-fold ensembles, staging up to 1.9 TB of features per lab on node-local NVMe; ran on Blackwell GPUs"
-      - "Moved the VideoPRISM backbone from JAX to PyTorch with parity checked, which enabled LoRA fine-tuning; wrote the PyTorch training stage, video loader, and 21 unit tests"
+      - "Switched the VideoPRISM backbone from JAX to a third-party PyTorch port and checked parity, which enabled LoRA fine-tuning; wrote the PyTorch training stage, video loader, and 21 unit tests"
 
   - title: "AI for Animal Behavior Monitoring"
     slug: "calf-behavior"
@@ -150,7 +150,6 @@ publications:
     url: null
     selected: true
     description: "A benchmark of annotated video and pose tracking from 15 laboratories, a community behavior classification challenge, and a behavior classifier that generalizes to labs it was not trained on."
-    role: "Co-author"
     year: "2026"
     type: "review"
 
@@ -161,7 +160,7 @@ publications:
     url: null
     selected: true
     description: "A computer vision framework for calf posture detection from farm video, built for veterinary researchers studying early indicators of disease and welfare."
-    role: "Author"
+    role: "First author"
     year: "2026"
     type: "poster"
 
@@ -171,8 +170,7 @@ publications:
     venue: "Journal of Dairy Science, 2026"
     url: "https://doi.org/10.3168/jds.2026-28434"
     selected: true
-    description: "A deep learning classifier for lung consolidation from calf lung ultrasound. Supporting author: advised on annotation tooling (CVAT) and model selection (YOLO, DINO)."
-    role: "Supporting author"
+    description: "A deep learning classifier for lung consolidation from calf lung ultrasound. My part: advised on annotation tooling (CVAT) and model selection (YOLO, DINO)."
     year: "2026"
     type: "journal"
 
