@@ -1,4 +1,4 @@
-% One-page resume for SWE internship applications. Source of truth for facts is
+% One-page research-first resume. Source of truth for facts is
 % the master resume; keep the two in sync. Build: tectonic resume/resume.tex
 % then move resume/resume.pdf to the repo root (see README).
 \documentclass[10pt,letterpaper]{article}
@@ -49,7 +49,7 @@
 \entry{Cornell University}{Ithaca, NY}{B.S. in Computer Science, College of Engineering, GPA 4.02}{Expected May 2028}
 \begin{itemize}
   \item \textbf{Coursework:} Deep Learning, Computer Vision, Machine Learning, Computer System Organization (C), Algorithms, Data Structures, Networks, Functional Programming (OCaml), Discrete Math, Linear Algebra
-  \item \textbf{Honors:} BURE Fellow, CIDA Grant Recipient, AIMI Junior Affiliate, 4-time AIME Qualifier, USACO Silver Division
+  \item \textbf{Honors:} BURE Fellow, CIDA Grant Recipient, AIMI Junior Af{}f{}iliate, 4-time AIME Qualifier, USACO Silver Division
 \end{itemize}
 
 \section{Technical Skills}
@@ -61,10 +61,10 @@
 
 \section{Research Experience}
 \entry{Undergraduate Researcher, Sun Lab at Cornell University}{May 2025 -- Present}{PI: Jennifer Sun. AI for science: scientific discovery agents and computer vision for animal behavior}{}
-\subentry{Statistical validation for automated hypothesis discovery (AIMI Junior Affiliate)}{Jun 2026 -- Present}
+\subentry{Statistical validation for automated hypothesis discovery (AIMI Junior Af{}f{}iliate)}{Jun 2026 -- Present}
 \begin{itemize}
-  \item Implemented the randomization tests (p- and e-values for 11 claim types) and the false discovery rate reporting rules behind an independent check on what AI discovery agents report
-  \item Ran five agent systems, 500+ runs in 13 test settings with known ground truth: the agents' own reports were 18 to 66\% false; the check brought that to at most 1.3\% for every agent; stress tests showed it can fail if held-out results leak
+  \item Across five AI discovery agents (500+ runs, 13 test settings with known ground truth), their own reports were 18 to 66\% false; the held-out check cut that to at most 1.3\% for every agent
+  \item Implemented the check's randomization tests (p- and e-values, 11 claim types) and false discovery rate rules; built the Apptainer sandbox and SLURM runs for the agents; stress tests showed it can fail if held-out results leak
 \end{itemize}
 \subentry{Multi-lab video behavior recognition (MABe)}{Feb 2026 -- Present}
 \begin{itemize}
@@ -74,7 +74,7 @@
 \end{itemize}
 \subentry{Calf behavior monitoring (BURE Fellow, CIDA grant)}{May 2025 -- Present}
 \begin{itemize}
-  \item Built a two-stage posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 self-annotated images from 14 pens and 6 cameras: F1 0.93 with 300 labels, 0.98 with 2,988; 0.93+ on unseen cameras, calves, and days
+  \item Built a two-stage posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 hand-labeled calf annotations from 14 pens and 6 cameras: F1 0.93 with 300 labels, 0.98 with 2,988; 0.93+ on unseen cameras, calves, and days
   \item Rebuilt the evaluation (time-blocked test set, McNemar tests with Holm correction, block bootstrap), overturning two earlier claims; self-supervised features beat supervised ImageNet ones by 0.11--0.12 F1 at 50--100 labels
   \item Benchmarked five vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear-tag and pose recognition; built a Jupyter workflow for veterinary researchers; first-author manuscript in preparation
 \end{itemize}
@@ -89,19 +89,19 @@
 \section{Projects}
 \entry{DoRA Re-Implementation and Evaluation}{Spring 2026}{CS 4782 Deep Learning final project, 4-person team. PyTorch, Hugging Face PEFT}{\href{https://github.com/leonjiao5/cs4782-project}{GitHub}}
 \begin{itemize}
-  \item Team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B (AMC12, MATH); ran all HPC experiments
-  \item Built the evaluation harness (logit-probe and two-pass scoring, separating what a model knows from what it generates), the data pipeline with a leakage filter, and the figures
+  \item Team re-implementation of DoRA vs.\ LoRA on Qwen2.5-3B: trained on 7.5K problems, both ranked the right AMC12 answer first 38\% of the time but generated it only 12--18\%; more training data closed the gap
+  \item Ran all HPC experiments; built the evaluation harness (logit probe, two-pass), data pipeline with leakage filter, and figures
 \end{itemize}
 
 \entry{Worship Rig}{Sep 2026}{Personal project. Electron, JavaScript, Web Audio}{\href{https://ryanmye.github.io/worship-rig/}{Site} $\cdot$ \href{https://github.com/ryanmye/worship-rig}{GitHub}}
 \begin{itemize}
-  \item Built and shipped a Mac app that turns a MIDI keyboard into a keys rig for worship bands: 43 instruments, a key drone, setlists, per-sound EQ, and WAV recording, on a Web Audio engine that also renders offline for tests
+  \item Built and shipped a Mac app that turns a MIDI keyboard into a keys rig for worship bands: 43 instruments, a key drone, setlists, per-sound EQ, and WAV recording, on a Web Audio engine that also renders of{}f{}line for tests
   \item Added 1,000+ automated tests (Playwright), a GarageBand sample converter, and CI builds for Apple Silicon and Intel
 \end{itemize}
 
 \entryshort{\href{https://github.com/matthewj5/sisyphus}{Sisyphus: AI Productivity App} (Claude Builders Club Hackathon, 4-person team)}{Nov 2025}
 \begin{itemize}
-  \item Checks task photos with Claude; one of 5 winners among 38 projects (Fun Award); worked on frontend and AI validation
+  \item Fun Award (one of 5 winners among 38 projects): checks task photos with Claude; worked on frontend and AI validation
 \end{itemize}
 
 \section{Leadership}

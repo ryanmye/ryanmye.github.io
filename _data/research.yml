@@ -52,8 +52,8 @@ positions:
     cv_date: "Jun 2026 – present"
     cv_subtitle: "Statistical validation for automated hypothesis discovery"
     cv_bullets:
-      - "Implemented the randomization tests (p- and e-values for 11 claim types) and the false discovery rate reporting rules behind an independent check on what AI discovery agents report"
-      - "Ran five agent systems, 500+ runs in 13 test settings with known ground truth: the agents' own reports were 18 to 66% false; the check brought that to at most 1.3% for every agent"
+      - "Across five AI discovery agents (500+ runs, 13 test settings with known ground truth), their own reports were 18 to 66% false; the held-out check cut that to at most 1.3% for every agent"
+      - "Implemented the check's randomization tests (p- and e-values for 11 claim types) and false discovery rate rules; built the Apptainer sandbox and SLURM runs for the agents"
       - "Stress-tested the check: showed its error control can fail when held-out results are fed back to the agent"
 
   - title: "Video Behavior Recognition Across Labs (MABe)"
@@ -107,13 +107,13 @@ positions:
     date: "May 2025 – present"
     description: |
       Computer vision for dairy calf behavior on working farms, for veterinary researchers
-      studying early indicators of disease and welfare. I annotated 3,776 calf images,
+      studying early indicators of disease and welfare. I made 3,776 calf annotations,
       built a two-stage posture pipeline (detection, then frozen self-supervised features with
       lightweight classifiers), rebuilt its evaluation for rigor, and benchmarked
       vision-language models for posture and ear tag recognition.
     focus:
       - title: "Self-supervised vision for livestock monitoring"
-        detail: "YOLO11n detection, then frozen DINOv2/DINOv3 features with lightweight classifiers, on 3,776 images from 14 pens and 6 cameras: F1 0.93 with 300 labels and 0.98 with 2,988, and 0.93 or higher on unseen cameras, calves and days. Self-supervised features beat supervised ImageNet features by 0.11 to 0.12 F1 at 50 to 100 labels"
+        detail: "YOLO11n detection, then frozen DINOv2/DINOv3 features with lightweight classifiers, on 3,776 calf annotations from 14 pens and 6 cameras: F1 0.93 with 300 labels and 0.98 with 2,988, and 0.93 or higher on unseen cameras, calves and days. Self-supervised features beat supervised ImageNet features by 0.11 to 0.12 F1 at 50 to 100 labels"
       - title: "Checking my own results"
         detail: "Rebuilt the evaluation: removed images from outside the study, fixed a checkpoint bug, held out a time block for testing to stop leakage, and switched to McNemar tests with Holm correction and a block bootstrap. This overturned two earlier claims, that DINOv3 beat DINOv2 and that ensembling helped"
       - title: "Vision-language models on farm imagery"
@@ -125,13 +125,13 @@ positions:
     note: "Conducted as part of the Bowers Undergraduate Research Experience (BURE) with support from a CIDA grant."
     homepage: true
     index_title: "Calf Behavior Monitoring"
-    index_description: "Calf posture classification at F1 0.98 from frozen DINO features on 3,776 images I annotated, holding up on unseen cameras, calves and days; poster presented at ADSA 2026."
+    index_description: "Calf posture classification at F1 0.98 from frozen DINO features on 3,776 calf annotations I made, holding up on unseen cameras, calves and days; poster presented at ADSA 2026."
     cv: true
     cv_title: "Sun Lab · calf behavior"
     cv_date: "May 2025 – present"
     cv_subtitle: "Calf behavior monitoring (BURE Fellow, CIDA grant)"
     cv_bullets:
-      - "Built a two-stage calf posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 self-annotated images: F1 0.93 with 300 labels, 0.98 with 2,988; 0.93 or higher on unseen cameras, calves and days"
+      - "Built a two-stage calf posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 hand-labeled calf annotations: F1 0.93 with 300 labels, 0.98 with 2,988; 0.93 or higher on unseen cameras, calves and days"
       - "Rebuilt the evaluation (time-blocked test set, McNemar tests with Holm correction, block bootstrap), which overturned two earlier claims; self-supervised features beat supervised ImageNet ones by 0.11 to 0.12 F1 at 50 to 100 labels"
       - "Benchmarked vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear tag and pose recognition on farm imagery"
       - "Built an interactive Jupyter workflow for veterinary researchers"
