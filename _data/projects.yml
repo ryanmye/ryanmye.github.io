@@ -48,7 +48,7 @@ projects:
     date: "Sep 2026"
     featured: true
     short: "A Mac app that turns a MIDI keyboard into a keys rig for worship bands, with its own Web Audio engine, 43 instruments, and a key drone."
-    summary: "A Mac app that turns a MIDI keyboard into a keys rig for a worship band. Each song sets up to four sounds, their effects, and a drone in the song's key, played by its own Web Audio engine with **43 instruments** and an automated test suite."
+    summary: "A Mac app that turns a MIDI keyboard into a keys rig for a worship band. Each song sets up to four sounds, their effects, and a drone in the song's key, played by its own Web Audio engine with **43 instruments** and backed by over 1,000 automated tests."
     context: "Personal project; Electron, Web Audio"
     description: "Built for the keys player in a worship band: plug in a MIDI keyboard, pick a song from the setlist, and play. It runs as a Mac app (Electron) or in Chrome, and everything, the sounds included, stays on the Mac, so nothing streams during a set."
     bullets:
@@ -56,7 +56,7 @@ projects:
       - "43 instruments: 23 multisampled (grand, upright, electric pianos, mallets, guitars), 16 synth patches, and a drawbar organ with a rotary speaker and four presets, plus a drone that holds the root, fifth, and octave of the song's key"
       - "An 8-band EQ per sound drawn over a piano keyboard, 19 factory songs, setlists, transpose, MIDI Learn, WAV recording through an AudioWorklet, a menu-bar mode, and 8 themes"
       - "A converter that reads Apple's EXS instrument format and turns GarageBand and Logic sampled instruments into packs the app plays, kept on the user's Mac for licensing"
-      - "AI-assisted automated tests (offline audio renders, Playwright, Electron) and a 20-minute soak test; GitHub Actions builds the Apple Silicon and Intel releases"
+      - "Over 1,000 automated tests (offline audio renders, Playwright, Electron) and a 20-minute soak test; GitHub Actions builds the Apple Silicon and Intel releases"
     url: "https://github.com/ryanmye/worship-rig"
     site: "https://ryanmye.github.io/worship-rig/"
     image:
@@ -68,7 +68,7 @@ projects:
     cv_tech: "Electron, JavaScript, Web Audio"
     cv_bullets:
       - "Mac app (Electron) that turns a MIDI keyboard into a keys rig for worship bands: 43 instruments, a key drone, setlists, a per-sound 8-band EQ, WAV recording"
-      - "Web Audio engine that also renders offline for tests and level calibration; GarageBand/Logic sample converter; AI-assisted automated tests; CI releases for Apple Silicon and Intel"
+      - "Web Audio engine that also renders offline for tests and level calibration; GarageBand/Logic sample converter; 1,000+ automated tests; CI releases for Apple Silicon and Intel"
 
   - title: "World Seed"
     date: "Oct 2026"
