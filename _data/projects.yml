@@ -22,8 +22,8 @@ projects:
   - title: "DoRA Re-Implementation and Evaluation"
     date: "Spring 2026"
     featured: true
-    short: "4-person team re-implementation of DoRA; I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
-    summary: "4-person team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B. Trained on little data, both methods often ranked the right AMC12 answer highest but failed to generate it; more data closed the gap, and DoRA reached 46%, ahead of LoRA's 36% on the same data. I ran the experiments on the HPC cluster, built the evaluation harness, and diagnosed a critical bug in the DoRA layer."
+    short: "4-person team re-implementation of DoRA; I ran the experiments on the HPC cluster and built the evaluation harness."
+    summary: "4-person team re-implementation of DoRA, tested against LoRA on Qwen2.5-3B. Trained on little data, both methods often ranked the right AMC12 answer highest but failed to generate it; more data closed the gap, and DoRA reached 46%, ahead of LoRA's 36% on the same data. I ran the experiments on the HPC cluster and built the evaluation harness."
     context: "CS 4782 (Deep Learning), 4-person team"
     description: "CS 4782 final project, Spring 2026. We wrote DoRA as a PyTorch layer, fine-tuned Qwen2.5-3B with it and with LoRA on 1K to 27.5K math problems, and tested on AMC12 2024/2025 and the MATH benchmark. To separate what a model knows from what it can write out, we scored AMC12 three ways: a one-token probe over the answer letters, generate then probe, and plain generation."
     bullets:
@@ -31,7 +31,7 @@ projects:
       - "At 3B scale we only partly reproduced the paper's DoRA-over-LoRA result, and fine-tuning lowered MATH accuracy for both methods"
       - "Ran all training and evaluation on Cornell's HPC cluster: ranks 2, 4, and 8, three dataset sizes, base and instruct models"
       - "Wrote the evaluation harness (logit-probe and two-pass scoring), the benchmark and training-data scripts with a leakage filter, checkpoint averaging, the tables and figures, and the first draft of the report"
-      - "Diagnosed a critical bug in the team's DoRA layer and contributed to the problem formulation"
+      - "Contributed to the problem formulation"
     url: "https://github.com/leonjiao5/cs4782-project"
     image:
       src: "/assets/images/projects/dora.webp"
@@ -42,13 +42,13 @@ projects:
     cv_tech: "PyTorch, Hugging Face PEFT"
     cv_bullets:
       - "4-person team re-implementation of DoRA in PyTorch, tested against LoRA on Qwen2.5-3B (AMC12, MATH)"
-      - "Ran all experiments on the HPC cluster; built the evaluation harness (logit-probe, two-pass, and generation scoring), data pipeline, and analysis; diagnosed a critical bug in the DoRA layer"
+      - "Ran all experiments on the HPC cluster; built the evaluation harness (logit-probe, two-pass, and generation scoring), data pipeline, and analysis"
 
   - title: "Worship Rig"
     date: "Sep 2026"
     featured: true
     short: "A Mac app that turns a MIDI keyboard into a keys rig for worship bands, with its own Web Audio engine, 43 instruments, and a key drone."
-    summary: "A Mac app that turns a MIDI keyboard into a keys rig for a worship band. Each song sets up to four sounds, their effects, and a drone in the song's key, played by its own Web Audio engine with **43 instruments** and backed by over 1,000 automated tests."
+    summary: "A Mac app that turns a MIDI keyboard into a keys rig for a worship band. Each song sets up to four sounds, their effects, and a drone in the song's key, played by its own Web Audio engine with **43 instruments** and an automated test suite."
     context: "Personal project; Electron, Web Audio"
     description: "Built for the keys player in a worship band: plug in a MIDI keyboard, pick a song from the setlist, and play. It runs as a Mac app (Electron) or in Chrome, and everything, the sounds included, stays on the Mac, so nothing streams during a set."
     bullets:
@@ -56,7 +56,7 @@ projects:
       - "43 instruments: 23 multisampled (grand, upright, electric pianos, mallets, guitars), 16 synth patches, and a drawbar organ with a rotary speaker and four presets, plus a drone that holds the root, fifth, and octave of the song's key"
       - "An 8-band EQ per sound drawn over a piano keyboard, 19 factory songs, setlists, transpose, MIDI Learn, WAV recording through an AudioWorklet, a menu-bar mode, and 8 themes"
       - "A converter that reads Apple's EXS instrument format and turns GarageBand and Logic sampled instruments into packs the app plays, kept on the user's Mac for licensing"
-      - "Over 1,000 automated tests (offline audio renders, Playwright, Electron) and a 20-minute soak test; GitHub Actions builds the Apple Silicon and Intel releases"
+      - "AI-assisted automated tests (offline audio renders, Playwright, Electron) and a 20-minute soak test; GitHub Actions builds the Apple Silicon and Intel releases"
     url: "https://github.com/ryanmye/worship-rig"
     site: "https://ryanmye.github.io/worship-rig/"
     image:
@@ -68,7 +68,7 @@ projects:
     cv_tech: "Electron, JavaScript, Web Audio"
     cv_bullets:
       - "Mac app (Electron) that turns a MIDI keyboard into a keys rig for worship bands: 43 instruments, a key drone, setlists, a per-sound 8-band EQ, WAV recording"
-      - "Web Audio engine that also renders offline for tests and level calibration; GarageBand/Logic sample converter; 1,000+ automated tests; CI releases for Apple Silicon and Intel"
+      - "Web Audio engine that also renders offline for tests and level calibration; GarageBand/Logic sample converter; AI-assisted automated tests; CI releases for Apple Silicon and Intel"
 
   - title: "World Seed"
     date: "Oct 2026"
@@ -159,6 +159,14 @@ projects:
     cv_bullets:
       - "Web app that checks task photos with the Claude API; one of 5 winners among 38 projects (Fun Award), 4-person team"
       - "Worked on the frontend and the AI photo validation"
+
+  - title: "Found: Cornell Lost and Found"
+    date: "Nov – Dec 2024"
+    summary: "An iOS app for Cornell's lost and found. People who lose something describe it and see only the found posts that match, so nobody can browse everything and claim what isn't theirs. I hand-coded most of the SwiftUI frontend."
+    context: "Team project; Swift, SwiftUI"
+    description: "Finders post items; owners describe what they lost (category, color, location) and see matching posts only. Sign-in is limited to Cornell Google accounts."
+    url: "https://github.com/chelsea-she/Found-Frontend-App"
+    cv: false
 
   - title: "Transformer-Based Piano Melody Generation"
     date: "Aug 2023 – Apr 2024"
