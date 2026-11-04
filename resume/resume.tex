@@ -64,7 +64,7 @@
 \subentry{Statistical validation for automated hypothesis discovery (AIMI Junior Affiliate)}{Jun 2026 -- Present}
 \begin{itemize}
   \item Implemented the randomization tests (p- and e-values for 11 claim types) and the false discovery rate reporting rules behind an independent check on what AI discovery agents report
-  \item Ran five agent systems, 500+ runs in 13 test settings with known ground truth: the agents' own reports were 18 to 66\% false; the check brought that below 1\% for every agent; stress tests showed it can fail if held-out results leak
+  \item Ran five agent systems, 500+ runs in 13 test settings with known ground truth: the agents' own reports were 18 to 66\% false; the check brought that to at most 1.3\% for every agent; stress tests showed it can fail if held-out results leak
 \end{itemize}
 \subentry{Multi-lab video behavior recognition (MABe)}{Feb 2026 -- Present}
 \begin{itemize}
@@ -74,7 +74,7 @@
 \end{itemize}
 \subentry{Calf behavior monitoring (BURE Fellow, CIDA grant)}{May 2025 -- Present}
 \begin{itemize}
-  \item Built a two-stage posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 self-annotated images from 14 pens and 6 cameras: F1 0.93 with 300 labels, 0.98 with 2,988; 0.94+ on unseen cameras, calves, and days
+  \item Built a two-stage posture pipeline (YOLO11n detection, frozen DINO features) on 3,776 self-annotated images from 14 pens and 6 cameras: F1 0.93 with 300 labels, 0.98 with 2,988; 0.93+ on unseen cameras, calves, and days
   \item Rebuilt the evaluation (time-blocked test set, McNemar tests with Holm correction, block bootstrap), overturning two earlier claims; self-supervised features beat supervised ImageNet ones by 0.11--0.12 F1 at 50--100 labels
   \item Benchmarked five vision-language models (Qwen, Gemma 3, Gemini 2.5 Pro, PaliGemma, NVLM) for ear-tag and pose recognition; built a Jupyter workflow for veterinary researchers; first-author manuscript in preparation
 \end{itemize}
