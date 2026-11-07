@@ -1,0 +1,35 @@
+{
+  "track": {
+    "name": "To The One Who Is Seated On The Throne - Live",
+    "url": "https://open.spotify.com/track/3zc8HnAS2WJ7VNsV1OEt13",
+    "artists": [
+      {
+        "name": "UPPERROOM",
+        "url": "https://open.spotify.com/artist/107CG0UhUl9GJnPwF83N63"
+      },
+      {
+        "name": "TOMATULUGAR",
+        "url": "https://open.spotify.com/artist/44RfC7kgNNz6s2MD3gJqXX"
+      },
+      {
+        "name": "Elyssa Figueroa",
+        "url": "https://open.spotify.com/artist/0u6BP0u3FLrJrlWU3XwC8l"
+      },
+      {
+        "name": "Marcos Brunet",
+        "url": "https://open.spotify.com/artist/7cLoxFihGCVL3s1K3xHK4I"
+      },
+      {
+        "name": "Lucas Conslie",
+        "url": "https://open.spotify.com/artist/20uZDxss82sidLBxEyjnD1"
+      }
+    ],
+    "played_at": "2026-11-07T18:22:05.210Z"
+  },
+  "fetched_at": "2026-11-07T18:55:10Z",
+  "context": {
+    "type": "playlist",
+    "name": "IGNITE FA'26",
+    "url": "https://open.spotify.com/playlist/6cdVExCvKM5caDWXMPbOgn"
+  }
+}
