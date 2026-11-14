@@ -1,0 +1,19 @@
+{
+  "track": {
+    "name": "Jesus Paid it All",
+    "url": "https://open.spotify.com/track/35wrkrrCur9pRMkywUsT2g",
+    "artists": [
+      {
+        "name": "Hymns of Grace",
+        "url": "https://open.spotify.com/artist/53B2lGpquXpRQnm8csSXSa"
+      }
+    ],
+    "played_at": "2026-11-14T02:41:06.068Z"
+  },
+  "fetched_at": "2026-11-14T03:48:04Z",
+  "context": {
+    "type": "playlist",
+    "name": "IGNITE FA'26",
+    "url": "https://open.spotify.com/playlist/6cdVExCvKM5caDWXMPbOgn"
+  }
+}
