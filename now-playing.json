@@ -1,0 +1,19 @@
+{
+  "track": {
+    "name": "Eze Ebube II",
+    "url": "https://open.spotify.com/track/5VqbyQDOlTs9CwYnDOfpRh",
+    "artists": [
+      {
+        "name": "Neon Adejo",
+        "url": "https://open.spotify.com/artist/1Ywypkj7wYHenVdKnsp3Nn"
+      }
+    ],
+    "played_at": "2026-11-21T05:54:30.004Z"
+  },
+  "fetched_at": "2026-11-21T07:28:10Z",
+  "context": {
+    "type": "playlist",
+    "name": "surrender my life",
+    "url": "https://open.spotify.com/playlist/1eQ5bBxjfhMjB797PyQmgq"
+  }
+}
