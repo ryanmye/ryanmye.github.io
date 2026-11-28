@@ -1,0 +1,19 @@
+{
+  "track": {
+    "name": "\u98db\u6a5f\u5834\u768410:30",
+    "url": "https://open.spotify.com/track/0v2hRgvRSMnHsTSWyaoKbH",
+    "artists": [
+      {
+        "name": "David Tao",
+        "url": "https://open.spotify.com/artist/40tNK2YedBV2jRFAHxpifB"
+      }
+    ],
+    "played_at": "2026-11-28T09:26:06.714Z"
+  },
+  "fetched_at": "2026-11-28T12:30:19Z",
+  "context": {
+    "type": "playlist",
+    "name": "mandornb",
+    "url": "https://open.spotify.com/playlist/4fx7axG0d1041gOkUXUnXp"
+  }
+}
